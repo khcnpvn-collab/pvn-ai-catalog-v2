@@ -2,15 +2,19 @@
 import { useState } from 'react';
 import { STANDARD_GROUP, type CatalogRecord } from '@/lib/catalog';
 import type { Overview } from '@/lib/overview';
-import RecordCombobox, { type ComboChoice } from './record-combobox';
+import MultiRecordPicker from './multi-record-picker';
+import RecordCombobox, { type ComboChoice, type ComboOption } from './record-combobox';
 import { api, ErrorBox, message } from './ui';
 import { invalidateOverview, useOverview } from './use-overview';
 
 // Who carries out an activity opened from a partner page: the partner itself, or one of the
 // consortia it belongs to, optionally as that activity's lead within the consortium.
 export type Party = { consortiumId: string; lead: boolean };
-export type ActivityLinks = { party: Party; unit: ComboChoice | null; item: ComboChoice | null };
-export const emptyActivityLinks: ActivityLinks = { party: { consortiumId: '', lead: true }, unit: null, item: null };
+// executor is used when the form is not opened from a partner (whose party choice is then in party).
+export type ActivityLinks = { party: Party; executor: ComboChoice | null; unit: ComboChoice | null; supporting: ComboOption[]; experts: ComboOption[]; item: ComboChoice | null };
+export const emptyActivityLinks: ActivityLinks = { party: { consortiumId: '', lead: true }, executor: null, unit: null, supporting: [], experts: [], item: null };
+// Fields the parent record already fills: an activity added from a unit has its lead, from an item its item.
+export type ActivityLinkHidden = { executor?: boolean; unit?: boolean; item?: boolean };
 
 // Items an activity of this group can take: standard problems for "Bài toán", otherwise the group's work items.
 export function itemOptions(overview: Overview | undefined, group: string) {
@@ -50,24 +54,37 @@ export function PartyChoice({ partner, value, onChange }: { partner: CatalogReco
 }
 
 // group is the item group picked in the activity form above, so the item list follows it.
-export function ActivityLinkFields({ partner, group, value, onChange }: { partner: CatalogRecord; group: string; value: ActivityLinks; onChange: (links: ActivityLinks) => void }) {
+export function ActivityLinkFields({ partner, group, value, onChange, hidden = {} }: { partner?: CatalogRecord; group: string; value: ActivityLinks; onChange: (links: ActivityLinks) => void; hidden?: ActivityLinkHidden }) {
   const overview = useOverview();
   const units = (overview.data?.units || []).map(unit => ({ id: unit.id, label: unit.title, detail: unit.abbreviation }));
+  const executors = [...(overview.data?.partners || []).map(item => ({ id: item.id, label: item.title, detail: item.partner_type || 'Đối tác' })), ...units.map(unit => ({ ...unit, detail: ['Đơn vị PVN', unit.detail].filter(Boolean).join(' · ') }))];
+  const experts = (overview.data?.experts || []).map(item => ({ id: item.id, label: item.title, detail: [item.current_position, item.organization].filter(Boolean).join(' · ') }));
+  const leadId = value.unit && 'id' in value.unit ? value.unit.id : null;
   return <section className="panel form-section"><h2>Bên tham gia và hạng mục</h2><div className="form-grid">
-    <PartyChoice partner={partner} value={value.party} onChange={party => onChange({ ...value, party })}/>
-    <RecordCombobox label="Đơn vị đầu mối PVN" options={units} value={value.unit} onChange={unit => onChange({ ...value, unit })} placeholder="Gõ tên hoặc viết tắt đơn vị…"/>
-    <ItemCombobox key={group} group={group} value={value.item} onChange={item => onChange({ ...value, item })}/>
+    {partner ? <PartyChoice partner={partner} value={value.party} onChange={party => onChange({ ...value, party })}/>
+      : !hidden.executor && <RecordCombobox label="Bên thực hiện" options={executors} value={value.executor} onChange={executor => onChange({ ...value, executor })} placeholder="Gõ tên đối tác, liên danh hoặc đơn vị PVN…"/>}
+    {!hidden.unit && <RecordCombobox label="Đơn vị đầu mối PVN" options={units} value={value.unit} onChange={unit => onChange({ ...value, unit, supporting: value.supporting.filter(item => !unit || !('id' in unit) || item.id !== unit.id) })} placeholder="Gõ tên hoặc viết tắt đơn vị…"/>}
+    {!hidden.item && <ItemCombobox key={group} group={group} value={value.item} onChange={item => onChange({ ...value, item })}/>}
+    <MultiRecordPicker label="Đơn vị phối hợp" options={units.filter(unit => unit.id !== leadId)} value={value.supporting} onChange={supporting => onChange({ ...value, supporting })} placeholder="Gõ tên hoặc viết tắt đơn vị…"/>
+    <MultiRecordPicker label="Chuyên gia tham gia" options={experts} value={value.experts} onChange={next => onChange({ ...value, experts: next })} placeholder="Gõ tên chuyên gia…"/>
   </div></section>;
 }
 
+const link = (body: Record<string, unknown>) => api('/api/links', { method: 'POST', body: JSON.stringify(body) });
+
 // Links chosen in the create form, written once the activity exists. A new item joins the activity's group.
-export async function saveActivityLinks(activityId: string, links: ActivityLinks, group: string) {
-  if (links.unit && !('create' in links.unit)) await api('/api/links', { method: 'POST', body: JSON.stringify({ source_id: activityId, target_id: links.unit.id, relation: 'unit', context: { subject_role: 'lead' } }) });
+// skip holds records the create call already linked (the page the form was opened from).
+export async function saveActivityLinks(activityId: string, links: ActivityLinks, group: string, skip: string[] = []) {
+  const leadId = links.unit && 'id' in links.unit ? links.unit.id : null;
+  if (leadId && !skip.includes(leadId)) await link({ source_id: activityId, target_id: leadId, relation: 'unit', context: { subject_role: 'lead' } });
+  for (const unit of links.supporting) if (unit.id !== leadId && !skip.includes(unit.id)) await link({ source_id: activityId, target_id: unit.id, relation: 'unit', context: { subject_role: 'supporting' } });
+  if (links.executor && 'id' in links.executor && !skip.includes(links.executor.id)) await link({ source_id: activityId, target_id: links.executor.id, relation: 'partner' });
+  for (const expert of links.experts) if (!skip.includes(expert.id)) await link({ source_id: activityId, target_id: expert.id, relation: 'expert' });
   if (links.item && 'create' in links.item) {
     const record = group === STANDARD_GROUP ? { kind: 'use_case', title: links.item.create, status: 'Đang thực hiện', data: {} }
       : { kind: 'work_item', title: links.item.create, status: 'Đang thực hiện', data: { item_group: group } };
     await api(`/api/records/${activityId}/related`, { method: 'POST', body: JSON.stringify({ record, relation: 'use_case', direction: 'from-parent' }) });
-  } else if (links.item) await api('/api/links', { method: 'POST', body: JSON.stringify({ source_id: activityId, target_id: links.item.id, relation: 'use_case' }) });
+  } else if (links.item && !skip.includes(links.item.id)) await link({ source_id: activityId, target_id: links.item.id, relation: 'use_case' });
 }
 
 // On an activity: pick an item of the activity's group, or add one to that group, and link it straight away.

@@ -1,7 +1,8 @@
 "use client";
-import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { Fragment, useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { groupFields, ITEM_CATEGORIES, moduleMap, modules, splitTags, STANDARD_GROUP, validateRecord, type CatalogRecord, type RecordInput } from "@/lib/catalog";
 import TagInput from "./tag-input";
+import { useCreateLinks } from "./record-create-links";
 import { cleanGeneratedRecordText, isGeneratedRecordCode, visibleOperationalStatus } from "@/lib/record-presentation";
 import type { DossierContext } from "@/lib/dossier";
 import { editorPresentation, visibleEditorDataKeys } from "@/lib/editor-presentation";
@@ -40,7 +41,8 @@ function recordInput(record: CatalogRecord): RecordInput {
   return { id: record.id, version: record.version, kind: record.kind, title: record.title, code: record.code, summary: record.summary, status: record.status, data };
 }
 
-// children adds a section of linked records (for example who carries out an activity) right after the name.
+// children adds a section of linked records (for example who carries out an activity) after the first group of fields,
+// where an activity picks its item group; a new record without children gets the standard link fields there.
 export default function RecordEditor({ kind, record, context, onSave, onCancel, embedded = false, hideHeading = false, preset, onDataChange, children }: { kind: string; record?: CatalogRecord; context?: DossierContext; onSave: (record: CatalogRecord) => void | Promise<void>; onCancel: () => void; embedded?: boolean; hideHeading?: boolean; children?: ReactNode; preset?: Record<string, string>; onDataChange?: (data: RecordInput["data"]) => void }) {
   const overview = useOverview();
   const [form, setForm] = useState<RecordInput>(() => record ? recordInput(record) : { kind, title: "", status: startingStatus(kind), data: startingData(kind, context, overview.data, preset) });
@@ -48,6 +50,9 @@ export default function RecordEditor({ kind, record, context, onSave, onCancel, 
   const [editedFields, setEditedFields] = useState<Set<string>>(() => new Set());
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  // Set when a new record was saved but some of its links were not: the form offers to open it instead of saving twice.
+  const [savedRecord, setSavedRecord] = useState<CatalogRecord | null>(null);
+  const createLinks = useCreateLinks(record || children ? null : form.kind, context, form.data);
   const formRef = useRef<HTMLFormElement>(null);
   const dirty = editedFields.size > 0;
   useEffect(() => {
@@ -79,7 +84,10 @@ export default function RecordEditor({ kind, record, context, onSave, onCancel, 
     const invalid = validateRecord(input);
     if (invalid) { setError(invalid); return; }
     setBusy(true); setError(null);
-    try { const result = await api<{ data: CatalogRecord }>(record ? `/api/records/${record.id}` : context ? `/api/records/${context.parentId}/related` : "/api/records", { method: record ? "PATCH" : "POST", body: JSON.stringify(context && !record ? { record: input, relation: context.relation, direction: context.direction, ...(context.context ? { context: context.context } : {}) } : input) }); release(); setEditedFields(new Set()); await onSave(result.data); invalidateOverview(); }
+    try { const result = await api<{ data: CatalogRecord }>(record ? `/api/records/${record.id}` : context ? `/api/records/${context.parentId}/related` : "/api/records", { method: record ? "PATCH" : "POST", body: JSON.stringify(context && !record ? { record: input, relation: context.relation, direction: context.direction, ...(context.context ? { context: context.context } : {}) } : input) }); release(); setEditedFields(new Set());
+      const linkError = record ? null : await createLinks.save(result.data).then(() => null, (cause: unknown) => message(cause));
+      if (linkError) { invalidateOverview(); setSavedRecord(result.data); setError(`Đã lưu ${mod.singular} nhưng chưa gắn được một số liên kết: ${linkError}. Mở hồ sơ để gắn tiếp.`); return; }
+      await onSave(result.data); invalidateOverview(); }
     catch (e) { setError(message(e)); } finally { setBusy(false); }
   }
   const editorTitle = `${record ? "Chỉnh sửa" : "Thêm"} ${mod.singular}`;
@@ -91,8 +99,7 @@ export default function RecordEditor({ kind, record, context, onSave, onCancel, 
         {presentation.showStatus && operationalStatuses.length > 0 && <label className="field">{({ partner: "Trạng thái hợp tác", collaboration: "Trạng thái", use_case: "Tình trạng danh mục" } as Record<string, string>)[form.kind] || "Tình trạng hoạt động"}<select value={form.status} onChange={e => update("status", e.target.value)}>{!visibleOperationalStatus(form.status) && <option value={form.status}>Chưa ghi nhận</option>}{operationalStatuses.map(s => <option key={s}>{s}</option>)}</select></label>}
         {presentation.showSummary && <label className="field full">{form.kind === 'partner' ? 'Giới thiệu ngắn' : 'Tóm tắt'}<textarea rows={presentation.compact ? 2 : 3} maxLength={10000} value={displayedText("summary", form.summary)} onChange={e => update("summary", e.target.value)}/>{form.kind === 'partner' && <small>Mô tả ngắn về đối tác; năng lực chi tiết ghi ở phần dưới.</small>}</label>}
       </div></section>
-      {children}
-      {fieldGroups.map(group => <section className="panel form-section" key={group.label}><h2>{group.label}</h2><div className="form-grid">{group.fields.map(field => {
+      {fieldGroups.map((group, index) => <Fragment key={group.label}><section className="panel form-section"><h2>{group.label}</h2><div className="form-grid">{group.fields.map(field => {
         const value = form.data?.[field.key] ?? "";
         const change = (value: string) => { markEdited(field.key); setForm(current => {
           const data = { ...current.data, [field.key]: value === "" ? null : field.type === "number" ? Number(value) : value };
@@ -102,7 +109,8 @@ export default function RecordEditor({ kind, record, context, onSave, onCancel, 
         if (field.key === "item_category") field = { ...field, options: ITEM_CATEGORIES[String(form.data?.item_group || "")] || [] };
         if (field.type === "tags") return <TagInput key={field.key} label={field.label} hint={field.hint} value={String(value)} suggestions={tagSuggestions(form.kind, field.key, field.suggestions, overview.data)} onChange={change}/>;
         return <label className={`field ${field.type === "textarea" ? "full" : ""}`} key={field.key}>{field.label}{field.type === "textarea" ? <textarea rows={presentation.compact ? 2 : 4} maxLength={10000} value={value} onChange={e => change(e.target.value)}/> : field.type === "select" ? <select value={value} onChange={e => change(e.target.value)}><option value="">Chưa ghi nhận</option>{value && field.options && !field.options.includes(String(value)) && <option value={String(value)}>{String(value)} (dữ liệu hiện có)</option>}{field.options?.map(option => <option key={option}>{option}</option>)}</select> : field.suggestions ? <><input list={`tag-${field.key}`} maxLength={1000} value={value} onChange={e => change(e.target.value)} placeholder="Chọn giá trị đã có hoặc nhập mới"/><datalist id={`tag-${field.key}`}>{tagSuggestions(form.kind, field.key, field.suggestions, overview.data).map(option => <option key={option} value={option}/>)}</datalist></> : <input type={field.type || "text"} min={field.type === "number" ? 0 : undefined} max={field.type === "number" ? 100000000 : undefined} step={field.type === "number" ? "any" : undefined} maxLength={1000} value={value} onChange={e => change(e.target.value)}/>} {field.hint && <small>{field.hint}</small>}</label>;
-      })}</div></section>)}
-      <div className="save-bar"><ErrorBox error={error}/><div className="actions"><button className="button" type="button" disabled={busy} onClick={cancel}>Hủy</button><button className="button primary" disabled={busy}>{busy ? "Đang lưu…" : "Lưu hồ sơ"}</button></div></div>
+      })}</div></section>{index === 0 && <>{children}{createLinks.fields}</>}</Fragment>)}
+      {!fieldGroups.length && <>{children}{createLinks.fields}</>}
+      <div className="save-bar"><ErrorBox error={error}/><div className="actions">{savedRecord ? <button className="button primary" type="button" onClick={() => onSave(savedRecord)}>Mở hồ sơ đã lưu</button> : <><button className="button" type="button" disabled={busy} onClick={cancel}>Hủy</button><button className="button primary" disabled={busy}>{busy ? "Đang lưu…" : "Lưu hồ sơ"}</button></>}</div></div>
     </form></>;
 }

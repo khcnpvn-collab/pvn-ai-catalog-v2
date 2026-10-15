@@ -15,12 +15,13 @@ const section = (id: string, label: string, description: string, kinds: string[]
 const contacts = section('contacts', 'Đầu mối', 'Danh bạ và vai trò các đầu mối được kết nối với hồ sơ.', ['contact'], [from('contact', 'contact')], 'contact-grid');
 const activityDescription = 'Bài toán đơn vị, POC, đề tài KHCN và nội dung hợp tác';
 export const dossierSections: Record<string, DossierSection[]> = {
+  // Contacts come right after the main information on unit and partner pages.
   unit: [
+    contacts,
     section('activities', 'Triển khai & hợp tác', `${activityDescription} mà đơn vị làm đầu mối hoặc phối hợp.`, ['collaboration'], [{ ...to('collaboration', 'unit'), label: 'Thêm hoạt động', context: { subject_role: 'lead' } }], 'activity-list'),
     section('standards', 'Hạng mục', 'Bài toán chuẩn đơn vị là đầu mối ưu tiên hoặc có tiềm năng áp dụng, và các hạng mục áp dụng cho đơn vị.', ['use_case', 'work_item'], [{ ...to('use_case', 'unit'), label: 'Bài toán chuẩn', context: { subject_role: 'supporting' } }, { ...to('work_item', 'unit'), label: 'Hạng mục khác' }], 'unit-standards'),
     section('partners', 'Đối tác', 'Đối tác đã làm việc cùng đơn vị qua các hoạt động.', ['partner'], [], 'unit-partners'),
     section('engagements', 'Mốc & ghi chú', 'Các mốc làm việc và ghi chú với đơn vị.', ['engagement'], [{ ...to('engagement', 'unit'), label: 'Thêm mốc' }], 'milestones'),
-    contacts,
   ],
   partner: [
     section('contacts', 'Đầu mối liên hệ', 'Thông tin người phụ trách để liên hệ nhanh, không mở thêm một hồ sơ trung gian.', ['contact'], [from('contact', 'contact')], 'partner-contact'),

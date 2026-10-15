@@ -1,7 +1,7 @@
 "use client";
 import { COUNTRIES, PARTNER_STATUSES, PARTNER_TYPES, splitTags, STRATEGIC_LEVELS } from '@/lib/catalog';
 import { daysSince, rankIn, type QuickFilter, type TableFilter } from '@/lib/catalog-table';
-import { countBy, distinct, isActiveActivity, isConsortium, latestMilestone, milestoneDate, partnerActivities, type Overview } from '@/lib/overview';
+import { countBy, distinct, isActiveActivity, isConsortium, lastMilestoneDay, partnerActivities, type Overview } from '@/lib/overview';
 import { dayText, overviewMaps, RecordLines, unitName, unitTerms } from './activity-cells';
 import CatalogTable, { useTableState, type CatalogColumn } from './catalog-table';
 import { BarChart, ChartGrid, DashboardSection, dashboardStyles as styles, KpiGrid, Panel, StageBar } from './dashboard-primitives';
@@ -20,12 +20,12 @@ export default function PartnerDashboard({ overview, onOpen }: { overview: Overv
   const consortia = overview.partners.filter(isConsortium);
   const rows = partners.map(partner => {
     const activities = partnerActivities(overview, partner.id);
-    const milestone = latestMilestone(overview.milestones.filter(item => item.partner_ids.includes(partner.id)));
     return { id: partner.id, partner, activities, active: activities.filter(activity => isActiveActivity(activity.status)).length,
       // PVN units and items met through this partner's activities.
       unitIds: distinct(activities.flatMap(activity => activity.unit_ids)), itemIds: distinct(activities.map(activity => activity.standard_id || activity.work_item_id)),
       groups: consortia.filter(group => group.member_ids.includes(partner.id)).map(group => group.title),
-      lastWork: [milestone ? milestoneDate(milestone) : '', ...activities.map(activity => activity.last_meeting_date || '')].filter(Boolean).sort().at(-1) || '' };
+      // The last day of the most recent milestone with this partner or on one of its activities.
+      lastWork: lastMilestoneDay(overview.milestones.filter(item => item.partner_ids.includes(partner.id) || item.activity_ids.some(id => activities.some(activity => activity.id === id)))) };
   });
   type Row = typeof rows[number];
   const itemLabel = (id: string) => { const standard = maps.standards.get(id); return standard ? [standard.code, standard.title].filter(Boolean).join(' · ') : maps.workItems.get(id)?.title || ''; };
@@ -49,7 +49,7 @@ export default function PartnerDashboard({ overview, onOpen }: { overview: Overv
       render: row => row.unitIds.length ? row.unitIds.map((id, index) => <span key={id}>{index > 0 && ', '}<button className="text-button" onClick={() => onOpen(id)}>{unitName(maps, id)}</button></span>) : '—' },
     { key: 'items', label: 'Hạng mục hợp tác', wide: true, text: row => row.itemIds.map(itemLabel).join('; '), sort: row => row.itemIds.length || null,
       render: row => <RecordLines items={row.itemIds.map(id => ({ id, label: itemLabel(id) }))} onOpen={onOpen}/> },
-    { key: 'last_work', label: 'Làm việc gần nhất', text: row => dayText(row.lastWork), sort: row => row.lastWork },
+    { key: 'last_work', label: 'Làm việc gần nhất', text: row => dayText(row.lastWork) || 'Không có', sort: row => row.lastWork, render: row => row.lastWork ? dayText(row.lastWork) : <span className="muted">Không có</span> },
     { key: 'updated', label: 'Cập nhật', text: row => dayText(row.partner.updated_at), sort: row => row.partner.updated_at },
   ];
   const filters: TableFilter<Row>[] = [

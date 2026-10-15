@@ -4,7 +4,7 @@ import { ACTIVE_ACTIVITY_STATUSES } from './catalog';
 type Base = { id: string; title: string; updated_at: string };
 export type OverviewStandard = Base & { code: string | null; status: string; program: string | null; category: string | null; is_priority: string | null; leadership_level: string | null; start_year: number | null; lead_unit_id: string | null; potential_unit_ids: string[]; potential_partner_ids: string[] };
 export type OverviewWorkItem = Base & { code: string | null; status: string; item_group: string; scope_level: string | null; apply_scope: string | null; owner: string | null; coordinator: string | null; start_date: string | null; unit_ids: string[] };
-export type OverviewActivity = Base & { status: string; item_group: string | null; item_category: string | null; start_date: string | null; end_date: string | null; last_meeting_date?: string | null; next_notes?: string | null; partner_id: string | null; provider_unit_id: string | null; party_lead_id: string | null; standard_id: string | null; work_item_id: string | null; lead_unit_id: string | null; unit_ids: string[]; expert_ids?: string[] };
+export type OverviewActivity = Base & { status: string; item_group: string | null; item_category: string | null; start_date: string | null; end_date: string | null; partner_id: string | null; provider_unit_id: string | null; party_lead_id: string | null; standard_id: string | null; work_item_id: string | null; lead_unit_id: string | null; unit_ids: string[]; expert_ids?: string[] };
 export type OverviewPartner = Base & { status: string; short_name: string | null; partner_type: string | null; country: string | null; strategic_level?: string | null; specialties?: string | null; contact_name?: string | null; contact_count?: number; member_ids: string[]; lead_member_id?: string | null };
 export type OverviewUnit = Base & { abbreviation: string | null; sector: string | null; unit_type?: string | null; status?: string; parent_id: string | null };
 export type OverviewMilestone = Base & { status: string; start_date: string | null; end_date: string | null; period_label: string | null; partner_ids: string[]; unit_ids: string[]; activity_ids: string[] };
@@ -69,6 +69,11 @@ export function distinct(values: (string | null | undefined)[]): string[] {
 export function itemPartnerIds(overview: Overview, itemId: string): string[] {
   const partners = byId(overview.partners);
   return distinct(itemActivities(overview, itemId).flatMap(activity => activityPartnerIds(activity, partners))).filter(id => !isConsortium(partners.get(id)));
+}
+
+// The last day of the most recent milestone among those given; empty when there is none.
+export function lastMilestoneDay(milestones: OverviewMilestone[]): string {
+  return milestones.map(item => item.end_date || item.start_date || '').filter(Boolean).sort().at(-1) || '';
 }
 
 export function milestoneDate(milestone: OverviewMilestone): string {

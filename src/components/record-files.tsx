@@ -5,6 +5,7 @@ import type { Dossier } from '@/lib/dossier';
 import { canWriteRecord, dossierAttachmentOwners, dossierFolders, folderCreateInput, folderRenameInput } from '@/lib/record-files';
 import { DocumentItems, ReuseDocument, UploadForm } from './document-library';
 import { api, ErrorBox, Icon, Loading, message, useResource } from './ui';
+import AddMenu from './add-menu';
 
 function FolderNameForm({ record, rename, onDone, onCancel }: {
   record: CatalogRecord; rename: boolean; onDone: () => void; onCancel: () => void;
@@ -76,11 +77,11 @@ export default function RecordFiles({ dossier, membership, onOpen, onRefresh }: 
   }) : [];
   return <section className="record-files" aria-label="File & tài liệu">
     <header className="section-heading"><div><h2>File & tài liệu</h2>{!selected && <p>{target?.kind === 'reference' ? 'Các file được lưu trong thư mục này.' : target?.kind === 'collaboration' ? 'File của hoạt động và file từ các mốc liên quan được tập hợp tại đây.' : 'Tải file trực tiếp hoặc sắp xếp theo thư mục.'}</p>}</div>
-      {writable && !action && <div className="actions">
-        {!selected && target?.kind !== 'reference' && <button className="button" onClick={() => setAction('create')}><Icon name="folder"/>Tạo thư mục</button>}
-        <button className="button" onClick={() => setAction('reuse')}><Icon name="link"/>Dùng file có sẵn</button>
-        <button className="button primary" onClick={() => setAction('upload')}><Icon name="upload"/>Tải file lên</button>
-      </div>}
+      {writable && !action && <AddMenu label="Thêm file" options={[
+        { label: 'Tải file lên', onSelect: () => setAction('upload') },
+        { label: 'Dùng file có sẵn', onSelect: () => setAction('reuse') },
+        ...(!selected && target?.kind !== 'reference' ? [{ label: 'Tạo thư mục', onSelect: () => setAction('create') }] : []),
+      ]}/>}
     </header>
     {selected && <div className="file-location"><button className="text-button" disabled={Boolean(action)} onClick={backToFiles}><Icon name="back"/>Tất cả file & thư mục</button>{target && <strong>{target.title}</strong>}{writable && target?.kind === 'reference' && target.data.reference_type === 'Thư mục' && !action && <div className="actions"><button className="text-button" onClick={() => setAction('rename')}>Đổi tên</button><button className="text-button danger-text" onClick={() => setDeleteFolder(true)}>Xóa thư mục</button></div>}</div>}
     {selected && deleteFolder && <div className="document-confirm"><p>Xóa thư mục “{target?.title}” ở tất cả hồ sơ đang dùng thư mục này? File trong thư mục vẫn được giữ ở kho chung.</p><ErrorBox error={deleteError}/><div className="actions"><button className="button small danger" disabled={deleting} onClick={removeFolder}>{deleting ? 'Đang xóa…' : 'Xác nhận xóa'}</button><button className="button small" disabled={deleting} onClick={() => { setDeleteFolder(false); setDeleteError(null); }}>Hủy</button></div></div>}

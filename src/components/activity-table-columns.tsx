@@ -1,10 +1,9 @@
 "use client";
 import { ACTIVITY_STATUSES, ITEM_CATEGORIES } from '@/lib/catalog';
 import { daysSince, rankIn, type QuickFilter, type TableFilter } from '@/lib/catalog-table';
-import { latestMilestone, milestoneDate, type Overview, type OverviewActivity } from '@/lib/overview';
+import { lastMilestoneDay, type Overview, type OverviewActivity } from '@/lib/overview';
 import { ActivityItemCell, ActivityPartyCell, activityItemText, activityPartyText, dayText, overviewMaps, partnerTerms, unitName, unitTerms } from './activity-cells';
 import type { CatalogColumn } from './catalog-table';
-import { dashboardStyles as styles } from './dashboard-primitives';
 import { Badge } from './ui';
 
 export const STALE_DAYS = 90;
@@ -13,11 +12,8 @@ export const STALE_DAYS = 90;
 export function activityTable(overview: Overview, onOpen: (id: string) => void, group: string) {
   const maps = overviewMaps(overview);
   const supporting = (activity: OverviewActivity) => activity.unit_ids.filter(id => id !== activity.lead_unit_id).map(id => unitName(maps, id)).filter(Boolean);
-  // The latest working day: the date written on the activity or its most recent milestone.
-  const lastWork = (activity: OverviewActivity) => {
-    const milestone = latestMilestone(overview.milestones.filter(item => item.activity_ids.includes(activity.id)));
-    return [activity.last_meeting_date, milestone ? milestoneDate(milestone) : ''].filter(Boolean).sort().at(-1) || '';
-  };
+  // The latest working day is the last day of the activity's most recent milestone.
+  const lastWork = (activity: OverviewActivity) => lastMilestoneDay(overview.milestones.filter(item => item.activity_ids.includes(activity.id)));
   const period = (activity: OverviewActivity) => [dayText(activity.start_date), dayText(activity.end_date)].filter(Boolean).join(' – ');
   const columns: CatalogColumn<OverviewActivity>[] = [
     { key: 'title', label: 'Hoạt động', wide: true, text: activity => activity.title,
@@ -29,8 +25,7 @@ export function activityTable(overview: Overview, onOpen: (id: string) => void, 
       render: activity => <>{activity.lead_unit_id ? <button className="text-button" onClick={() => onOpen(activity.lead_unit_id!)}>{unitName(maps, activity.lead_unit_id)}</button> : '—'}{supporting(activity).length > 0 && <div className="record-meta">Phối hợp: {supporting(activity).join(', ')}</div>}</> },
     { key: 'item', label: 'Hạng mục', wide: true, text: activity => activityItemText(activity, maps), render: activity => <ActivityItemCell activity={activity} maps={maps} onOpen={onOpen}/> },
     { key: 'period', label: 'Thời gian', text: period, sort: activity => activity.start_date || activity.end_date },
-    { key: 'last_work', label: 'Làm việc gần nhất', text: activity => dayText(lastWork(activity)), sort: lastWork },
-    { key: 'next', label: 'Bước tiếp theo', text: activity => activity.next_notes || '', render: activity => activity.next_notes ? <div className={styles.clamp} title={activity.next_notes}>{activity.next_notes}</div> : '—' },
+    { key: 'last_work', label: 'Làm việc gần nhất', text: activity => dayText(lastWork(activity)) || 'Không có', sort: lastWork, render: activity => lastWork(activity) ? dayText(lastWork(activity)) : <span className="muted">Không có</span> },
     { key: 'updated', label: 'Cập nhật', text: activity => dayText(activity.updated_at), sort: activity => activity.updated_at },
   ];
   const filters: TableFilter<OverviewActivity>[] = [

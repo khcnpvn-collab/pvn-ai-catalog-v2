@@ -5,6 +5,7 @@ import { isConsortium } from '@/lib/overview';
 import RecordCombobox, { type ComboChoice } from './record-combobox';
 import { api, Badge, ErrorBox, Icon, message } from './ui';
 import { invalidateOverview, useOverview } from './use-overview';
+import AddMenu from './add-menu';
 
 const isLead = (relation?: Relation) => ['lead', 'Đầu mối liên danh', 'Đứng đầu liên danh'].includes(String(relation?.context?.consortium_role || relation?.context?.['Vai trò'] || ''));
 
@@ -43,7 +44,7 @@ export default function ConsortiumSection({ record, links, writable, onOpen, ref
   </div>;
 
   return <div className="consortium-section">
-    {writable && <div className="section-toolbar"><button className="button small" disabled={busy} onClick={() => setMode(mode === 'join' ? null : 'join')}><Icon name="plus" size={15}/>Tham gia liên danh</button><button className="text-button" disabled={busy} onClick={() => setMode(mode === 'create' ? null : 'create')}>Tạo liên danh mới</button></div>}
+    {writable && !mode && <div className="section-toolbar"><AddMenu disabled={busy} options={[{ label: 'Tham gia liên danh có sẵn', onSelect: () => setMode('join') }, { label: 'Tạo liên danh mới', onSelect: () => setMode('create') }]}/></div>}
     <ErrorBox error={error}/>
     {mode && <div className="consortium-form">
       <label className="checkbox-label"><input type="checkbox" checked={lead} onChange={event => setLead(event.target.checked)}/>{record.title} là đầu mối liên danh</label>

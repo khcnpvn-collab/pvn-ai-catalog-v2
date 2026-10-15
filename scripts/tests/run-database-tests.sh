@@ -88,5 +88,10 @@ psql -X -h "$test_dir" -p 55439 -d postgres -v ON_ERROR_STOP=1 -v "dossier_secti
   -f "$script_dir/contact-directory-checks.sql" \
   -f "$project_dir/supabase/migrations/202610150010_delete_contacts_with_organisation.sql" \
   -f "$script_dir/contact-cleanup-checks.sql" \
+  -f "$project_dir/supabase/migrations/202610150011_document_uploader_name.sql" \
+  -f "$script_dir/document-uploader-checks.sql" \
   -f "$script_dir/overview-management-checks.sql" \
+  -f "$script_dir/activity-meeting-setup.sql" \
+  -f "$project_dir/supabase/migrations/202610150012_activity_meetings_to_milestones.sql" \
+  -f "$script_dir/activity-meeting-checks.sql" \
   -f "$script_dir/ui-contract-checks.sql"

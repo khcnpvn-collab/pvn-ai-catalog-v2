@@ -66,10 +66,6 @@ export function StageBar({ data, unit, onSelect, selected }: { data: Count[]; un
   </>;
 }
 
-export function FilterNote({ label, onClear }: { label: string; onClear: () => void }) {
-  return <span className={styles.filterNote}>Đang lọc: <strong>{label}</strong><button type="button" className="text-button" onClick={onClear}>Bỏ lọc</button></span>;
-}
-
 export function DashboardSection({ title, eyebrow, children }: { title: string; eyebrow?: string; children: ReactNode }) {
   return <section className={styles.panel} aria-label={title}><div className={styles.panelHeading}><div>{eyebrow && <p className={styles.eyebrow}>{eyebrow}</p>}<h2>{title}</h2></div></div>{children}</section>;
 }

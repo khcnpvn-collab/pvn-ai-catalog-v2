@@ -30,7 +30,7 @@ const presets: Record<string, Omit<EditorPresentation, 'showStatus'>> = {
     compact: true,
   },
   collaboration: {
-    dataKeys: ['item_group', 'item_category', 'declared_title', 'scope', 'lead', 'start_date', 'end_date', 'agreement', 'results', 'conclusion', 'next_notes'],
+    dataKeys: ['item_group', 'item_category', 'declared_title', 'scope', 'lead', 'start_date', 'end_date', 'agreement', 'results'],
     showCode: false,
     showSummary: false,
     compact: true,
@@ -52,4 +52,9 @@ export function editorPresentation(kind: string, parentKind?: string): EditorPre
 export function visibleEditorDataKeys(kind: string, parentKind: string | undefined, available: string[]): string[] {
   const keys = editorPresentation(kind, parentKind).dataKeys;
   return (keys ? keys.filter(key => available.includes(key)) : available).filter(key => !isInternalCodeField(key));
+}
+
+// The record summary is named the same in the form and on the record page.
+export function summaryFieldLabel(kind: string) {
+  return kind === 'partner' ? 'Giới thiệu đối tác' : kind === 'unit' ? 'Giới thiệu đơn vị' : 'Tóm tắt';
 }

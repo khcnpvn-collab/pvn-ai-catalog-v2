@@ -1,5 +1,5 @@
 "use client";
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { moduleMap, type CatalogRecord, type Membership, type Relation } from '@/lib/catalog';
 import type { Dossier, DossierSection as Section, RelatedRecord, SectionAction } from '@/lib/dossier';
 import { cleanGeneratedRecordText, isGeneratedRecordCode, recordExcerpt, rowRecordStatus } from '@/lib/record-presentation';
@@ -12,7 +12,7 @@ import { PartnerContacts } from './contact-table';
 import { PartnerTimeline, TimelineInlineEditor } from './partner-sections';
 import ConsortiumSection from './consortium-section';
 import PartnerWorkspaceEditor from './partner-workspace-editor';
-import EditorDialog from './editor-dialog';
+import AddMenu, { type AddOption } from './add-menu';
 import RoadmapSection from './roadmap-sections';
 import { invalidateOverview } from './use-overview';
 import { ItemLinker } from './activity-link-fields';
@@ -31,6 +31,18 @@ function description(record: CatalogRecord) {
 
 // On the summary page the heading is one compact row (title, count, actions); previewLimit trims long lists and
 // onShowAll opens the section's own view with every entry.
+// The name an add option uses: the action's own label without "Thêm", or the record kind.
+function actionName(spec: SectionAction) {
+  const label = (spec.label || moduleMap[spec.kind].singular).replace(/^Thêm\s+/i, '');
+  // Keep acronyms (PVN, AI) as written; lower the first letter of an ordinary word.
+  return /^[A-ZĐ]{2}/.test(label) ? label : label.charAt(0).toLocaleLowerCase('vi') + label.slice(1);
+}
+
+// A form opened from a section stays in the page, in place of the section's list, with its own close button.
+function InlinePanel({ title, onClose, children }: { title: string; onClose: () => void; children: ReactNode }) {
+  return <div className="section-editor-form"><div className="embedded-editor-heading"><div><h3>{title}</h3></div><button className="icon-button" type="button" onClick={onClose} aria-label="Đóng biểu mẫu"><Icon name="close"/></button></div>{children}</div>;
+}
+
 export default function DossierSection({ section, record, related, links, membership, writable, onOpen, refresh, attachments = [], compactCount, previewLimit, onShowAll }: {
   section: Section; record: CatalogRecord; related: RelatedRecord[]; writable: boolean;
   links: Relation[]; membership: Membership; onOpen: (id: string) => void; refresh: () => void; attachments?: Dossier['attachments']; compactCount?: number;
@@ -39,6 +51,7 @@ export default function DossierSection({ section, record, related, links, member
   const [action, setAction] = useState<{ mode: 'create' | 'link'; spec: SectionAction } | null>(null);
   // A unit role link (activity or standard problem ↔ unit) can be made the lead while it is chosen.
   const [asLead, setAsLead] = useState(false);
+  const [contactAdd, setContactAdd] = useState(0);
   const roleLink = Boolean(action?.spec.context?.subject_role) && ((action?.spec.kind === 'unit' && ['collaboration', 'use_case'].includes(record.kind)) || (action?.spec.kind === 'use_case' && record.kind === 'unit'));
   const chooseLead = () => { const spec = section.actions.find(item => item.context?.subject_role); if (spec) { setError(null); setSelectedTarget(null); setAsLead(true); setAction({ mode: 'link', spec }); } };
   const [editingRecord, setEditingRecord] = useState<CatalogRecord | null>(null);
@@ -65,10 +78,10 @@ export default function DossierSection({ section, record, related, links, member
       setAction(null); setSelectedTarget(null); setAsLead(false); done();
     } catch (e) { setError(message(e)); } finally { setBusy(false); }
   }
-  if (editingRecord && record.kind === 'partner' && ['collaboration', 'engagement'].includes(editingRecord.kind)) return <EditorDialog title={`Chỉnh sửa ${editingRecord.kind === 'collaboration' ? 'hoạt động' : 'mốc làm việc'}`} onClose={() => setEditingRecord(null)}><PartnerWorkspaceEditor kind={editingRecord.kind as 'collaboration' | 'engagement'} record={editingRecord} partner={record} cooperationEntries={related.filter(entry => entry.record.kind === 'collaboration' && !entry.via)} membership={membership} onOpen={onOpen} onDone={() => { setEditingRecord(null); done(); }}/></EditorDialog>;
+  if (editingRecord && record.kind === 'partner' && ['collaboration', 'engagement'].includes(editingRecord.kind)) return <InlinePanel title={`Chỉnh sửa ${editingRecord.kind === 'collaboration' ? 'hoạt động' : 'mốc làm việc'}`} onClose={() => setEditingRecord(null)}><PartnerWorkspaceEditor kind={editingRecord.kind as 'collaboration' | 'engagement'} record={editingRecord} partner={record} cooperationEntries={related.filter(entry => entry.record.kind === 'collaboration' && !entry.via)} membership={membership} onOpen={onOpen} onDone={() => { setEditingRecord(null); done(); }}/></InlinePanel>;
   if (editingRecord?.kind === 'engagement') return <TimelineInlineEditor record={editingRecord} onCancel={() => setEditingRecord(null)} onSaved={() => { setEditingRecord(null); done(); }}/>;
   if (editingRecord) return <RecordEditor kind={editingRecord.kind} record={editingRecord} embedded onCancel={() => setEditingRecord(null)} onSave={() => { setEditingRecord(null); done(); }}/>;
-  if (action?.mode === 'create' && record.kind === 'partner' && ['collaboration', 'engagement'].includes(action.spec.kind)) return <EditorDialog title={`Thêm ${action.spec.kind === 'collaboration' ? 'hoạt động' : 'mốc làm việc'}`} onClose={() => setAction(null)}><PartnerWorkspaceEditor kind={action.spec.kind as 'collaboration' | 'engagement'} partner={record} cooperationEntries={related.filter(entry => entry.record.kind === 'collaboration' && !entry.via)} membership={membership} onOpen={onOpen} onDone={() => { setAction(null); done(); }}/></EditorDialog>;
+  if (action?.mode === 'create' && record.kind === 'partner' && ['collaboration', 'engagement'].includes(action.spec.kind)) return <InlinePanel title={`Thêm ${action.spec.kind === 'collaboration' ? 'hoạt động' : 'mốc làm việc'}`} onClose={() => setAction(null)}><PartnerWorkspaceEditor kind={action.spec.kind as 'collaboration' | 'engagement'} partner={record} cooperationEntries={related.filter(entry => entry.record.kind === 'collaboration' && !entry.via)} membership={membership} onOpen={onOpen} onDone={() => { setAction(null); done(); }}/></InlinePanel>;
   if (action?.mode === 'create') return <div className="section-editor-form"><RecordEditor kind={action.spec.kind} embedded
     context={{ parentId: record.id, parentTitle: record.title, parentKind: record.kind, relation: action.spec.relation, direction: action.spec.direction, ...(action.spec.context ? { context: action.spec.context } : {}) }}
     onCancel={() => setAction(null)} onSave={() => { setAction(null); done(); }}/></div>;
@@ -85,18 +98,22 @@ export default function DossierSection({ section, record, related, links, member
     try { await api(`/api/links/${existing.id}`, { method: 'DELETE' }); done(); } catch (e) { setError(message(e)); } finally { setBusy(false); }
   }
   function renderActions(actions: SectionAction[]) {
-    if (['partner', 'unit'].includes(record.kind) && ['partner-contact', 'contact-grid'].includes(section.selector || '')) return null;
+    if (['partner-contact', 'contact-grid'].includes(section.selector || '')) return writable && <AddMenu disabled={busy} options={[{ label: 'Thêm đầu mối', onSelect: () => setContactAdd(count => count + 1) }]}/>;
     // The consortium view carries its own join / create / add actions.
     if (['partner-consortium', 'consortium-members'].includes(section.selector || '')) return null;
-    if (record.kind === 'partner' && ['partner-collaboration', 'partner-engagement'].includes(section.selector || '')) return writable && <div className="related-kind-actions"><button className="button small" disabled={busy} onClick={() => { setError(null); setAction({ mode: 'create', spec: actions[0] }); }}><Icon name="plus" size={16}/>{section.selector === 'partner-collaboration' ? 'Thêm hoạt động' : 'Thêm mốc làm việc'}</button></div>;
+    if (!writable) return null;
+    const create = (spec: SectionAction) => () => { setError(null); setSelectedTarget(null); setAction({ mode: 'create', spec }); };
+    const choose = (spec: SectionAction) => () => { setError(null); setSelectedTarget(null); setAsLead(false); setAction({ mode: 'link', spec }); };
+    // A partner's activities and milestones are always written from the partner, so they are only ever new.
+    if (record.kind === 'partner' && ['partner-collaboration', 'partner-engagement'].includes(section.selector || '')) return <AddMenu disabled={busy} options={[{ label: section.selector === 'partner-collaboration' ? 'Thêm hoạt động' : 'Thêm mốc làm việc', onSelect: create(actions[0]) }]}/>;
     // An activity has at most one partner and one standard problem.
     if (section.selector === 'activity-partner' && entries.length) return null;
     if (record.kind === 'collaboration' && section.id === 'contents') return null;
-    return writable && <div className="related-kind-actions">{actions.map(spec => <div className="actions" key={`${spec.relation}-${spec.direction}-${spec.kind}`}>
-      {spec.label && <span className="related-action-label">{spec.label}</span>}
-      <button className="button small" disabled={busy} onClick={() => { setError(null); setSelectedTarget(null); setAction({ mode: 'create', spec }); }}><Icon name="plus" size={16}/>Thêm mới</button>
-      <button className="text-button" disabled={busy} onClick={() => { setError(null); setSelectedTarget(null); setAsLead(false); setAction({ mode: 'link', spec }); }}>Chọn có sẵn</button>
-    </div>)}</div>;
+    const options: AddOption[] = actions.flatMap(spec => {
+      const name = actionName(spec);
+      return [{ label: `Tạo ${name} mới`, onSelect: create(spec) }, { label: `Chọn ${name} có sẵn`, onSelect: choose(spec) }];
+    });
+    return <AddMenu disabled={busy} options={options}/>;
   }
   const partnerView = section.selector && partnerSelectors.has(section.selector) && (record.kind === 'partner' || (record.kind === 'unit' && section.selector === 'contact-grid'));
   const roadmapView = section.selector && roadmapSelectors.has(section.selector);
@@ -109,18 +126,18 @@ export default function DossierSection({ section, record, related, links, member
   const preview = <T,>(items: T[]) => previewLimit ? items.slice(0, previewLimit) : items;
   const showAll = (total: number, kind: string) => previewLimit && onShowAll && total > previewLimit && <button className="text-button related-show-all" onClick={onShowAll}>Xem tất cả {total} {moduleMap[kind].singular}<Icon name="arrow" size={16}/></button>;
   return <>
-    {compactCount == null && <div className="section-heading"><div><h2>{section.label}{section.kinds.length === 1 && <span className="section-record-count">{entries.length}</span>}</h2><p>{section.description}</p></div>{(section.kinds.length === 1 || roadmapView) && renderActions(section.actions)}</div>}
-    {compactCount != null && <header className="cv-section-heading"><h2>{section.label}<span className="cv-count">{compactCount}</span></h2>{(section.kinds.length === 1 || roadmapView) && renderActions(section.actions)}</header>}
+    {compactCount == null && <div className="section-heading"><div><h2>{section.label}{section.kinds.length === 1 && <span className="section-record-count">{entries.length}</span>}</h2><p>{section.description}</p></div>{renderActions(section.actions)}</div>}
+    {compactCount != null && <header className="cv-section-heading"><h2>{section.label}<span className="cv-count">{compactCount}</span></h2>{renderActions(section.actions)}</header>}
     <ErrorBox error={error}/>
     {action?.mode === 'link' && <div className="inline-form"><div className="section-heading"><h3>Chọn {moduleMap[action.spec.kind].singular}</h3><div className="actions"><button className="button small" disabled={busy} onClick={() => { setAction(null); setSelectedTarget(null); }}>Hủy</button></div></div>{selectedTarget ? <div className="selected-record"><div><strong>{selectedTarget.title}</strong><p>{moduleMap[selectedTarget.kind]?.label}</p></div><button className="button small" onClick={() => setSelectedTarget(null)}>Chọn lại</button></div> : <div inert={busy}><RecordPicker key={action.spec.kind} fixedKind={action.spec.kind} exclude={record.id} onSelect={setSelectedTarget}/></div>}{roleLink && <label className="checkbox-label"><input type="checkbox" checked={asLead} onChange={event => setAsLead(event.target.checked)}/>{record.kind === 'collaboration' ? 'Đặt làm đơn vị đầu mối' : 'Đặt làm đầu mối ưu tiên triển khai'}</label>}{selectedTarget && <div className="actions link-review-actions"><button className="button primary" disabled={busy} onClick={link}>{busy ? 'Đang lưu…' : 'Lưu liên kết'}</button></div>}</div>}
     {standardLinker && <ItemLinker activity={record} onLinked={done}/>}
     {!collapsed && !standardLinker && (roadmapView ? <div className="partner-section-content"><RoadmapSection selector={section.selector!} record={record} entries={entries} links={links} writable={writable} onOpen={onOpen} refresh={done} limit={previewLimit} onShowAll={onShowAll} onChooseLead={chooseLead}/></div> : milestoneView ? <div className="partner-section-content">{entries.length ? <PartnerTimeline entries={preview(entries)} attachments={attachments} onOpen={onOpen} onRefresh={done} onEdit={membership.role !== 'reader' ? editRecord : undefined} canEdit={() => canWriteRecord(membership)}/> : <p className="related-group-empty">Chưa có mốc làm việc.</p>}</div> : partnerView ? <div className="partner-section-content">
-      {['partner-contact', 'contact-grid'].includes(section.selector || '') && <PartnerContacts entries={entries} owner={record} writable={writable} onRefresh={refresh} canEdit={() => canWriteRecord(membership)}/>}
+      {['partner-contact', 'contact-grid'].includes(section.selector || '') && <PartnerContacts entries={entries} owner={record} writable={writable} onRefresh={refresh} canEdit={() => canWriteRecord(membership)} addSignal={contactAdd}/>}
       {section.selector === 'partner-collaboration' && <RoadmapSection selector="activity-list" record={record} entries={entries} links={links} writable={writable} onOpen={onOpen} refresh={done} limit={previewLimit} onShowAll={onShowAll}/>}
       {section.selector === 'partner-engagement' && (entries.length ? <PartnerTimeline entries={entries} attachments={attachments} onOpen={onOpen} onRefresh={refresh} onEdit={membership.role !== 'reader' ? editRecord : undefined} canEdit={() => canWriteRecord(membership)}/> : <p className="related-group-empty">Chưa có mốc làm việc.</p>)}
       {['partner-consortium', 'consortium-members'].includes(section.selector || '') && <ConsortiumSection record={record} links={links} writable={writable} onOpen={onOpen} refresh={done}/>}
     </div> : <div className="related-kind-groups">{groups.filter(group => group.entries.length || (writable && group.actions.length)).map(group => <section className="related-kind-group" key={group.kind}>
-      {section.kinds.length > 1 && !itemSection && <header className="related-kind-heading"><h3>{moduleMap[group.kind].label}<span>{group.entries.length}</span></h3>{renderActions(group.actions)}</header>}
+      {section.kinds.length > 1 && !itemSection && <header className="related-kind-heading"><h3>{moduleMap[group.kind].label}<span>{group.entries.length}</span></h3></header>}
 
       {group.entries.length ? <div className="related-record-list">{preview(group.entries).map(entry => {
         const status = rowRecordStatus(entry.record);

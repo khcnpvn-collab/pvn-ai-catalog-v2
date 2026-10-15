@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import type { CatalogRecord } from '../src/lib/catalog';
 import { dossierPath, dossierSections, readTrail, type Dossier, type RelatedRecord } from '../src/lib/dossier';
 import { resolveDossierTab, visibleRecordStatus } from '../src/lib/record-presentation';
-import { partnerTimelineEntries, sectionEntries, summaryFacts, summaryNarrative, summaryRecordDescription, summarySectionEntries, summarySections, withDirectLinks } from '../src/lib/dossier-summary';
+import { partnerTimelineEntries, sectionEntries, summaryRecordDescription, summarySectionEntries, summarySections, withDirectLinks } from '../src/lib/dossier-summary';
 import { editorPresentation, visibleEditorDataKeys } from '../src/lib/editor-presentation';
 
 // Synthetic inputs exercise presentation only; no API fixtures or production writes.
@@ -80,13 +80,8 @@ test('partner editor presets are contextual and preserve full forms outside the 
   expect(editorPresentation('partner').dataKeys).toEqual(['partner_type', 'strategic_level', 'country', 'website', 'specialties']);
   expect(visibleEditorDataKeys('contact', 'partner', ['position', 'email', 'expertise', 'role'])).toEqual(['role', 'position', 'email']);
   expect(editorPresentation('contact', 'unit').dataKeys).toBeNull();
-  expect(editorPresentation('collaboration').dataKeys).toEqual(['item_group', 'item_category', 'declared_title', 'scope', 'lead', 'start_date', 'end_date', 'agreement', 'results', 'conclusion', 'next_notes']);
+  expect(editorPresentation('collaboration').dataKeys).toEqual(['item_group', 'item_category', 'declared_title', 'scope', 'lead', 'start_date', 'end_date', 'agreement', 'results']);
   expect(editorPresentation('partner').showStatus).toBe(true);
-});
-
-test('partner summary only exposes the basic identity fields in the requested order', () => {
-  const item = record('partner', 'partner', { aliases: 'Tên cũ', origin: 'Nguồn khảo sát', website: 'https://example.test', country: 'Việt Nam', partner_type: 'Doanh nghiệp' });
-  expect(summaryFacts(item, 10).map(({field}) => field.key)).toEqual(['partner_type', 'country', 'website']);
 });
 
 test('direct links replace an indirect duplicate without inflating counts or retaining a false via label', () => {
@@ -101,36 +96,6 @@ test('metadata references never count as stored files or invent download version
   const model = dossier({ related: [related(record('reference', 'reference', { external_url: 'https://example.test/cv.pdf' }))] });
   const sections = summarySections(dossierSections.engagement, model.related);
   expect(sections.find(group => group.section.id === 'references')?.count).toBe(1);
-});
-
-test('summary facts include only populated short facts and preserve numeric zero', () => {
-  const item = record('use_case', 'use_case', { start_year: 0, objective: 'Narrative objective', category: 'a'.repeat(161), program: 'line one\nline two', leadership_level: null });
-  const facts = summaryFacts(item, 10);
-  expect(facts.find(fact => fact.field.key === 'start_year')?.value).toBe(0);
-  expect(facts.some(fact => ['objective', 'category', 'program', 'leadership_level'].includes(fact.field.key))).toBe(false);
-  expect(summaryFacts(item, 1)).toHaveLength(1);
-  expect(summaryFacts(record('empty'))).toEqual([]);
-});
-
-test('summary narrative is readable and bounded without inventing content for empty dossiers', () => {
-  const item = { ...record('summary'), summary: 'Thông tin có nguồn và nội dung rõ ràng. '.repeat(40) };
-  const value = summaryNarrative(item);
-  expect(value.length).toBeLessThanOrEqual(480);
-  expect(value).toContain('Thông tin có nguồn');
-  expect(value.endsWith('…')).toBe(true);
-  expect(summaryNarrative(record('empty'))).toBe('');
-});
-
-test('collaboration summary presents its managed scope before imported provenance prose', () => {
-  const collaboration = record('collaboration', 'collaboration', { scope: 'AI Chatbot' });
-  collaboration.summary = 'Tình trạng nguyên gốc: Nghiên cứu đối tác\nTên đối tác nguyên gốc: FPT Digital';
-  expect(summaryNarrative(collaboration)).toBe('AI Chatbot');
-});
-
-test('summary favors substantive labeled narrative and does not preview raw indexed survey matrices', () => {
-  const item = { ...record('need', 'demand'), summary: 'Đơn vị: Example\nTrạng thái đơn vị khai báo: Đang nghiên cứu\nMô tả nhu cầu: Theo dõi thiết bị quay' };
-  expect(summaryNarrative(item)).toBe('Theo dõi thiết bị quay');
-  expect(summaryNarrative(record('unit', 'unit', { capabilities: '0: 0: Nội dung ô ma trận' }))).toBe('');
 });
 
 test('record previews expose useful domain context with bounded descriptions', () => {
@@ -171,7 +136,6 @@ test('internal codes stay out of every editor and summary facts', () => {
     expect(visibleEditorDataKeys(kind, undefined, ['domain_code', 'internal_unit_code', 'country'])).not.toContain('domain_code');
     expect(visibleEditorDataKeys(kind, undefined, ['domain_code', 'internal_unit_code', 'country'])).not.toContain('internal_unit_code');
   }
-  expect(summaryFacts(record('expertise', 'expertise', {domain_code: 'CM001'}))).toEqual([]);
 });
 
 test('a unit that is both PVN subject and executing party shows in both activity sections', () => {

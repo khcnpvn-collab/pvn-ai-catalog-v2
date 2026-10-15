@@ -2,12 +2,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { type Membership } from '@/lib/catalog';
 import { type Dossier, type DossierSection as Section } from '@/lib/dossier';
-import { summaryFacts, summaryNarrative, summarySections } from '@/lib/dossier-summary';
-import { date, Icon } from './ui';
+import { summarySections } from '@/lib/dossier-summary';
+import { Icon } from './ui';
 import DossierSection from './dossier-section';
 import RecordEditor from './record-editor';
 import RecordFiles from './record-files';
 import RecordHighlights from './record-highlights';
+import RecordOverview from './record-overview';
 import { invalidateOverview } from './use-overview';
 
 export default function RecordSummary({ dossier, sections, writable, allowSurvey, onSection, onOpen, membership, onRefresh }: {
@@ -28,8 +29,6 @@ export default function RecordSummary({ dossier, sections, writable, allowSurvey
   }
   const record = dossier.data;
   const partner = record.kind === 'partner';
-  const facts = summaryFacts(record);
-  const narrative = summaryNarrative(record);
   const groups = summarySections(sections.filter(section => section.id !== 'references'), dossier.related);
   const sectionKey = groups.map(group => group.section.id).join();
   // Highlight the contents entry for the section crossing the upper part of the viewport.
@@ -47,13 +46,10 @@ export default function RecordSummary({ dossier, sections, writable, allowSurvey
     <nav className="cv-contents" aria-label="Mục lục hồ sơ tổng hợp"><strong>Trong hồ sơ</strong>{contentsButton('cv-information', 'Thông tin chính')}{groups.map(({section, count}) => contentsButton(`cv-${section.id}`, section.label, count))}{contentsButton('cv-documents', 'File & tài liệu')}{allowSurvey && contentsButton('cv-survey', 'Kết quả khảo sát')}</nav>
     <div className="cv-body">
       <RecordHighlights record={record}/>
-      <section tabIndex={-1} className="cv-section cv-introduction" id="cv-information" aria-labelledby="cv-information-title"><header className="cv-section-heading"><h2 id="cv-information-title">Thông tin chính</h2>{!editingInformation && <div className="cv-section-actions">{writable && <button className="button small" onClick={() => setEditingInformation(true)}><Icon name="edit" size={15}/>Chỉnh sửa</button>}{!partner && <button className="text-button" onClick={() => onSection('information')}>Xem đầy đủ thông tin<Icon name="arrow" size={16}/></button>}</div>}</header>
+      <section tabIndex={-1} className="cv-section cv-introduction" id="cv-information" aria-labelledby="cv-information-title"><header className="cv-section-heading"><h2 id="cv-information-title">Thông tin chính</h2>{!editingInformation && <div className="cv-section-actions">{writable && <button className="button small" onClick={() => setEditingInformation(true)}><Icon name="edit" size={15}/>Chỉnh sửa</button>}</div>}</header>
         {/* The section heading already names the form; Hủy and Lưu close it. */}
-        {editingInformation ? <RecordEditor kind={record.kind} record={record} embedded hideHeading onCancel={() => setEditingInformation(false)} onSave={() => { setEditingInformation(false); invalidateOverview(); onRefresh(); }}/> : <>
-          {narrative && <p className="cv-narrative">{narrative}</p>}
-          {facts.length > 0 && <dl className="record-facts">{facts.map(({field, value}) => <div key={field.key}><dt>{field.label}</dt><dd>{field.type === 'url' && /^https?:\/\//i.test(String(value)) ? <a href={String(value)} target="_blank" rel="noreferrer">{String(value)}</a> : field.type === 'email' ? <a href={`mailto:${value}`}>{value}</a> : field.type === 'date' ? date(String(value)) : value}</dd></div>)}</dl>}
-          {!narrative && !facts.length && <p className="muted">Chưa ghi nhận thông tin mô tả.</p>}
-        </>}
+        {editingInformation ? <RecordEditor kind={record.kind} record={record} embedded hideHeading onCancel={() => setEditingInformation(false)} onSave={() => { setEditingInformation(false); invalidateOverview(); onRefresh(); }}/>
+          : <RecordOverview record={record} onSurvey={allowSurvey ? () => onSection('survey') : undefined}/>}
       </section>
       {groups.map(({section, count}) => <section tabIndex={-1} className="cv-section" id={`cv-${section.id}`} key={section.id} aria-label={section.label}>
         <DossierSection section={section} record={record} related={dossier.related} links={dossier.links} membership={membership} attachments={dossier.attachments} writable={writable} onOpen={onOpen} refresh={onRefresh} compactCount={count} previewLimit={partner ? undefined : 6} onShowAll={() => onSection(section.id)}/>

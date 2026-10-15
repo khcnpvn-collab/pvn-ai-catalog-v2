@@ -2,6 +2,7 @@
 import type { CatalogRecord, Field } from '@/lib/catalog';
 import { groupFields, moduleMap } from '@/lib/catalog';
 import { cleanGeneratedRecordText, isInternalCodeField, isGeneratedRecordCode, parseDataDetails, parseNarrative } from '@/lib/record-presentation';
+import { summaryFieldLabel } from '@/lib/editor-presentation';
 import { date } from './ui';
 
 function Paragraphs({ text }: { text: string }) {
@@ -38,10 +39,9 @@ function NarrativeFieldValue({ kind, value, onSurvey }: { kind: string; value: s
 
 export default function RecordOverview({ record, onSurvey }: { record: CatalogRecord; onSurvey?: () => void }) {
   const mod = moduleMap[record.kind];
-  const partnerKeys = new Set(['partner_type', 'strategic_level', 'country', 'website', 'specialties']);
   const generated = isGeneratedRecordCode(record.code);
   const summary = cleanGeneratedRecordText(record.summary, generated);
-  const visibleFields = mod.fields.filter(field => !field.hidden && !isInternalCodeField(field.key) && (record.kind !== 'partner' || partnerKeys.has(field.key)));
+  const visibleFields = mod.fields.filter(field => !field.hidden && !isInternalCodeField(field.key));
   // Every field keeps its place; one not recorded yet simply shows an empty value.
   const fields = visibleFields.map(field => ({ field, value: record.data[field.key] ?? '' }));
   const filled = (value: string | number) => String(value).trim() !== '';
@@ -52,12 +52,14 @@ export default function RecordOverview({ record, onSurvey }: { record: CatalogRe
   const hasGroups = visibleFields.some(field => field.group);
   const grouped = hasGroups ? groupFields(visibleFields, 'Thông tin khác').map(group => ({ label: group.label, values: fields.filter(item => group.fields.some(field => field.key === item.field.key)) })) : [];
   const summaryBlocks = parseNarrative(summary);
+  const summaryLabel = summaryFieldLabel(record.kind);
   const shortSummary = summary && summary.length <= 320 && !summaryBlocks.some(block => block.label);
   return <div className="record-overview">
-    {shortSummary && <section className="dossier-intro"><h2>Tóm tắt</h2><Paragraphs text={summary}/></section>}
+    {shortSummary && <section className="dossier-intro"><h2>{summaryLabel}</h2><Paragraphs text={summary}/></section>}
     {!hasGroups && facts.length > 0 && <section className="record-facts-section"><h2>Thông tin chính</h2><dl className="record-facts">{facts.map(({field, value}) => <div key={field.key}><dt>{field.label}</dt><dd><FactValue field={field} value={value}/></dd></div>)}</dl></section>}
-    {summary && !shortSummary && <section className="record-narrative-section"><h2>Nội dung tổng hợp</h2><NarrativeContent text={summary}/></section>}
-    {grouped.map(group => <section className="record-field-group" key={group.label}><h2>{group.label}</h2>
+    {summary && !shortSummary && <section className="record-narrative-section"><h2>{summaryLabel}</h2><NarrativeContent text={summary}/></section>}
+    {/* The first group is the record's main information, already titled by the section around it. */}
+    {grouped.map((group, index) => <section className="record-field-group" key={group.label}>{index > 0 && <h2>{group.label}</h2>}
       {group.values.some(item => !isNarrative(item)) && <dl className="record-facts">{group.values.filter(item => !isNarrative(item)).map(({field, value}) => <div key={field.key}><dt>{field.label}</dt><dd><FactValue field={field} value={value}/></dd></div>)}</dl>}
       {group.values.filter(isNarrative).map(({field, value}) => <div className="record-group-narrative" key={field.key}><h3>{field.label}</h3><NarrativeFieldValue kind={record.kind} value={value} onSurvey={onSurvey}/></div>)}
     </section>)}

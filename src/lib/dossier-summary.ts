@@ -1,36 +1,9 @@
-import { moduleMap, type CatalogRecord, type Field, type Relation } from './catalog';
+import type { CatalogRecord, Relation } from './catalog';
 import type { Dossier, DossierSection, RelatedRecord } from './dossier';
-import { cleanGeneratedRecordText, isInternalCodeField, isGeneratedRecordCode, parseNarrative, recordExcerpt } from './record-presentation';
+import { cleanGeneratedRecordText, isGeneratedRecordCode, recordExcerpt } from './record-presentation';
 
 function clean(record: CatalogRecord, value: string | number | null | undefined) {
   return cleanGeneratedRecordText(value == null ? '' : String(value), isGeneratedRecordCode(record.code));
-}
-
-export function summaryFacts(record: CatalogRecord, limit = 6): { field: Field; value: string | number }[] {
-  const fields = moduleMap[record.kind]?.fields || [];
-  const visibleFields = record.kind === 'partner'
-    ? ['partner_type', 'country', 'website'].flatMap(key => fields.find(field => field.key === key) || [])
-    : fields.filter(field => !field.hidden);
-  return visibleFields.filter(field => !isInternalCodeField(field.key)).flatMap(field => {
-    const value = clean(record, record.data[field.key]);
-    return field.type !== 'textarea' && value.trim() && value.length <= 160 && !value.includes('\n')
-      ? [{ field, value: field.type === 'number' ? record.data[field.key] as number | string : value }] : [];
-  }).slice(0, Math.max(0, limit));
-}
-
-export function summaryNarrative(record: CatalogRecord): string {
-  // Unit summaries written by the survey import only restate that a questionnaire was received.
-  if (record.kind === 'unit' && /phiếu khảo sát/i.test(record.summary || '')) return '';
-  if (record.kind === 'use_case' && clean(record, record.data.objective).trim()) return recordExcerpt(clean(record, record.data.objective), 480);
-  if (record.kind === 'collaboration') {
-    const scope = clean(record, record.data.scope);
-    if (scope.trim()) return recordExcerpt(scope, 480);
-  }
-  const blocks = parseNarrative(clean(record, record.summary));
-  const preferred = blocks.find(block => ['Mô tả', 'Mô tả nhu cầu', 'Phạm vi'].includes(block.label || ''));
-  const summary = preferred?.text || blocks.filter(block => !block.label).map(block => block.text).join(' ') || blocks.map(block => `${block.label}: ${block.text}`).join(' ');
-  const fallback = (moduleMap[record.kind]?.fields || []).filter(field => field.type === 'textarea').map(field => clean(record, record.data[field.key])).find(value => value.trim() && !/(?:^|\s)\d+:\s*\d+:/.test(value));
-  return recordExcerpt(summary || fallback || '', 480);
 }
 
 export function summarySections(sections: DossierSection[], related: RelatedRecord[], limit = 3) {
@@ -85,7 +58,7 @@ export function summaryRecordDescription(record: CatalogRecord): string {
     reference: ['reference_type', 'date_note', 'edition'], engagement: ['start_date', 'location', 'conclusions'],
   };
   const value = (keys[record.kind] || []).map(key => clean(record, record.data[key])).filter(Boolean).join(' · ');
-  return recordExcerpt(value || summaryNarrative(record), 180);
+  return recordExcerpt(value || clean(record, record.summary), 180);
 }
 
 // The dossier lists each related record once, yet one record can be linked twice (a unit that is both a PVN

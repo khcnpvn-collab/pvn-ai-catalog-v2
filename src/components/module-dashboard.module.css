@@ -35,7 +35,6 @@ button.barRow:hover, button.barRow[aria-pressed="true"] { background: var(--subt
 .legendValue { margin-left: auto; font-variant-numeric: tabular-nums; color: var(--muted); }
 .filters { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 14px; }
 .filters select { flex: 0 1 230px; width: auto; max-width: 280px; min-height: 44px; border-color: var(--border-strong); font-size: 14px; }
-.filterNote { display: flex; align-items: center; gap: 8px; font-size: var(--ui); color: var(--muted); }
 .count { font-size: var(--ui); color: var(--muted); margin-bottom: 10px; }
 .numeric { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .tableTitle { font-weight: 600; }

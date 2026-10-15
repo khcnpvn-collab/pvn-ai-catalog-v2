@@ -6,13 +6,13 @@ import { api, Badge, ErrorBox, Icon, message } from './ui';
 
 const text = (value: unknown) => value == null ? '' : String(value).trim();
 const WORK_STATUSES = ['Đang công tác', 'Đã chuyển công tác', 'Đã nghỉ'];
-// One field per piece of contact information, in the order they are read and typed.
-const FIELDS: { key: string; label: string; type?: string; placeholder?: string }[] = [
-  { key: 'position', label: 'Chức vụ', placeholder: 'VD: Trưởng ban, Giám đốc kinh doanh' },
-  { key: 'department', label: 'Ban / phòng / văn phòng', placeholder: 'VD: Ban CNTT & CĐS' },
-  { key: 'role', label: 'Vai trò đầu mối', placeholder: 'VD: Đầu mối giải pháp AI' },
+// One column per piece of contact information, edited in the same cell it is shown in.
+const COLUMNS: { key: string; label: string; type?: string; placeholder?: string }[] = [
+  { key: 'position', label: 'Chức vụ', placeholder: 'Trưởng ban…' },
+  { key: 'department', label: 'Ban / phòng', placeholder: 'Ban CNTT…' },
+  { key: 'role', label: 'Vai trò đầu mối', placeholder: 'Đầu mối giải pháp AI…' },
   { key: 'email', label: 'Email', type: 'email', placeholder: 'ten@congty.vn' },
-  { key: 'phone', label: 'Điện thoại', type: 'tel', placeholder: 'VD: 0912 345 678' },
+  { key: 'phone', label: 'Điện thoại', type: 'tel', placeholder: '0912 345 678' },
 ];
 
 function draftOf(record?: CatalogRecord): RecordInput {
@@ -20,15 +20,25 @@ function draftOf(record?: CatalogRecord): RecordInput {
     : { kind: 'contact', title: '', status: 'Còn hiệu lực', data: { work_status: 'Đang công tác' } };
 }
 
-// Contacts of a unit or partner: one column per field, a separate labelled form to add or edit, and delete.
-export function PartnerContacts({ entries, owner, writable, canEdit, onRefresh }: { entries: RelatedRecord[]; owner?: CatalogRecord; writable?: boolean; canEdit?: (record: CatalogRecord) => boolean; onRefresh?: () => void }) {
-  const [editing, setEditing] = useState<CatalogRecord | 'new' | null>(null);
+function Value({ name, value }: { name: string; value: string }) {
+  if (!value) return <>—</>;
+  if (name === 'email') return <a href={`mailto:${value}`}>{value}</a>;
+  if (name === 'phone') return <a href={`tel:${value.replace(/[^+\d]/g, '')}`}>{value}</a>;
+  return <>{value}</>;
+}
+
+// Contacts of a unit or partner: add, edit and delete right in the table rows. The section heading's add
+// button raises addSignal, which opens an empty row at the top.
+export function PartnerContacts({ entries, owner, writable, canEdit, onRefresh, addSignal = 0 }: { entries: RelatedRecord[]; owner?: CatalogRecord; writable?: boolean; canEdit?: (record: CatalogRecord) => boolean; onRefresh?: () => void; addSignal?: number }) {
+  const [editing, setEditing] = useState<string | null>(null);
   const [draft, setDraft] = useState<RecordInput | null>(null);
-  const [deleting, setDeleting] = useState<CatalogRecord | null>(null);
+  const [deleting, setDeleting] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  function begin(record?: CatalogRecord) { setDraft(draftOf(record)); setEditing(record || 'new'); setDeleting(null); setError(null); }
+  function begin(record: CatalogRecord) { setDraft(draftOf(record)); setEditing(record.id); setDeleting(null); setError(null); }
   function close() { setEditing(null); setDraft(null); setError(null); }
+  const [seenSignal, setSeenSignal] = useState(addSignal);
+  if (addSignal !== seenSignal) { setSeenSignal(addSignal); setDraft(draftOf()); setEditing('new'); setDeleting(null); setError(null); }
   const set = (key: string, value: string) => setDraft(current => current && (key === 'title' ? { ...current, title: value } : { ...current, data: { ...current.data, [key]: value || null } }));
   async function run(action: () => Promise<unknown>) {
     setBusy(true); setError(null);
@@ -36,41 +46,34 @@ export function PartnerContacts({ entries, owner, writable, canEdit, onRefresh }
   }
   function save() {
     if (!draft || !owner) return;
-    const invalid = validateRecord({ ...draft, title: draft.title.trim() });
+    const input = { ...draft, title: draft.title.trim() };
+    const invalid = validateRecord(input);
     if (invalid) { setError(invalid); return; }
     run(() => api(editing === 'new' ? `/api/records/${owner.id}/related` : `/api/records/${draft.id}`, {
       method: editing === 'new' ? 'POST' : 'PATCH',
-      body: JSON.stringify(editing === 'new' ? { record: { ...draft, title: draft.title.trim() }, relation: 'contact', direction: 'from-parent' } : { ...draft, title: draft.title.trim() }),
+      body: JSON.stringify(editing === 'new' ? { record: input, relation: 'contact', direction: 'from-parent' } : input),
     }));
   }
   const contacts = [...entries].map(entry => entry.record).sort((a, b) => Number(text(b.data.is_primary) === 'Có') - Number(text(a.data.is_primary) === 'Có') || a.title.localeCompare(b.title, 'vi'));
   const editable = (record: CatalogRecord) => writable && (!canEdit || canEdit(record));
+  // Enter saves and Escape cancels from any field of the row being edited.
+  const editRow = (key: string) => draft && <tr key={key} className="contact-edit-row" onKeyDown={event => { if (event.key === 'Enter' && (event.target as HTMLElement).tagName === 'INPUT' && (event.target as HTMLInputElement).type !== 'checkbox') { event.preventDefault(); save(); } if (event.key === 'Escape') { event.stopPropagation(); close(); } }}>
+    <td><input aria-label="Họ tên" placeholder="Họ tên *" autoFocus maxLength={250} value={draft.title} disabled={busy} onChange={event => set('title', event.target.value)}/>
+      <div className="contact-edit-extra"><label className="checkbox-label"><input type="checkbox" checked={draft.data?.is_primary === 'Có'} disabled={busy} onChange={event => set('is_primary', event.target.checked ? 'Có' : 'Không')}/>Đầu mối chính</label>
+        <select aria-label="Tình trạng công tác" value={text(draft.data?.work_status)} disabled={busy} onChange={event => set('work_status', event.target.value)}><option value="">Tình trạng: chưa ghi nhận</option>{text(draft.data?.work_status) && !WORK_STATUSES.includes(text(draft.data?.work_status)) && <option>{text(draft.data?.work_status)}</option>}{WORK_STATUSES.map(item => <option key={item}>{item}</option>)}</select></div></td>
+    {COLUMNS.map(column => <td key={column.key}><input aria-label={column.label} type={column.type || 'text'} maxLength={1000} placeholder={column.placeholder} value={text(draft.data?.[column.key])} disabled={busy} onChange={event => set(column.key, event.target.value)}/></td>)}
+    <td><div className="contact-row-buttons"><button type="button" className="icon-button" title="Lưu" aria-label="Lưu đầu mối" disabled={busy} onClick={save}><Icon name="check" size={17}/></button><button type="button" className="icon-button" title="Hủy" aria-label="Hủy" disabled={busy} onClick={close}><Icon name="close" size={17}/></button></div></td>
+  </tr>;
   return <div className="contact-table">
-    {writable && owner && !editing && <div className="partner-contact-toolbar"><button className="button small" type="button" onClick={() => begin()}><Icon name="plus" size={15}/>Thêm đầu mối</button></div>}
-    {editing && draft && <form className="panel form-section contact-form" onSubmit={event => { event.preventDefault(); save(); }}>
-      <h3>{editing === 'new' ? 'Thêm đầu mối' : `Sửa đầu mối: ${editing.title}`}</h3>
-      <div className="form-grid">
-        <label className="field full"><span>Họ tên <span className="required" aria-hidden="true">*</span></span><input required autoFocus maxLength={250} value={draft.title} onChange={event => set('title', event.target.value)}/></label>
-        {FIELDS.map(field => <label className="field" key={field.key}>{field.label}<input type={field.type || 'text'} maxLength={1000} placeholder={field.placeholder} value={text(draft.data?.[field.key])} onChange={event => set(field.key, event.target.value)}/></label>)}
-        <label className="field">Tình trạng công tác<select value={text(draft.data?.work_status)} onChange={event => set('work_status', event.target.value)}><option value="">Chưa ghi nhận</option>{text(draft.data?.work_status) && !WORK_STATUSES.includes(text(draft.data?.work_status)) && <option>{text(draft.data?.work_status)}</option>}{WORK_STATUSES.map(item => <option key={item}>{item}</option>)}</select></label>
-        <label className="checkbox-label full contact-primary"><input type="checkbox" checked={draft.data?.is_primary === 'Có'} onChange={event => set('is_primary', event.target.checked ? 'Có' : 'Không')}/>Đầu mối chính</label>
-      </div>
-      <ErrorBox error={error}/>
-      <div className="actions"><button className="button" type="button" disabled={busy} onClick={close}>Hủy</button><button className="button primary" disabled={busy}>{busy ? 'Đang lưu…' : 'Lưu đầu mối'}</button></div>
-    </form>}
-    {!editing && <ErrorBox error={error}/>}
-    {contacts.length > 0 ? <div className="table-scroll partner-contact-table"><table><thead><tr><th>Họ tên</th><th>Chức vụ</th><th>Ban / phòng</th><th>Vai trò đầu mối</th><th>Email</th><th>Điện thoại</th>{writable && <th><span className="sr-only">Thao tác</span></th>}</tr></thead>
-      <tbody>{contacts.map(record => <tr key={record.id}>
+    <ErrorBox error={error}/>
+    {contacts.length > 0 || editing === 'new' ? <div className="table-scroll partner-contact-table"><table><thead><tr><th>Họ tên</th>{COLUMNS.map(column => <th key={column.key}>{column.label}</th>)}{writable && <th><span className="sr-only">Thao tác</span></th>}</tr></thead>
+      <tbody>{editing === 'new' && editRow('new')}{contacts.map(record => editing === record.id ? editRow(record.id) : <tr key={record.id}>
         <td><strong>{record.title}</strong>{text(record.data.is_primary) === 'Có' && <Badge>Đầu mối chính</Badge>}{text(record.data.work_status) && text(record.data.work_status) !== 'Đang công tác' && <div className="record-meta">{text(record.data.work_status)}</div>}</td>
-        <td>{text(record.data.position) || '—'}</td>
-        <td>{text(record.data.department) || '—'}</td>
-        <td>{text(record.data.role) || '—'}</td>
-        <td>{text(record.data.email) ? <a href={`mailto:${text(record.data.email)}`}>{text(record.data.email)}</a> : '—'}</td>
-        <td>{text(record.data.phone) ? <a href={`tel:${text(record.data.phone).replace(/[^+\d]/g, '')}`}>{text(record.data.phone)}</a> : '—'}</td>
-        {writable && <td>{editable(record) && (deleting?.id === record.id
-          ? <div className="actions contact-delete-confirm"><span>Xoá hẳn?</span><button className="button small danger" disabled={busy} onClick={() => run(() => api(`/api/records/${record.id}`, { method: 'DELETE', body: JSON.stringify({ version: record.version }) }))}>Xoá</button><button className="button small" disabled={busy} onClick={() => setDeleting(null)}>Giữ lại</button></div>
-          : <div className="actions contact-row-buttons"><button className="icon-button" onClick={() => begin(record)} aria-label={`Sửa ${record.title}`} disabled={busy || Boolean(editing)}><Icon name="edit" size={15}/></button><button className="text-button danger-text" onClick={() => setDeleting(record)} disabled={busy || Boolean(editing)}>Xoá</button></div>)}</td>}
+        {COLUMNS.map(column => <td key={column.key}><Value name={column.key} value={text(record.data[column.key])}/></td>)}
+        {writable && <td>{editable(record) && (deleting === record.id
+          ? <div className="contact-row-buttons"><span>Xoá hẳn?</span><button className="button small danger" disabled={busy} onClick={() => run(() => api(`/api/records/${record.id}`, { method: 'DELETE', body: JSON.stringify({ version: record.version }) }))}>Xoá</button><button className="button small" disabled={busy} onClick={() => setDeleting(null)}>Giữ</button></div>
+          : <div className="contact-row-buttons"><button className="icon-button" title="Sửa" onClick={() => begin(record)} aria-label={`Sửa ${record.title}`} disabled={busy || editing !== null}><Icon name="edit" size={16}/></button><button className="icon-button danger-text" title="Xoá" onClick={() => setDeleting(record.id)} aria-label={`Xoá ${record.title}`} disabled={busy || editing !== null}><Icon name="trash" size={16}/></button></div>)}</td>}
       </tr>)}</tbody></table></div>
-      : !editing && <p className="related-group-empty">Chưa có đầu mối.</p>}
+      : <p className="related-group-empty">Chưa có đầu mối.</p>}
   </div>;
 }

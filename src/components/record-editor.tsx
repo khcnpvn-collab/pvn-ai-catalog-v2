@@ -5,7 +5,7 @@ import TagInput from "./tag-input";
 import { useCreateLinks } from "./record-create-links";
 import { cleanGeneratedRecordText, isGeneratedRecordCode, visibleOperationalStatus } from "@/lib/record-presentation";
 import type { DossierContext } from "@/lib/dossier";
-import { editorPresentation, visibleEditorDataKeys } from "@/lib/editor-presentation";
+import { editorPresentation, summaryFieldLabel, visibleEditorDataKeys } from "@/lib/editor-presentation";
 import { api, confirmDiscardChanges, ErrorBox, Heading, Icon, message } from "./ui";
 import { invalidateOverview, useOverview } from "./use-overview";
 import type { Overview } from "@/lib/overview";
@@ -97,7 +97,7 @@ export default function RecordEditor({ kind, record, context, onSave, onCancel, 
         {!record && !context && <label className="field full">Loại hồ sơ<select value={form.kind} onChange={e => { const next = moduleMap[e.target.value]; setEditedFields(new Set(form.title.trim() ? ["title"] : [])); setForm({ kind: next.kind, title: form.title, status: startingStatus(next.kind), data: startingData(next.kind, context, overview.data) }); }}>{modules.filter(m => m.kind !== 'contact').map(m => <option key={m.kind} value={m.kind}>{m.label}</option>)}</select></label>}
         <label className="field full"><span>{({expert:"Họ tên chuyên gia",reference:"Tên thư mục hoặc tài liệu",collaboration:"Tên hoạt động",partner:"Tên đối tác",use_case:"Tên bài toán chuẩn",unit:"Tên đơn vị"} as Record<string,string>)[form.kind] || "Tên hồ sơ"} <span className="required" aria-hidden="true">*</span></span><input required autoFocus={!embedded} name="title" maxLength={250} value={form.title} onChange={e => update("title", e.target.value)} placeholder={`Nhập tên ${mod.singular}`}/></label>
         {presentation.showStatus && operationalStatuses.length > 0 && <label className="field">{({ partner: "Trạng thái hợp tác", collaboration: "Trạng thái", use_case: "Tình trạng danh mục" } as Record<string, string>)[form.kind] || "Tình trạng hoạt động"}<select value={form.status} onChange={e => update("status", e.target.value)}>{!visibleOperationalStatus(form.status) && <option value={form.status}>Chưa ghi nhận</option>}{operationalStatuses.map(s => <option key={s}>{s}</option>)}</select></label>}
-        {presentation.showSummary && <label className="field full">{form.kind === 'partner' ? 'Giới thiệu ngắn' : 'Tóm tắt'}<textarea rows={presentation.compact ? 2 : 3} maxLength={10000} value={displayedText("summary", form.summary)} onChange={e => update("summary", e.target.value)}/>{form.kind === 'partner' && <small>Mô tả ngắn về đối tác; năng lực chi tiết ghi ở phần dưới.</small>}</label>}
+        {presentation.showSummary && <label className="field full">{summaryFieldLabel(form.kind)}<textarea rows={presentation.compact ? 2 : 3} maxLength={10000} value={displayedText("summary", form.summary)} onChange={e => update("summary", e.target.value)}/>{form.kind === 'partner' && <small>Mô tả ngắn về đối tác; năng lực chi tiết ghi ở phần dưới.</small>}</label>}
       </div></section>
       {fieldGroups.map((group, index) => <Fragment key={group.label}><section className="panel form-section"><h2>{group.label}</h2><div className="form-grid">{group.fields.map(field => {
         const value = form.data?.[field.key] ?? "";

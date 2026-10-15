@@ -55,7 +55,7 @@ export default function RecordDetail({ id, membership, onOpen: openRecord, onEdi
   const reference = record.kind === 'reference';
   const sections = (record.kind === 'partner' && record.data.partner_type === 'Liên danh' ? consortiumSections : dossierSections[record.kind] || []).filter(section => section.id !== 'references');
   const allowSurvey = record.kind === 'unit' && membership.role === 'admin';
-  const tab = resolveDossierTab(activeTab, ['information', ...sections.map(section => section.id)], allowSurvey);
+  const tab = resolveDossierTab(activeTab, [...(primary ? [] : ['information']), ...sections.map(section => section.id)], allowSurvey);
   const selected = sections.find(section => section.id === tab);
   const status = reference ? null : visibleRecordStatus(record, documents.length);
   const writable = canWriteRecord(membership);
@@ -64,7 +64,6 @@ export default function RecordDetail({ id, membership, onOpen: openRecord, onEdi
   const empty = groups.filter(group => !group.count && ((writable && group.section.actions.length) || group.section.id === tab));
   const tabs = [
     { id: 'overview', label: 'Hồ sơ tổng hợp', count: null as number | null },
-    { id: 'information', label: 'Thông tin đầy đủ', count: null },
     ...(allowSurvey ? [{ id: 'survey', label: 'Kết quả khảo sát', count: null }] : []),
     ...groups.map(({section, count}) => ({ id: section.id, label: section.label, count })),
     { id: 'documents', label: 'File & tài liệu', count: null },
@@ -104,7 +103,6 @@ export default function RecordDetail({ id, membership, onOpen: openRecord, onEdi
     {primary ? <>
       {!partnerSinglePage && tab !== 'overview' && <nav className="dossier-section-switcher" aria-label="Chuyển phần hồ sơ"><button className="text-button" onClick={() => onTab('overview')}><Icon name="back"/>Hồ sơ tổng hợp</button><label>Xem mục<select value={tab} onChange={event => onTab(event.target.value)}>{tabs.map(item => <option key={item.id} value={item.id}>{item.label}{item.count != null ? ` (${item.count})` : ''}</option>)}</select></label></nav>}
       {partnerSinglePage || tab === 'overview' ? <RecordSummary dossier={dossier} sections={sections} writable={writable} allowSurvey={allowSurvey} membership={membership} onRefresh={resource.refresh} onSection={onTab} onOpen={onOpen}/> : <section className="panel detail-panel">
-        {tab === 'information' && fullInformation}
         {tab === 'survey' && allowSurvey && <UnitSurvey recordId={record.id}/>}
         {selected && <DossierSection key={selected.id} section={selected} record={record} related={related} links={dossier.links} membership={membership} attachments={dossier.attachments} writable={writable} onOpen={onOpen} refresh={resource.refresh}/>}
         {tab === 'documents' && files}

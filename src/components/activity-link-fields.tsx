@@ -57,7 +57,7 @@ export function PartyChoice({ partner, value, onChange }: { partner: CatalogReco
 export function ActivityLinkFields({ partner, group, value, onChange, hidden = {} }: { partner?: CatalogRecord; group: string; value: ActivityLinks; onChange: (links: ActivityLinks) => void; hidden?: ActivityLinkHidden }) {
   const overview = useOverview();
   const units = (overview.data?.units || []).map(unit => ({ id: unit.id, label: unit.title, detail: unit.abbreviation }));
-  const executors = [...(overview.data?.partners || []).map(item => ({ id: item.id, label: item.title, detail: item.partner_type || 'Đối tác' })), ...units.map(unit => ({ ...unit, detail: ['Đơn vị PVN', unit.detail].filter(Boolean).join(' · ') }))];
+  const executors = [...(overview.data?.partners || []).map(item => ({ id: item.id, label: item.title, detail: [item.partner_type || 'Đối tác', item.short_name].filter(Boolean).join(' · ') })), ...units.map(unit => ({ ...unit, detail: ['Đơn vị PVN', unit.detail].filter(Boolean).join(' · ') }))];
   const experts = (overview.data?.experts || []).map(item => ({ id: item.id, label: item.title, detail: [item.current_position, item.organization].filter(Boolean).join(' · ') }));
   const leadId = value.unit && 'id' in value.unit ? value.unit.id : null;
   return <section className="panel form-section"><h2>Bên tham gia và hạng mục</h2><div className="form-grid">

@@ -4,6 +4,7 @@ import type { CatalogRecord, Relation } from '@/lib/catalog';
 import type { RelatedRecord } from '@/lib/dossier';
 import { directRelationContext } from '@/lib/dossier-summary';
 import { activityTitle, byId, unitActivities, type Overview, type OverviewActivity } from '@/lib/overview';
+import { ActivityItemCell, ActivityPartyCell, overviewMaps, unitName } from './activity-cells';
 import { rowRecordStatus } from '@/lib/record-presentation';
 import { api, Badge, date, ErrorBox, Icon, message } from './ui';
 import { invalidateOverview, useOverview } from './use-overview';
@@ -12,19 +13,16 @@ type Column = 'partner' | 'unit' | 'standard';
 // One row per activity: status, group, partner, lead PVN subject and item at a glance.
 // leadOf marks activities signed through a consortium that this partner leads.
 export function ActivityTable({ activities, overview, onOpen, hide = [], omit = [], leadOf, label = 'Danh sách hoạt động', showGroup = true, onRemove, canRemove }: { activities: OverviewActivity[]; overview?: Overview; onOpen: (id: string) => void; hide?: Column[]; omit?: (string | null | undefined)[]; leadOf?: string; label?: string; showGroup?: boolean; onRemove?: (activityId: string) => void; canRemove?: (activityId: string) => boolean }) {
-  const partners = byId(overview?.partners || []), units = byId(overview?.units || []), standards = byId(overview?.standards || []), workItems = byId(overview?.work_items || []);
+  const maps = overviewMaps(overview);
   const show = (column: Column) => !hide.includes(column);
-  const name = (id: string | null, map: Map<string, { title: string }>) => (id && map.get(id)?.title) || '—';
   const period = (activity: OverviewActivity) => [activity.start_date, activity.end_date].filter(Boolean).map(value => date(value)).join(' – ');
   return <div className="table-scroll" tabIndex={0} role="region" aria-label={label}><table className="activity-table"><thead><tr><th>Hoạt động</th><th className="activity-status">Trạng thái</th>{show('partner') && <th className="activity-party">Bên thực hiện</th>}{show('unit') && <th className="activity-party">Đầu mối PVN</th>}{show('standard') && <th className="activity-standard">Hạng mục</th>}{onRemove && <th aria-label="Thao tác"></th>}</tr></thead>
     <tbody>{activities.map(activity => <tr key={activity.id}>
       <td><button className="record-name" title={activity.title} onClick={() => onOpen(activity.id)}>{activityTitle(activity.title, omit)}</button><div className="record-meta">{[showGroup ? activity.item_group : null, activity.item_category, period(activity)].filter(Boolean).join(' · ')}</div></td>
       <td><Badge>{activity.status}</Badge></td>
-      {show('partner') && <td data-label="Bên thực hiện">{activity.partner_id ? <><button className="text-button" onClick={() => onOpen(activity.partner_id!)}>{name(activity.partner_id, partners)}</button>{partners.get(activity.partner_id)?.member_ids.length ? <div className="record-meta">{leadOf && activity.party_lead_id === leadOf ? 'Liên danh · đối tác này là đầu mối' : 'Liên danh'}</div> : null}</>
-        : activity.provider_unit_id ? <><button className="text-button" onClick={() => onOpen(activity.provider_unit_id!)}>{units.get(activity.provider_unit_id)?.abbreviation || name(activity.provider_unit_id, units)}</button><div className="record-meta">Đơn vị PVN</div></> : '—'}</td>}
-      {show('unit') && <td data-label="Đầu mối PVN">{activity.lead_unit_id ? <button className="text-button" onClick={() => onOpen(activity.lead_unit_id!)}>{units.get(activity.lead_unit_id)?.abbreviation || name(activity.lead_unit_id, units)}</button> : '—'}</td>}
-      {show('standard') && <td className="activity-standard" data-label="Hạng mục">{activity.standard_id ? <button className="text-button" title={name(activity.standard_id, standards)} onClick={() => onOpen(activity.standard_id!)}>{[standards.get(activity.standard_id)?.code, name(activity.standard_id, standards)].filter(Boolean).join(' · ')}</button>
-        : activity.work_item_id ? <button className="text-button" title={name(activity.work_item_id, workItems)} onClick={() => onOpen(activity.work_item_id!)}>{name(activity.work_item_id, workItems)}</button> : <span className="muted">Chưa gắn</span>}</td>}
+      {show('partner') && <td data-label="Bên thực hiện"><ActivityPartyCell activity={activity} maps={maps} onOpen={onOpen} leadOf={leadOf}/></td>}
+      {show('unit') && <td data-label="Đầu mối PVN">{activity.lead_unit_id ? <button className="text-button" onClick={() => onOpen(activity.lead_unit_id!)}>{unitName(maps, activity.lead_unit_id)}</button> : '—'}</td>}
+      {show('standard') && <td className="activity-standard" data-label="Hạng mục"><ActivityItemCell activity={activity} maps={maps} onOpen={onOpen}/></td>}
       {onRemove && <td>{(!canRemove || canRemove(activity.id)) && <button className="text-button" onClick={() => onRemove(activity.id)}>Gỡ</button>}</td>}
     </tr>)}</tbody></table></div>;
 }

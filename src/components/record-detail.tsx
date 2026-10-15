@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from 'react';
 import { moduleMap, type CatalogRecord, type Membership } from '@/lib/catalog';
-import { consortiumSections, dossierSections, type Dossier, type DossierCrumb } from '@/lib/dossier';
+import { consortiumSections, contactOrganisation, dossierPath, dossierSections, type Dossier, type DossierCrumb } from '@/lib/dossier';
 import { recordShortName, resolveDossierTab, visibleRecordStatus } from '@/lib/record-presentation';
 import { canWriteRecord, isPrimaryDossier } from '@/lib/record-files';
 import { summarySections, withDirectLinks } from '@/lib/dossier-summary';
@@ -37,7 +37,14 @@ export default function RecordDetail({ id, membership, onOpen: openRecord, onEdi
     target?.scrollIntoView({ block: 'start' });
     target?.focus({ preventScroll: true });
   }, [id, activeTab, resource.data, resource.loading]);
-  if (resource.loading && !resource.data) return <Loading/>;
+  // A contact is a row of its unit or partner, never a page of its own: opening one shows its organisation's
+  // contacts, or the directory when it belongs to none. The redirect replaces history so Back still works.
+  const contactOwner = resource.data?.data.kind === 'contact' ? contactOrganisation(resource.data) : undefined;
+  useEffect(() => {
+    if (contactOwner === undefined) return;
+    window.location.replace(`#${contactOwner ? dossierPath(contactOwner, 'contacts', []) : 'directory'}`);
+  }, [contactOwner]);
+  if (contactOwner !== undefined || (resource.loading && !resource.data)) return <Loading/>;
   if (resource.error && !resource.data) return <><button className="text-button back" onClick={() => onBack()}><Icon name="back"/>Quay lại</button><ErrorBox error={resource.error} retry={resource.refresh}/></>;
   if (!resource.data) return null;
   const dossier = withDirectLinks(resource.data);

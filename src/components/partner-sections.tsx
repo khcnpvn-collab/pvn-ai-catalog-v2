@@ -9,48 +9,6 @@ import { api, Badge, date, ErrorBox, Icon, message } from './ui';
 
 function text(value: string | number | null | undefined) { return value == null ? '' : String(value).trim(); }
 
-type ContactKey = 'role' | 'position' | 'department' | 'email' | 'phone' | 'is_primary' | 'work_status';
-function contactDraft(record?: CatalogRecord): RecordInput {
-  return record ? { id: record.id, version: record.version, kind: record.kind, title: record.title, code: record.code, summary: record.summary, status: record.status, data: { ...record.data } }
-    : { kind: 'contact', title: '', status: 'Còn hiệu lực', data: {} };
-}
-
-export function PartnerContacts({ entries, owner, writable, canEdit, onRefresh, limit }: { entries: RelatedRecord[]; owner?: CatalogRecord; writable?: boolean; canEdit?: (record: CatalogRecord) => boolean; onRefresh?: () => void; limit?: number }) {
-  const [editing, setEditing] = useState<string | null>(null);
-  const [draft, setDraft] = useState<RecordInput | null>(null);
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  function begin(record?: CatalogRecord) { setDraft(contactDraft(record)); setEditing(record?.id || 'new'); setError(null); }
-  function update(key: string, value: string) {
-    setDraft(current => current && (key === 'title' ? { ...current, title: value } : { ...current, data: { ...current.data, [key]: value || null } }));
-  }
-  async function save() {
-    if (!draft || !owner || busy) return;
-    const invalid = validateRecord(draft);
-    if (invalid) { setError(invalid); return; }
-    setBusy(true); setError(null);
-    try {
-      await api(editing === 'new' ? `/api/records/${owner.id}/related` : `/api/records/${editing}`, {
-        method: editing === 'new' ? 'POST' : 'PATCH',
-        body: JSON.stringify(editing === 'new' ? { record: draft, relation: 'contact', direction: 'from-parent' } : draft),
-      });
-      setEditing(null); setDraft(null); onRefresh?.();
-    } catch (cause) { setError(message(cause)); } finally { setBusy(false); }
-  }
-  const cell = (key: ContactKey | 'title', label: string) => <input aria-label={label} value={key === 'title' ? draft?.title || '' : String(draft?.data?.[key] || '')} onChange={event => update(key, event.target.value)} disabled={busy} maxLength={key === 'title' ? 250 : 1000} type={key === 'email' ? 'email' : 'text'}/>;
-  const editRow = (key: string) => <tr key={key} className="contact-edit-row"><td><div className="contact-cell-stack">{cell('title', 'Họ tên')}<label><input type="checkbox" checked={draft?.data?.is_primary === 'Có'} onChange={event => update('is_primary', event.target.checked ? 'Có' : 'Không')} disabled={busy}/> Đầu mối chính</label>{cell('work_status', 'Trạng thái công tác')}</div></td><td><div className="contact-cell-stack">{cell('role', 'Vai trò')}{cell('position', 'Chức vụ')}{cell('department', 'Đơn vị / phòng ban')}</div></td><td><div className="contact-cell-stack">{cell('email', 'Email')}{cell('phone', 'Điện thoại')}</div></td><td><div className="contact-row-actions"><button className="button small primary" type="button" disabled={busy} onClick={save}>{busy ? 'Đang lưu…' : 'Lưu'}</button><button className="text-button" type="button" disabled={busy} onClick={() => { setEditing(null); setDraft(null); setError(null); }}>Hủy</button></div></td></tr>;
-  const contacts = [...entries].sort((a, b) => {
-    const primary = Number(text(b.record.data.is_primary) === 'Có') - Number(text(a.record.data.is_primary) === 'Có');
-    return primary || a.record.title.localeCompare(b.record.title, 'vi');
-  }).slice(0, limit);
-  return <div className="partner-contact-grid-editor">{writable && owner && <div className="partner-contact-toolbar"><button className="button small" type="button" onClick={() => begin()} disabled={busy || editing !== null}><Icon name="plus" size={15}/>Thêm đầu mối</button></div>}<ErrorBox error={error}/>{(contacts.length > 0 || editing === 'new') && <div className="table-scroll partner-contact-table"><table><thead><tr><th>Họ tên</th><th>Vai trò / chức vụ</th><th>Liên hệ</th>{writable && <th><span className="sr-only">Thao tác</span></th>}</tr></thead><tbody>{contacts.map(({record}) => editing === record.id ? editRow(record.id) : <tr key={record.id}>
-    <td><strong>{record.title}</strong>{text(record.data.is_primary) === 'Có' && <Badge>Đầu mối chính</Badge>}{text(record.data.work_status) && text(record.data.work_status) !== 'Đang công tác' && <Badge>{text(record.data.work_status)}</Badge>}</td>
-    <td>{[record.data.role, record.data.position, text(record.data.department) !== owner?.title ? record.data.department : null].filter(Boolean).join(' · ') || '—'}</td>
-    <td><div className="partner-contact-links">{text(record.data.email) && <a href={`mailto:${record.data.email}`}>{record.data.email}</a>}{text(record.data.phone) && <a href={`tel:${String(record.data.phone).replace(/[^+\d]/g, '')}`}>{record.data.phone}</a>}{!text(record.data.email) && !text(record.data.phone) && '—'}</div></td>
-    {writable && <td>{(!canEdit || canEdit(record)) && <button className="icon-button record-inline-edit" onClick={() => begin(record)} aria-label={`Chỉnh sửa ${record.title}`} disabled={editing !== null}><Icon name="edit" size={15}/></button>}</td>}
-  </tr>)}{editing === 'new' && editRow('new')}</tbody></table></div>}</div>;
-}
-
 export function TimelineInlineEditor({ record, onCancel, onSaved }: { record: CatalogRecord; onCancel: () => void; onSaved: () => void }) {
   const [draft, setDraft] = useState<RecordInput>({ id: record.id, version: record.version, kind: record.kind, title: record.title, code: record.code, summary: record.summary, status: record.status, data: { ...record.data } });
   const [busy, setBusy] = useState(false);

@@ -116,6 +116,7 @@ async function handle(request: Request, context: { params: Promise<{ path: strin
 
     if (route === "stats" && method === "GET") return response({ data: await rpc("ai_catalog_stats") });
     if (route === "overview" && method === "GET") return response({ data: await rpc("ai_catalog_overview") });
+    if (route === "directory" && method === "GET") return response({ data: await rpc("ai_catalog_directory") });
     if (unitSurvey && method === "GET") return response({ data: await rpc("ai_catalog_unit_survey", { p_id: id(path[1]) }) });
     if (path[0] === "records" && path.length === 3 && path[2] === "dossier" && method === "GET") {
       return response(await rpc("ai_catalog_dossier", { p_id: id(path[1]) }));

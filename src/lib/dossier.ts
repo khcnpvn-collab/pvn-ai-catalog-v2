@@ -75,3 +75,11 @@ export const consortiumSections: DossierSection[] = [
   section('members', 'Thành viên', 'Các đối tác trong liên danh; một đối tác làm đầu mối.', ['partner'], [from('partner', 'partner')], 'consortium-members'),
   section('collaborations', 'Triển khai & hợp tác', 'Các hoạt động ký qua liên danh.', ['collaboration'], [to('collaboration', 'partner')], 'partner-collaboration'),
 ];
+
+// The unit or partner a contact belongs to: a unit contact points to its unit, a partner points to its contacts.
+export function contactOrganisation(dossier: Dossier): string | null {
+  const id = dossier.data.id;
+  const link = dossier.links.find(item => (item.relation === 'contact' && item.target_id === id && ['unit', 'partner'].includes(item.source?.kind || ''))
+    || (['unit', 'partner'].includes(item.relation) && item.source_id === id));
+  return link ? (link.source_id === id ? link.target_id : link.source_id) : null;
+}

@@ -46,6 +46,7 @@ export function Icon({ name = "file", size = 20 }: { name?: string; size?: numbe
     database: <><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 4 16 4 16 0V5M4 12c0 4 16 4 16 0"/></>,
     book: <><path d="M12 5v16M12 5C8 2 3 3 3 3v16s5-1 9 2c4-3 9-2 9-2V3s-5-1-9 2Z"/></>,
     upload: <><path d="M12 16V3m-5 5 5-5 5 5M3 16v5h18v-5"/></>,
+    download: <><path d="M12 3v13m-5-5 5 5 5-5M3 16v5h18v-5"/></>,
     logout: <><path d="M9 3H4v18h5M9 12h12m-4-4 4 4-4 4"/></>,
     menu: <path d="M4 6h16M4 12h16M4 18h16"/>,
     clock: <><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></>,

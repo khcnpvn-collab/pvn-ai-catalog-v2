@@ -3443,3 +3443,13 @@ select {
 /* Several values in one table cell, one per line. */
 .cell-lines { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; }
 .cell-lines .text-button { text-align: left; }
+
+/* Contacts of a unit or partner: one column per field and a labelled form above the table. */
+.contact-form { margin-bottom: 14px; }
+.contact-form h3 { margin-bottom: 14px; font-size: 16px; }
+.contact-form .actions { justify-content: flex-end; }
+.contact-table .partner-contact-table td { vertical-align: top; }
+.contact-table .partner-contact-table td a { overflow-wrap: anywhere; }
+.contact-delete-confirm { flex-wrap: nowrap; align-items: center; white-space: nowrap; }
+.contact-primary { justify-self: start; }
+.contact-row-buttons { flex-wrap: nowrap; align-items: center; gap: 4px; }

@@ -1,4 +1,5 @@
-.dashboard { display: grid; gap: 22px; min-width: 0; }
+.dashboard { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; min-width: 0; }
+.dashboard > * { min-width: 0; }
 .kpiGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; min-width: 0; }
 .kpiCard { display: block; text-align: left; min-width: 0; border: 1px solid var(--border); background: var(--surface); padding: 18px 20px; border-radius: 12px; color: var(--ink); }
 button.kpiCard { cursor: pointer; transition: border-color .18s, transform .18s; }
@@ -69,3 +70,30 @@ button.barRow:hover, button.barRow[aria-pressed="true"] { background: var(--subt
 .groupTab[aria-selected="true"] .groupTabCount { background: rgba(255, 255, 255, .2); }
 .tabHeading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
 .tabHeading p { margin: 0; color: var(--muted); }
+
+/* Shared overview tables: quick filters, sortable headers, a first column that stays while scrolling. */
+.quickFilters { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: -4px 0 14px; font-size: var(--ui); }
+.quickFilters > span:first-child { color: var(--muted); font-size: var(--small); margin-right: 2px; }
+.quickChip { display: inline-flex; align-items: center; gap: 6px; min-height: 34px; padding: 5px 12px; border: 1px solid var(--border-strong); border-radius: 999px; background: var(--surface); color: var(--ink); font: inherit; font-size: var(--ui); cursor: pointer; }
+.quickChip:hover { border-color: var(--navy); }
+.quickChip[aria-pressed="true"] { background: var(--navy); border-color: var(--navy); color: #fff; }
+.quickChip span { min-width: 22px; padding: 0 6px; border-radius: 999px; background: rgba(16, 45, 85, .08); font-size: 12px; text-align: center; font-variant-numeric: tabular-nums; }
+.quickChip[aria-pressed="true"] span { background: rgba(255, 255, 255, .2); }
+.tableBar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; margin-bottom: 10px; }
+.tableBar .count { margin: 0; }
+.catalogTable th { padding: 0; vertical-align: bottom; }
+.catalogTable td { vertical-align: top; }
+.catalogTable td:last-child { padding-left: var(--s4); min-width: 110px; }
+.catalogTable th:first-child, .catalogTable td:first-child { position: sticky; left: 0; z-index: 1; min-width: 240px; max-width: 360px; background: var(--surface); box-shadow: inset -1px 0 0 var(--border); }
+.catalogTable th:first-child { background: var(--subtle); }
+.catalogTable tbody tr:hover td:first-child { background: var(--blue-soft); }
+.sortButton { display: inline-flex; align-items: center; gap: 6px; width: 100%; min-height: 40px; padding: var(--s3) var(--s4); border: 0; background: transparent; color: inherit; font: inherit; font-weight: 500; text-align: left; white-space: nowrap; cursor: pointer; }
+th.numeric .sortButton { justify-content: flex-end; }
+.sortButton span { color: var(--muted); font-size: 12px; }
+th[aria-sort="ascending"] .sortButton span, th[aria-sort="descending"] .sortButton span { color: var(--navy); }
+.sortButton:hover { color: var(--navy); }
+.wideColumn { min-width: 260px; }
+.clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-width: 220px; max-width: 340px; }
+@media (max-width: 760px) {
+  .catalogTable th:first-child, .catalogTable td:first-child { min-width: 180px; max-width: 220px; }
+}

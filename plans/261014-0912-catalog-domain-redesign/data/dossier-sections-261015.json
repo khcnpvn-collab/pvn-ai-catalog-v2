@@ -1,0 +1,600 @@
+{
+ "unit": [
+  {
+   "id": "activities",
+   "label": "Triển khai & hợp tác",
+   "description": "Bài toán đơn vị, POC, đề tài KHCN và nội dung hợp tác mà đơn vị làm đầu mối hoặc phối hợp.",
+   "kinds": [
+    "collaboration"
+   ],
+   "actions": [
+    {
+     "kind": "collaboration",
+     "relation": "unit",
+     "direction": "to-parent",
+     "label": "Thêm hoạt động",
+     "context": {
+      "subject_role": "lead"
+     }
+    }
+   ],
+   "selector": "activity-list"
+  },
+  {
+   "id": "standards",
+   "label": "Bài toán chuẩn",
+   "description": "Bài toán chuẩn đơn vị là đầu mối ưu tiên hoặc có tiềm năng áp dụng.",
+   "kinds": [
+    "use_case"
+   ],
+   "actions": [],
+   "selector": "unit-standards"
+  },
+  {
+   "id": "partners",
+   "label": "Đối tác",
+   "description": "Đối tác đã làm việc cùng đơn vị qua các hoạt động.",
+   "kinds": [
+    "partner"
+   ],
+   "actions": [],
+   "selector": "unit-partners"
+  },
+  {
+   "id": "engagements",
+   "label": "Mốc & ghi chú",
+   "description": "Các mốc làm việc và ghi chú với đơn vị.",
+   "kinds": [
+    "engagement"
+   ],
+   "actions": [
+    {
+     "kind": "engagement",
+     "relation": "unit",
+     "direction": "to-parent",
+     "label": "Thêm mốc"
+    }
+   ],
+   "selector": "milestones"
+  },
+  {
+   "id": "contacts",
+   "label": "Đầu mối",
+   "description": "Danh bạ và vai trò các đầu mối được kết nối với hồ sơ.",
+   "kinds": [
+    "contact"
+   ],
+   "actions": [
+    {
+     "kind": "contact",
+     "relation": "contact",
+     "direction": "from-parent"
+    }
+   ],
+   "selector": "contact-grid"
+  }
+ ],
+ "partner": [
+  {
+   "id": "contacts",
+   "label": "Đầu mối liên hệ",
+   "description": "Thông tin người phụ trách để liên hệ nhanh, không mở thêm một hồ sơ trung gian.",
+   "kinds": [
+    "contact"
+   ],
+   "actions": [
+    {
+     "kind": "contact",
+     "relation": "contact",
+     "direction": "from-parent"
+    }
+   ],
+   "selector": "partner-contact"
+  },
+  {
+   "id": "collaborations",
+   "label": "Triển khai & hợp tác",
+   "description": "Mọi hoạt động có đối tác tham gia, kể cả hoạt động ký qua liên danh.",
+   "kinds": [
+    "collaboration"
+   ],
+   "actions": [
+    {
+     "kind": "collaboration",
+     "relation": "partner",
+     "direction": "to-parent"
+    }
+   ],
+   "selector": "partner-collaboration"
+  },
+  {
+   "id": "engagements",
+   "label": "Mốc làm việc",
+   "description": "Nhật ký làm việc chung hoặc gắn đồng thời với nhiều hoạt động. Mốc của liên danh ghi ở đối tác đầu mối.",
+   "kinds": [
+    "engagement"
+   ],
+   "actions": [
+    {
+     "kind": "engagement",
+     "relation": "partner",
+     "direction": "to-parent"
+    }
+   ],
+   "selector": "partner-engagement"
+  },
+  {
+   "id": "standards",
+   "label": "Bài toán chuẩn có thể đáp ứng",
+   "description": "Gắn bài toán chuẩn mà đối tác có năng lực đáp ứng; đối tác sẽ hiện là đối tác tiềm năng của bài toán đó.",
+   "kinds": [
+    "use_case"
+   ],
+   "actions": [
+    {
+     "kind": "use_case",
+     "relation": "use_case",
+     "direction": "from-parent",
+     "label": "Bài toán chuẩn"
+    }
+   ],
+   "selector": "direct-outgoing"
+  },
+  {
+   "id": "consortium",
+   "label": "Liên danh",
+   "description": "Một liên danh gồm nhiều đối tác; một đối tác có thể tham gia nhiều liên danh.",
+   "kinds": [
+    "partner"
+   ],
+   "actions": [
+    {
+     "kind": "partner",
+     "relation": "partner",
+     "direction": "from-parent",
+     "label": "Thêm thành viên"
+    },
+    {
+     "kind": "partner",
+     "relation": "partner",
+     "direction": "to-parent",
+     "label": "Tham gia liên danh"
+    }
+   ],
+   "selector": "partner-consortium"
+  }
+ ],
+ "use_case": [
+  {
+   "id": "activities",
+   "label": "Triển khai & hợp tác",
+   "description": "Bài toán đơn vị, POC, đề tài KHCN và nội dung hợp tác gắn với bài toán chuẩn này.",
+   "kinds": [
+    "collaboration"
+   ],
+   "actions": [
+    {
+     "kind": "collaboration",
+     "relation": "use_case",
+     "direction": "to-parent",
+     "label": "Thêm hoạt động"
+    }
+   ],
+   "selector": "activity-list"
+  },
+  {
+   "id": "units",
+   "label": "Đơn vị",
+   "description": "Đầu mối ưu tiên triển khai, đơn vị tiềm năng áp dụng và đơn vị đang có hoạt động.",
+   "kinds": [
+    "unit"
+   ],
+   "actions": [
+    {
+     "kind": "unit",
+     "relation": "unit",
+     "direction": "from-parent",
+     "label": "Đơn vị tiềm năng",
+     "context": {
+      "subject_role": "supporting"
+     }
+    }
+   ],
+   "selector": "unit-roles"
+  },
+  {
+   "id": "partners",
+   "label": "Đối tác tiềm năng",
+   "description": "Đối tác có thể đáp ứng bài toán; đối tác đã làm nằm trong bảng hoạt động.",
+   "kinds": [
+    "partner"
+   ],
+   "actions": [
+    {
+     "kind": "partner",
+     "relation": "use_case",
+     "direction": "to-parent",
+     "label": "Đối tác tiềm năng"
+    }
+   ],
+   "selector": "standard-partners"
+  }
+ ],
+ "collaboration": [
+  {
+   "id": "organizations",
+   "label": "Chủ thể PVN",
+   "description": "Một đơn vị hoặc Ban đầu mối và các đơn vị phối hợp.",
+   "kinds": [
+    "unit"
+   ],
+   "actions": [
+    {
+     "kind": "unit",
+     "relation": "unit",
+     "direction": "from-parent",
+     "label": "Đơn vị",
+     "context": {
+      "subject_role": "supporting"
+     }
+    }
+   ],
+   "selector": "unit-roles"
+  },
+  {
+   "id": "partner",
+   "label": "Bên thực hiện",
+   "description": "Một đối tác, một liên danh hoặc một đơn vị PVN thực hiện cho đơn vị đầu mối.",
+   "kinds": [
+    "partner",
+    "unit"
+   ],
+   "actions": [
+    {
+     "kind": "partner",
+     "relation": "partner",
+     "direction": "from-parent",
+     "label": "Đối tác / liên danh"
+    },
+    {
+     "kind": "unit",
+     "relation": "partner",
+     "direction": "from-parent",
+     "label": "Đơn vị PVN"
+    }
+   ],
+   "selector": "activity-partner"
+  },
+  {
+   "id": "contents",
+   "label": "Bài toán chuẩn",
+   "description": "Mỗi hoạt động gắn tối đa một bài toán chuẩn; bài toán chuẩn tạo mới tại đây được đánh dấu chờ rà soát.",
+   "kinds": [
+    "use_case"
+   ],
+   "actions": [
+    {
+     "kind": "use_case",
+     "relation": "use_case",
+     "direction": "from-parent"
+    }
+   ]
+  },
+  {
+   "id": "engagements",
+   "label": "Mốc làm việc",
+   "description": "Các mốc, kết quả và file được gắn với hoạt động này.",
+   "kinds": [
+    "engagement"
+   ],
+   "actions": [
+    {
+     "kind": "engagement",
+     "relation": "collaboration",
+     "direction": "to-parent"
+    }
+   ],
+   "selector": "milestones"
+  }
+ ],
+ "engagement": [
+  {
+   "id": "contacts",
+   "label": "Thành phần & đầu mối",
+   "description": "Các cá nhân tham gia và thông tin liên hệ.",
+   "kinds": [
+    "contact"
+   ],
+   "actions": [
+    {
+     "kind": "contact",
+     "relation": "participant",
+     "direction": "from-parent"
+    }
+   ]
+  },
+  {
+   "id": "collaborations",
+   "label": "Hoạt động",
+   "description": "Các hoạt động đã gắn với mốc làm việc này.",
+   "kinds": [
+    "collaboration"
+   ],
+   "actions": []
+  },
+  {
+   "id": "organizations",
+   "label": "Đơn vị & đối tác",
+   "description": "Các bên tham gia đợt làm việc.",
+   "kinds": [
+    "unit",
+    "partner"
+   ],
+   "actions": [
+    {
+     "kind": "unit",
+     "relation": "unit",
+     "direction": "from-parent"
+    },
+    {
+     "kind": "partner",
+     "relation": "partner",
+     "direction": "from-parent"
+    }
+   ]
+  },
+  {
+   "id": "standards",
+   "label": "Bài toán chuẩn",
+   "description": "Bài toán chuẩn được trao đổi trong mốc làm việc.",
+   "kinds": [
+    "use_case"
+   ],
+   "actions": [
+    {
+     "kind": "use_case",
+     "relation": "use_case",
+     "direction": "from-parent"
+    }
+   ]
+  },
+  {
+   "id": "experts",
+   "label": "Chuyên gia",
+   "description": "Các chuyên gia tham gia hoặc được kết nối với hồ sơ.",
+   "kinds": [
+    "expert"
+   ],
+   "actions": [
+    {
+     "kind": "expert",
+     "relation": "expert",
+     "direction": "from-parent"
+    }
+   ]
+  },
+  {
+   "id": "references",
+   "label": "Tài liệu tham khảo",
+   "description": "Thông tin và liên kết tham khảo. Tệp đã tải lên nằm riêng tại phần Tài liệu.",
+   "kinds": [
+    "reference"
+   ],
+   "actions": [
+    {
+     "kind": "reference",
+     "relation": "related",
+     "direction": "to-parent"
+    }
+   ]
+  }
+ ],
+ "contact": [
+  {
+   "id": "organizations",
+   "label": "Đơn vị & đối tác",
+   "description": "Các đơn vị, đối tác gắn với hồ sơ.",
+   "kinds": [
+    "unit",
+    "partner"
+   ],
+   "actions": [
+    {
+     "kind": "unit",
+     "relation": "unit",
+     "direction": "from-parent"
+    },
+    {
+     "kind": "partner",
+     "relation": "partner",
+     "direction": "from-parent"
+    }
+   ]
+  },
+  {
+   "id": "engagements",
+   "label": "Đợt làm việc",
+   "description": "Các đợt làm việc có sự tham gia của đầu mối.",
+   "kinds": [
+    "engagement"
+   ],
+   "actions": [
+    {
+     "kind": "engagement",
+     "relation": "participant",
+     "direction": "to-parent"
+    }
+   ]
+  }
+ ],
+ "learning_event": [
+  {
+   "id": "organizers",
+   "label": "Đối tác & đơn vị tổ chức",
+   "description": "Đối tác hoặc đơn vị tổ chức, phối hợp hoạt động.",
+   "kinds": [
+    "partner",
+    "unit"
+   ],
+   "actions": [
+    {
+     "kind": "partner",
+     "relation": "organizer",
+     "direction": "from-parent",
+     "label": "Đối tác"
+    },
+    {
+     "kind": "unit",
+     "relation": "organizer",
+     "direction": "from-parent",
+     "label": "Đơn vị"
+    }
+   ]
+  },
+  {
+   "id": "experts",
+   "label": "Chuyên gia",
+   "description": "Chuyên gia giảng dạy, trình bày hoặc tham dự.",
+   "kinds": [
+    "expert"
+   ],
+   "actions": [
+    {
+     "kind": "expert",
+     "relation": "speaker",
+     "direction": "from-parent",
+     "label": "Chuyên gia giảng dạy"
+    },
+    {
+     "kind": "expert",
+     "relation": "participant",
+     "direction": "from-parent",
+     "label": "Chuyên gia tham dự"
+    }
+   ]
+  }
+ ],
+ "expert": [
+  {
+   "id": "organizations",
+   "label": "Nơi công tác",
+   "description": "Đơn vị hoặc đối tác chuyên gia đang làm việc.",
+   "kinds": [
+    "unit",
+    "partner"
+   ],
+   "actions": [
+    {
+     "kind": "unit",
+     "relation": "unit",
+     "direction": "from-parent",
+     "label": "Đơn vị"
+    },
+    {
+     "kind": "partner",
+     "relation": "partner",
+     "direction": "from-parent",
+     "label": "Đối tác"
+    }
+   ]
+  },
+  {
+   "id": "training",
+   "label": "Đào tạo & hội thảo",
+   "description": "Hoạt động đào tạo, hội thảo có chuyên gia giảng dạy hoặc tham dự.",
+   "kinds": [
+    "learning_event"
+   ],
+   "actions": [
+    {
+     "kind": "learning_event",
+     "relation": "speaker",
+     "direction": "to-parent",
+     "label": "Giảng dạy / trình bày"
+    },
+    {
+     "kind": "learning_event",
+     "relation": "participant",
+     "direction": "to-parent",
+     "label": "Tham dự"
+    }
+   ]
+  }
+ ],
+ "reference": [
+  {
+   "id": "subjects",
+   "label": "Hồ sơ liên quan",
+   "description": "Hồ sơ sử dụng hoặc liên quan đến tài liệu tham khảo này.",
+   "kinds": [
+    "expert",
+    "unit",
+    "partner",
+    "collaboration",
+    "use_case",
+    "engagement"
+   ],
+   "actions": [
+    {
+     "kind": "expert",
+     "relation": "expert",
+     "direction": "from-parent"
+    },
+    {
+     "kind": "unit",
+     "relation": "related",
+     "direction": "from-parent"
+    },
+    {
+     "kind": "partner",
+     "relation": "related",
+     "direction": "from-parent"
+    },
+    {
+     "kind": "use_case",
+     "relation": "related",
+     "direction": "from-parent"
+    },
+    {
+     "kind": "engagement",
+     "relation": "related",
+     "direction": "from-parent"
+    }
+   ]
+  }
+ ],
+ "consortium": [
+  {
+   "id": "members",
+   "label": "Thành viên",
+   "description": "Các đối tác trong liên danh; một đối tác làm đầu mối.",
+   "kinds": [
+    "partner"
+   ],
+   "actions": [
+    {
+     "kind": "partner",
+     "relation": "partner",
+     "direction": "from-parent"
+    }
+   ],
+   "selector": "consortium-members"
+  },
+  {
+   "id": "collaborations",
+   "label": "Triển khai & hợp tác",
+   "description": "Các hoạt động ký qua liên danh.",
+   "kinds": [
+    "collaboration"
+   ],
+   "actions": [
+    {
+     "kind": "collaboration",
+     "relation": "partner",
+     "direction": "to-parent"
+    }
+   ],
+   "selector": "partner-collaboration"
+  }
+ ]
+}

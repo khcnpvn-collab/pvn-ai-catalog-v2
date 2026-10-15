@@ -1,0 +1,74 @@
+\set ON_ERROR_STOP on
+begin;
+reset role;
+select public.catalog_test_assert(not has_function_privilege('anon','public.ai_catalog_restore(uuid,integer)','EXECUTE'),'anonymous cannot execute restore');
+select public.catalog_test_assert(has_function_privilege('authenticated','public.ai_catalog_restore(uuid,integer)','EXECUTE'),'authenticated role may invoke restore gateway');
+set role anon;
+select public.catalog_test_error('select public.ai_catalog_restore(gen_random_uuid(),1)','permission denied','anonymous restore blocked by grant');
+reset role;
+-- Raw snapshots here verify preservation; mutations still use actual authenticated-identity gateways.
+do $$
+declare
+ original jsonb; restored jsonb; archived jsonb; item jsonb; detail jsonb; snapshot jsonb; after_snapshot jsonb;
+ rid uuid; parent_id uuid; private_id uuid; doc_id uuid; snapshot_id uuid; old_audit bigint; module record;
+begin
+ perform set_config('request.jwt.claim.sub','10000000-0000-4000-8000-000000000002',true);
+ original:=public.ai_catalog_save('{"kind":"reference","title":"Restore preservation fixture","code":"RESTORE-FIXTURE","status":"Chưa đính kèm","summary":"Original summary","source_note":"Original provenance","observed_on":"2026-10-08","visibility":"team","data":{"reference_type":"CV","external_url":"https://example.test/cv","notes":"Original metadata"}}');
+ rid:=(original->>'id')::uuid;
+ parent_id:=(public.ai_catalog_save('{"kind":"unit","title":"Restore parent fixture","status":"Đang hoạt động","visibility":"team"}')->>'id')::uuid;
+ perform public.ai_catalog_link(jsonb_build_object('source_id',rid,'target_id',parent_id,'relation','related'));
+ select (value->>'id')::uuid into doc_id from public.catalog_test_state where name='doc';
+ perform public.ai_catalog_document_link(rid,doc_id,'20000000-0000-4000-8000-000000000001');
+ perform set_config('request.jwt.claim.sub','10000000-0000-4000-8000-000000000001',true);
+ perform public.ai_catalog_source_save('{"source_key":"restore-isolated-fixture","source_type":"test","title":"Restore source fixture","payload":{"literal":"Keep this answer"}}');
+ select id into snapshot_id from ai_management.sources where source_key='restore-isolated-fixture';
+ perform public.ai_catalog_source_link(snapshot_id,rid);
+ select jsonb_build_object('relations',(select jsonb_agg(to_jsonb(r)) from ai_management.relations r where source_id=rid or target_id=rid),'document_links',(select jsonb_agg(to_jsonb(l)) from ai_management.document_links l where record_id=rid),'source_links',(select jsonb_agg(to_jsonb(l)) from ai_management.source_links l where record_id=rid),'source',(select to_jsonb(s) from ai_management.sources s where id=snapshot_id),'versions',(select jsonb_agg(to_jsonb(v) order by version) from ai_management.document_versions v where document_id=doc_id)) into snapshot;
+ perform public.catalog_test_assert(public.ai_catalog_archive(rid,1),'delete remains existing archive gateway');
+ archived:=public.ai_catalog_get(rid)->'data';
+ perform public.catalog_test_assert(archived->>'archived_at' is not null and (archived->>'version')::int=2,'deleted record retains ID and increments version');
+ perform public.catalog_test_assert((public.ai_catalog_list(null,'Restore preservation fixture',null,1,true)->>'total')::int=1 and (public.ai_catalog_list(null,'Restore preservation fixture',null,1,false)->>'total')::int=0,'trash filter includes archived record only');
+ detail:=public.ai_catalog_dossier(parent_id);
+ perform public.catalog_test_assert(not exists(select 1 from jsonb_array_elements(detail->'related') e where e->'record'->>'id'=rid::text),'deleted reference disappears from active parent projection');
+ old_audit:=(select count(*) from ai_management.audit where record_id=rid);
+ perform public.catalog_test_error(format('select public.ai_catalog_restore(%L,1)',rid),'CONFLICT','stale restore rejected');
+ perform public.catalog_test_error(format('select public.ai_catalog_restore(%L,null)',rid),'CONFLICT','missing restore version rejected');
+ perform public.catalog_test_assert((select count(*) from ai_management.audit where record_id=rid)=old_audit and public.ai_catalog_get(rid)->'data'=archived,'failed restore changes neither record nor audit');
+ perform set_config('request.jwt.claim.sub','10000000-0000-4000-8000-000000000003',true);
+ perform public.catalog_test_assert((public.ai_catalog_list(null,'Restore preservation fixture',null,1,true)->>'total')::int=1,'reader sees readable trash');
+ perform public.catalog_test_error(format('select public.ai_catalog_restore(%L,2)',rid),'FORBIDDEN','reader cannot restore');
+ perform set_config('request.jwt.claim.sub','10000000-0000-4000-8000-000000000004',true);
+ perform public.catalog_test_error(format('select public.ai_catalog_restore(%L,2)',rid),'FORBIDDEN','nonmember cannot restore');
+ perform set_config('request.jwt.claim.sub','10000000-0000-4000-8000-000000000002',true);
+ perform public.catalog_test_assert(public.ai_catalog_restore(rid,2),'editor restores readable team record');
+ restored:=public.ai_catalog_get(rid)->'data';
+ perform public.catalog_test_assert(restored-'version'-'updated_at'-'archived_at'=original-'version'-'updated_at'-'archived_at' and restored->'archived_at'='null'::jsonb and (restored->>'version')::int=3,'restore preserves all record and detail fields with one version increment');
+ perform public.catalog_test_assert((public.ai_catalog_list(null,'Restore preservation fixture',null,1,true)->>'total')::int=0 and (public.ai_catalog_list(null,'Restore preservation fixture',null,1,false)->>'total')::int=1,'restored record leaves trash and reenters active list');
+ detail:=public.ai_catalog_dossier(parent_id);
+ perform public.catalog_test_assert(exists(select 1 from jsonb_array_elements(detail->'related') e where e->'record'->>'id'=rid::text),'restored reference reappears in parent projection');
+ perform public.catalog_test_assert(exists(select 1 from jsonb_array_elements(detail->'attachments') e where e->'record'->>'id'=rid::text and e->'document'->'versions'->0->>'id'='20000000-0000-4000-8000-000000000001'),'restored attachment retains exact version pin');
+ select jsonb_build_object('relations',(select jsonb_agg(to_jsonb(r)) from ai_management.relations r where source_id=rid or target_id=rid),'document_links',(select jsonb_agg(to_jsonb(l)) from ai_management.document_links l where record_id=rid),'source_links',(select jsonb_agg(to_jsonb(l)) from ai_management.source_links l where record_id=rid),'source',(select to_jsonb(s) from ai_management.sources s where id=snapshot_id),'versions',(select jsonb_agg(to_jsonb(v) order by version) from ai_management.document_versions v where document_id=doc_id)) into after_snapshot;
+ perform public.catalog_test_assert(after_snapshot=snapshot,'delete and restore preserve relations source snapshots source links files and versions byte for byte');
+ perform public.catalog_test_assert((select count(*) from ai_management.audit where record_id=rid)=old_audit+1 and exists(select 1 from ai_management.audit where record_id=rid and action='restore' and actor_id=auth.uid() and before_value->>'archived_at' is not null and after_value->'archived_at'='null'::jsonb),'restore appends one attributable before-after audit event');
+ perform public.catalog_test_error(format('select public.ai_catalog_restore(%L,3)',rid),'VALIDATION','already active record rejects restore');
+ perform public.catalog_test_error(format('select public.ai_catalog_restore(%L,2)',rid),'CONFLICT','duplicate old-version restore conflicts');
+ perform public.catalog_test_assert(public.ai_catalog_get(rid)->'data'=restored and (select count(*) from ai_management.audit where record_id=rid)=old_audit+1,'duplicate or no-op restore leaves state and audit unchanged');
+ perform public.catalog_test_error('select public.ai_catalog_restore(''99999999-0000-4000-8000-000000000099'',1)','NOT_FOUND','missing restore target not found');
+ private_id:=(public.ai_catalog_save('{"kind":"unit","title":"Restore private fixture","status":"Đang hoạt động","visibility":"private"}')->>'id')::uuid;
+ perform public.ai_catalog_archive(private_id,1);
+ perform public.catalog_test_assert(public.ai_catalog_restore(private_id,2),'owner editor restores private record');
+ perform public.ai_catalog_archive(private_id,3);
+ update ai_management.memberships set role='editor' where user_id='10000000-0000-4000-8000-000000000003';
+ perform set_config('request.jwt.claim.sub','10000000-0000-4000-8000-000000000003',true);
+ perform public.catalog_test_error(format('select public.ai_catalog_restore(%L,4)',private_id),'NOT_FOUND','other editor cannot discover or restore private record');
+ perform public.catalog_test_assert((public.ai_catalog_list(null,'Restore private fixture',null,1,true)->>'total')::int=0,'other editor cannot enumerate private trash');
+ perform set_config('request.jwt.claim.sub','10000000-0000-4000-8000-000000000001',true);
+ perform public.catalog_test_assert(public.ai_catalog_restore(private_id,4),'admin restores another owners private record');
+ for module in select kind,statuses[1] status from ai_management.module_registry loop
+  item:=public.ai_catalog_save(jsonb_build_object('kind',module.kind,'title','Restore kind '||module.kind,'status',module.status,'visibility','team'));
+  perform public.ai_catalog_archive((item->>'id')::uuid,1);
+  perform public.catalog_test_assert(public.ai_catalog_restore((item->>'id')::uuid,2), 'restore supported for '||module.kind);
+ end loop;
+end $$;
+reset role;
+rollback;

@@ -1,0 +1,7 @@
+# Xử lý ý kiến rà soát migration 006
+
+Đối với 53 bản item đã lưu trữ, truy vấn trực tiếp sau triển khai xác nhận `observed_on`, `source_note`, `visibility` của từng cặp giống nhau. Trường `summary` khác ở cả 53 cặp nhưng tất cả bản item đều có đúng một câu mẫu kỹ thuật “Giữ nguyên phạm vi đã khai báo; chưa tự tách các hạng mục chưa rõ ranh giới.”; hồ sơ gốc giữ nội dung nguồn và trạng thái nghiệp vụ. Vì vậy ý kiến về nguy cơ mất nội dung riêng không xảy ra trên dữ liệu đã chuyển. Bản item, chi tiết, nguồn và audit vẫn còn để khôi phục nếu phát hiện căn cứ mới.
+
+Điều kiện rename ADT trong migration có thể được viết chặt hơn cho một database khác, nhưng truy vấn tiền triển khai trả đúng một nhóm và đối chiếu sau triển khai xác nhận hai cạnh thành viên riêng tới ADT Global / ADT Hi-tech và AIQ. Không có bằng chứng ghép nhầm thành viên trên project hiện tại. Migration đã áp dụng một lần và file được giữ nguyên như lịch sử triển khai.
+
+Nguy cơ ghi đồng thời giữa lúc materialize ứng viên và lúc lưu trữ là nhận xét đúng về tính tổng quát của migration. Đợt áp dụng trên project hiện tại đã đối chiếu tiền triển khai 53/53 và sau triển khai 53 audit, 53 bản lưu trữ, 53 hồ sơ gốc còn hoạt động; không có dấu hiệu lệch phiên bản hoặc tài sản riêng trong dữ liệu cuối. Nếu chuyển quy trình thành thao tác lặp trong ứng dụng, phải khóa/revalidate trong cùng transaction trước khi lưu trữ; không dùng migration một lần này làm API hợp nhất chung.

@@ -1,0 +1,44 @@
+\set ON_ERROR_STOP on
+select public.catalog_test_assert((select d.partner_type from ai_management.partner_details d join ai_management.records r on r.id=d.record_id where r.title='Công ty rà soát')='Công ty công nghệ','suppliers become technology companies');
+select public.catalog_test_assert((select d.partner_type from ai_management.partner_details d join ai_management.records r on r.id=d.record_id where r.title='Viện rà soát')='Đơn vị đào tạo và NCKH','institutes join training and research bodies');
+select public.catalog_test_assert((select summary from ai_management.records where title='Công ty rà soát')='Ghi chú giới thiệu cần giữ','introduction notes move into an empty introduction');
+select public.catalog_test_assert((select summary from ai_management.records where title='Viện rà soát')=E'Giới thiệu sẵn có\n\nGhi chú bổ sung','introduction notes are appended to an existing introduction');
+select public.catalog_test_assert((select before_value->>'aliases' from ai_management.audit a join ai_management.records r on r.id=a.record_id where r.title='Công ty rà soát' and a.action='drop_reviewed_fields')='CTRS','dropped values are snapshotted');
+select public.catalog_test_assert((select before_value->>'source_note' from ai_management.audit a join ai_management.records r on r.id=a.record_id where r.title='Công ty rà soát' and a.action='drop_reviewed_fields')='Khảo sát','dropped common values are snapshotted');
+select public.catalog_test_assert(not exists(select 1 from information_schema.columns where table_schema='ai_management' and ((table_name='records' and column_name in ('observed_on','source_note','visibility')) or (table_name='documents' and column_name='visibility')
+  or (table_name='partner_details' and column_name in ('aliases','legal_name','origin','document_notes','internal_unit_code','profile_url')) or (table_name='unit_details' and column_name in ('capabilities','governance')))),'reviewed columns are dropped');
+select public.catalog_test_assert((select d.unit_type from ai_management.unit_details d where d.abbreviation='PETROVIETNAM' limit 1)='Ban/Văn phòng/Tổ chức thuộc Tập đoàn','the Group head office is a Group body');
+select public.catalog_test_assert(not exists(select 1 from ai_management.unit_details where unit_type is null) and not exists(select 1 from ai_management.records where kind='unit' and status not in ('Đang hoạt động','Ngừng hoạt động')),'every unit has a type and an active or closed status');
+select public.catalog_test_assert(not exists(select 1 from ai_management.records where kind='partner' and status='Chiến lược'),'the strategic status is retired');
+select public.catalog_test_error($$update ai_management.records set archived_at=now() where title='Viện rà soát'$$,'records_never_archived','records can no longer be archived');
+select public.catalog_test_assert(not exists(select 1 from pg_proc where proname in ('ai_catalog_archive','ai_catalog_restore')),'archive and restore gateways are gone');
+set role authenticated;
+select set_config('request.jwt.claim.sub','10000000-0000-4000-8000-000000000002',false);
+do $$ declare partner jsonb; unit jsonb; activity jsonb; overview jsonb;
+begin
+ partner:=public.ai_catalog_save('{"kind":"partner","title":"Đối tác sau rà soát","status":"Tiềm năng","data":{"partner_type":"Công ty công nghệ","strategic_level":"Biên bản ghi nhớ cấp đơn vị","country":"Nhật Bản","specialties":"Nền tảng AI; Thị giác máy tính"}}');
+ perform public.catalog_test_assert(partner->'data'->>'specialties'='Nền tảng AI; Thị giác máy tính','tags are stored as one text value');
+ perform public.catalog_test_assert(not partner ? 'visibility' and not partner ? 'observed_on','saved records carry no dropped fields');
+ perform public.catalog_test_error($q$select public.ai_catalog_save('{"kind":"partner","title":"Sai danh mục","status":"Tiềm năng","data":{"country":"Atlantis"}}')$q$,'VALIDATION','values outside a list are rejected');
+ perform public.catalog_test_error($q$select public.ai_catalog_save('{"kind":"partner","title":"Còn phạm vi","status":"Tiềm năng","visibility":"team","data":{}}')$q$,'VALIDATION','the sharing scope is no longer accepted');
+ perform public.catalog_test_error($q$select public.ai_catalog_save('{"kind":"partner","title":"Trạng thái cũ","status":"Chiến lược","data":{}}')$q$,'VALIDATION','the strategic status is rejected');
+ unit:=public.ai_catalog_save('{"kind":"unit","title":"Đơn vị sau rà soát","status":"Đang hoạt động","data":{"unit_type":"Đơn vị thành viên","abbreviation":"DVSRS"}}');
+ perform public.catalog_test_error($q$select public.ai_catalog_save('{"kind":"unit","title":"Thiếu phân loại","status":"Đang hoạt động","data":{"abbreviation":"TPL"}}')$q$,'VALIDATION','a unit needs a type');
+ activity:=public.ai_catalog_save('{"kind":"collaboration","title":"Hoạt động sẽ xóa","status":"Đề xuất","data":{}}');
+ perform public.ai_catalog_collaboration_unit_link(jsonb_build_object('source_id',activity->>'id','target_id',unit->>'id','relation','unit','context',jsonb_build_object('subject_role','lead')));
+ perform public.catalog_test_error(format('select public.ai_catalog_delete(%L,99)',activity->>'id'),'CONFLICT','delete checks the version');
+ perform public.catalog_test_assert(public.ai_catalog_delete((activity->>'id')::uuid,(activity->>'version')::integer),'an editor deletes a record');
+ overview:=public.ai_catalog_overview();
+ perform public.catalog_test_assert(exists(select 1 from jsonb_array_elements(overview->'partners') p where p->>'id'=partner->>'id' and p->>'strategic_level'='Biên bản ghi nhớ cấp đơn vị' and p->>'specialties' like 'Nền tảng AI%'),'the overview carries strategic level and tags');
+ perform public.catalog_test_assert(exists(select 1 from jsonb_array_elements(overview->'units') u where u->>'id'=unit->>'id' and u->>'unit_type'='Đơn vị thành viên'),'the overview carries the unit type');
+end $$;
+reset role;
+select public.catalog_test_assert(not exists(select 1 from ai_management.records where title='Hoạt động sẽ xóa'),'deleted records are gone');
+select public.catalog_test_assert(not exists(select 1 from ai_management.relations l join ai_management.records u on u.id=l.target_id where u.title='Đơn vị sau rà soát'),'links of a deleted record are gone');
+select public.catalog_test_assert((select before_value->'record'->>'title' from ai_management.audit where action='delete' order by id desc limit 1)='Hoạt động sẽ xóa','a deleted record keeps its snapshot');
+select public.catalog_test_assert(jsonb_array_length((select before_value->'relations' from ai_management.audit where action='delete' order by id desc limit 1))=1,'the snapshot keeps the deleted links');
+select set_config('test.any_record',(select id::text from ai_management.records order by created_at limit 1),false);
+set role authenticated;
+select set_config('request.jwt.claim.sub','10000000-0000-4000-8000-000000000003',false);
+select public.catalog_test_error($q$select public.ai_catalog_delete(current_setting('test.any_record')::uuid,1)$q$,'FORBIDDEN','a reader cannot delete');
+reset role;

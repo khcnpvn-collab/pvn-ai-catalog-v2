@@ -1,0 +1,1942 @@
+{
+ "_source": "Supabase ai_management sau migration 202610140010 (rà soát từ điển), 15/10/2026. fields = [số hồ sơ có giá trị, tổng hồ sơ, ví dụ].",
+ "counts": {
+  "unit": 28,
+  "contact": 64,
+  "engagement": 1,
+  "partner": 69,
+  "partner#consortium": 4,
+  "collaboration": 157,
+  "use_case": 61,
+  "learning_event": 1,
+  "expert": 1,
+  "reference": 5
+ },
+ "statuses": {
+  "partner": {
+   "Đang hợp tác": 29,
+   "Tiềm năng": 38,
+   "Tạm dừng": 2
+  },
+  "partner#consortium": {
+   "Tiềm năng": 4
+  },
+  "unit": {
+   "Đang hoạt động": 28,
+   "Ngừng hoạt động": 0
+  },
+  "collaboration": {
+   "Đề xuất": 53,
+   "Đang trao đổi": 32,
+   "POC": 33,
+   "Triển khai chính thức": 25,
+   "Pilot": 0,
+   "Vận hành": 12,
+   "Tạm dừng": 1,
+   "Dừng": 1
+  },
+  "use_case": {
+   "Chính thức": 61,
+   "Chờ rà soát": 0
+  },
+  "contact": {
+   "Còn hiệu lực": 5,
+   "Đã thay đổi": 0,
+   "Chưa xác minh": 59
+  },
+  "engagement": {
+   "Đã diễn ra": 1
+  },
+  "expert": {
+   "Đã trao đổi": 1
+  },
+  "learning_event": {
+   "Đã tổ chức": 1
+  },
+  "reference": {
+   "Liên kết tham khảo": 3,
+   "Chưa đính kèm": 2
+  }
+ },
+ "fields": {
+  "partner.title": [
+   69,
+   69,
+   "1Office · ADT Global/ADT Hi-tech · AIQ"
+  ],
+  "partner.status": [
+   69,
+   69,
+   "Tiềm năng 38 · Đang hợp tác 29 · Tạm dừng 2"
+  ],
+  "partner.summary": [
+   17,
+   69,
+   "Đối tác ADT đã triển khai Triển lãm 50 năm PVN… (14 chuyển từ ghi chú giới thiệu)"
+  ],
+  "partner.partner_type": [
+   69,
+   69,
+   "Công ty công nghệ 59 · Đơn vị đào tạo và NCKH 8 · Truyền thông/sự kiện 1 · Tư vấn 1"
+  ],
+  "partner.country": [
+   34,
+   69,
+   "Việt Nam 16 · Hoa Kỳ 6 · Trung Quốc 3 · Vương quốc Anh 3 (10 giá trị)"
+  ],
+  "partner.website": [
+   28,
+   69,
+   "https://adtglobal.vn/"
+  ],
+  "partner.specialties": [
+   2,
+   69,
+   "Nền tảng AI · Tư vấn giải pháp"
+  ],
+  "partner.short_name": [
+   65,
+   69,
+   "ADT · AI Hay · AIQ"
+  ],
+  "partner.aliases": [
+   68,
+   69,
+   "ADT Global / ADT Hi-tech; ADT"
+  ],
+  "partner.legal_name": [
+   1,
+   69,
+   "CodeValue"
+  ],
+  "partner.origin": [
+   67,
+   69,
+   "Khảo sát đơn vị; chưa xác minh pháp nhân 50 · Danh mục Tập đoàn bổ sung 17"
+  ],
+  "partner.document_notes": [
+   14,
+   69,
+   "Email/workshop AI dành riêng cho Petrovietnam ngày 09/09/2025"
+  ],
+  "partner.internal_unit_code": [
+   0,
+   69,
+   ""
+  ],
+  "partner.profile_url": [
+   0,
+   69,
+   ""
+  ],
+  "partner.code": [
+   68,
+   69,
+   "KS-PARTNER-…"
+  ],
+  "partner.observed_on": [
+   50,
+   69,
+   "2026-08-11"
+  ],
+  "partner.source_note": [
+   67,
+   69,
+   "Chuẩn hóa từ khảo sát hiện hữu; đơn vị nguồn: PVU…"
+  ],
+  "partner.visibility": [
+   69,
+   69,
+   "team (cả 69)"
+  ],
+  "partner#consortium.title": [
+   4,
+   4,
+   "Liên danh ADT – AIQ · Liên danh VNPT – Qualcomm"
+  ],
+  "partner#consortium.status": [
+   4,
+   4,
+   "Tiềm năng (cả 4)"
+  ],
+  "partner#consortium.partner_type": [
+   4,
+   4,
+   "Liên danh"
+  ],
+  "partner#consortium.summary": [
+   0,
+   4,
+   ""
+  ],
+  "partner#consortium.country": [
+   0,
+   4,
+   ""
+  ],
+  "partner#consortium.website": [
+   0,
+   4,
+   ""
+  ],
+  "partner#consortium.source_note": [
+   4,
+   4,
+   "Tách từ quan hệ thành viên đã gắn trên CMC TS (14/10/2026)"
+  ],
+  "unit.title": [
+   28,
+   28,
+   "Viện Dầu khí Việt Nam"
+  ],
+  "unit.status": [
+   28,
+   28,
+   "Đang hoạt động (cả 28)"
+  ],
+  "unit.summary": [
+   28,
+   28,
+   "Đã nhận phiếu khảo sát… (câu tự sinh)"
+  ],
+  "unit.abbreviation": [
+   28,
+   28,
+   "VPI · BSR · PVEP"
+  ],
+  "unit.sector": [
+   28,
+   28,
+   "Chế biến và kinh doanh sản phẩm dầu khí 8 · Dịch vụ kỹ thuật dầu khí 6 · Thăm dò và khai thác 5 (8 giá trị)"
+  ],
+  "unit.address": [
+   0,
+   28,
+   ""
+  ],
+  "unit.website": [
+   0,
+   28,
+   ""
+  ],
+  "unit.capabilities": [
+   27,
+   28,
+   "Quy mô nhân sự AI/dữ liệu: …"
+  ],
+  "unit.governance": [
+   27,
+   28,
+   "Văn bản nền tảng: Chiến lược/Kế hoạch KHCN…"
+  ],
+  "unit.observed_on": [
+   28,
+   28,
+   "2026-08-11"
+  ],
+  "unit.source_note": [
+   28,
+   28,
+   "Chuẩn hóa từ khảo sát hiện hữu; đơn vị nguồn: BSR…"
+  ],
+  "use_case.title": [
+   61,
+   61,
+   "Camera AI giám sát an toàn, tuân thủ và ứng cứu sự cố"
+  ],
+  "use_case.code": [
+   61,
+   61,
+   "BTC-01 … BTC-62"
+  ],
+  "use_case.status": [
+   61,
+   61,
+   "Chính thức (cả 61)"
+  ],
+  "use_case.summary": [
+   0,
+   61,
+   ""
+  ],
+  "use_case.program": [
+   61,
+   61,
+   "7 chương trình"
+  ],
+  "use_case.category": [
+   61,
+   61,
+   "41 nhóm"
+  ],
+  "use_case.objective": [
+   61,
+   61,
+   "AI kết nối dữ liệu ERP và các báo cáo sản lượng…"
+  ],
+  "use_case.is_priority": [
+   61,
+   61,
+   "Có 14 · Không 47"
+  ],
+  "use_case.leadership_level": [
+   14,
+   61,
+   "Tập đoàn dẫn dắt, đơn vị triển khai 10 · Tập đoàn triển khai 4"
+  ],
+  "use_case.start_year": [
+   14,
+   61,
+   "2027 (10) · 2026 (4)"
+  ],
+  "use_case.sector": [
+   0,
+   61,
+   ""
+  ],
+  "use_case.scope": [
+   0,
+   61,
+   ""
+  ],
+  "use_case.expected_value": [
+   0,
+   61,
+   ""
+  ],
+  "use_case.observed_on": [
+   0,
+   61,
+   ""
+  ],
+  "use_case.source_note": [
+   61,
+   61,
+   "Danh mục bài toán chuẩn do Ban KHCN cung cấp ngày 14/10/2026"
+  ],
+  "collaboration.title": [
+   157,
+   157,
+   "AI Agent tự động nghiên cứu · VPI"
+  ],
+  "collaboration.status": [
+   157,
+   157,
+   "Đề xuất 53 · POC 33 · Đang trao đổi 32 · Triển khai chính thức 25 · Vận hành 12"
+  ],
+  "collaboration.cooperation_types": [
+   157,
+   157,
+   "Bài toán đơn vị 82 · Hợp tác đối tác 65 · POC 4 · Tư vấn 4"
+  ],
+  "collaboration.declared_title": [
+   82,
+   157,
+   "AI cho dự án nhà máy thông minh…"
+  ],
+  "collaboration.scope": [
+   156,
+   157,
+   "AI Chatbot · Văn phòng TCT"
+  ],
+  "collaboration.lead": [
+   103,
+   157,
+   "PETROVIETNAM 20 · Văn phòng 4 · Ban CĐS và các Ban/đơn vị… 3"
+  ],
+  "collaboration.start_date": [
+   2,
+   157,
+   "2026-09-02"
+  ],
+  "collaboration.end_date": [
+   2,
+   157,
+   "2026-12-31"
+  ],
+  "collaboration.agreement": [
+   0,
+   157,
+   ""
+  ],
+  "collaboration.results": [
+   2,
+   157,
+   "ADT đã gửi đề xuất, Ban KHCN đang lựa chọn usecase…"
+  ],
+  "collaboration.conclusion": [
+   0,
+   157,
+   ""
+  ],
+  "collaboration.next_notes": [
+   19,
+   157,
+   "Chọn 1-2 use case và workshop"
+  ],
+  "collaboration.source_status": [
+   102,
+   157,
+   "Đơn vị khai báo: Ý tưởng 41 · POC (thử nghiệm) 27 · Đang áp dụng 14"
+  ],
+  "collaboration.last_meeting_date": [
+   20,
+   157,
+   "2026-08-24"
+  ],
+  "collaboration.summary": [
+   154,
+   157,
+   "Cấp Tập đoàn · Tình trạng nguyên gốc: …"
+  ],
+  "collaboration.code": [
+   157,
+   157,
+   "KS-COLLABORATION-… · BTC-46-PVCFC-POC"
+  ],
+  "collaboration.observed_on": [
+   134,
+   157,
+   "2026-08-11"
+  ],
+  "collaboration.source_note": [
+   155,
+   157,
+   "Chuẩn hóa từ khảo sát hiện hữu; đơn vị nguồn: PVEP…"
+  ],
+  "contact.title": [
+   64,
+   64,
+   "Nguyễn Thế Duy · Phan Bảo Ngọc"
+  ],
+  "contact.status": [
+   64,
+   64,
+   "Chưa xác minh 59 · Còn hiệu lực 5"
+  ],
+  "contact.summary": [
+   38,
+   64,
+   "Đầu mối tổng hợp khảo sát của BSR."
+  ],
+  "contact.role": [
+   24,
+   64,
+   "Chuyên gia giải pháp · Đầu mối AI Hay"
+  ],
+  "contact.position": [
+   51,
+   64,
+   "Account Manager · Chánh Văn phòng"
+  ],
+  "contact.department": [
+   13,
+   64,
+   "CMC OpenAI · ADT Global"
+  ],
+  "contact.email": [
+   56,
+   64,
+   "tuph@bsr.com.vn"
+  ],
+  "contact.additional_emails": [
+   1,
+   64,
+   "ntdong@cmc.com.vn"
+  ],
+  "contact.phone": [
+   46,
+   64,
+   "+84 779 393 389"
+  ],
+  "contact.is_primary": [
+   22,
+   64,
+   "Có 13 · Không 9"
+  ],
+  "contact.work_status": [
+   22,
+   64,
+   "Đang công tác"
+  ],
+  "contact.expertise": [
+   0,
+   64,
+   ""
+  ],
+  "contact.biography": [
+   0,
+   64,
+   ""
+  ],
+  "engagement.title": [
+   1,
+   1,
+   "Buổi làm việc/trao đổi công nghệ — Mehdi Hatamian"
+  ],
+  "engagement.status": [
+   1,
+   1,
+   "Đã diễn ra"
+  ],
+  "engagement.summary": [
+   0,
+   1,
+   ""
+  ],
+  "engagement.start_date": [
+   1,
+   1,
+   "2026-09-11"
+  ],
+  "engagement.end_date": [
+   0,
+   1,
+   ""
+  ],
+  "engagement.period_label": [
+   0,
+   1,
+   ""
+  ],
+  "engagement.location": [
+   1,
+   1,
+   "Trực tiếp tại trụ sở Petrovietnam"
+  ],
+  "engagement.participants": [
+   0,
+   1,
+   ""
+  ],
+  "engagement.responsible": [
+   1,
+   1,
+   "Ban Khoa học Công nghệ (Ban KHCN)"
+  ],
+  "engagement.conclusions": [
+   1,
+   1,
+   "Trao đổi kinh nghiệm và năng lực nghiên cứu/phát triển…"
+  ],
+  "engagement.next_notes": [
+   1,
+   1,
+   "Đề nghị chuyên gia cung cấp hồ sơ từng sản phẩm…"
+  ],
+  "expert.title": [
+   1,
+   1,
+   "Mehdi Hatamian"
+  ],
+  "expert.status": [
+   1,
+   1,
+   "Đã trao đổi"
+  ],
+  "expert.summary": [
+   1,
+   1,
+   "Theo hồ sơ nguồn: Kỹ sư, nhà sáng chế…"
+  ],
+  "expert.honorific": [
+   1,
+   1,
+   "TS."
+  ],
+  "expert.academic_title": [
+   1,
+   1,
+   "Distinguished Professor"
+  ],
+  "expert.degree": [
+   1,
+   1,
+   "Ph.D. Electrical Engineering, University of Michigan (1982)"
+  ],
+  "expert.expert_type": [
+   1,
+   1,
+   "Chuyên gia quốc tế"
+  ],
+  "expert.current_position": [
+   1,
+   1,
+   "Founder, CEO & CTO, 2Pi-Sigma Corporation"
+  ],
+  "expert.organization": [
+   1,
+   1,
+   "2Pi-Sigma Corporation"
+  ],
+  "expert.expertise_summary": [
+   1,
+   1,
+   "Thiết kế vi mạch tích hợp, VLSI và SoC"
+  ],
+  "expert.work_history": [
+   1,
+   1,
+   "2Pi-Sigma Corporation · Founder, CEO & CTO · Từ 08/2016"
+  ],
+  "expert.country": [
+   1,
+   1,
+   "Hoa Kỳ"
+  ],
+  "expert.city": [
+   1,
+   1,
+   "Irvine, California"
+  ],
+  "expert.email": [
+   1,
+   1,
+   "mehdi@…"
+  ],
+  "expert.additional_emails": [
+   1,
+   1,
+   "mehdi@2pisigma.com"
+  ],
+  "expert.phone": [
+   1,
+   1,
+   "+1 949-…"
+  ],
+  "expert.website": [
+   1,
+   1,
+   "https://mehdihatamian.info"
+  ],
+  "expert.languages": [
+   0,
+   1,
+   ""
+  ],
+  "expert.roles": [
+   1,
+   1,
+   "Cố vấn công nghệ; phản biện; đào tạo"
+  ],
+  "expert.participation": [
+   0,
+   1,
+   ""
+  ],
+  "expert.availability": [
+   1,
+   1,
+   "Đã làm việc; cần xác nhận kế hoạch tiếp theo"
+  ],
+  "expert.commercial_terms": [
+   0,
+   1,
+   ""
+  ],
+  "expert.priority": [
+   1,
+   1,
+   "Cao – đề xuất tiếp tục làm việc chuyên sâu"
+  ],
+  "expert.contact_consent": [
+   1,
+   1,
+   "Chưa ghi nhận riêng; thông tin công khai trên website"
+  ],
+  "expert.sharing_terms": [
+   1,
+   1,
+   "Nội bộ Petrovietnam…"
+  ],
+  "expert.classification": [
+   1,
+   1,
+   "Nội bộ – có thông tin liên hệ cá nhân"
+  ],
+  "learning_event.title": [
+   1,
+   1,
+   "Hội thảo Chia sẻ kinh nghiệm ứng dụng AI tại Tập đoàn và đơn vị"
+  ],
+  "learning_event.status": [
+   1,
+   1,
+   "Đã tổ chức"
+  ],
+  "learning_event.summary": [
+   0,
+   1,
+   ""
+  ],
+  "learning_event.event_type": [
+   1,
+   1,
+   "Hội thảo"
+  ],
+  "learning_event.topic": [
+   1,
+   1,
+   "Chia sẻ kinh nghiệm ứng dụng AI…"
+  ],
+  "learning_event.start_date": [
+   1,
+   1,
+   "2026-03-26"
+  ],
+  "learning_event.end_date": [
+   1,
+   1,
+   "2026-03-26"
+  ],
+  "learning_event.period_label": [
+   0,
+   1,
+   ""
+  ],
+  "learning_event.format": [
+   1,
+   1,
+   "Kết hợp"
+  ],
+  "learning_event.location": [
+   1,
+   1,
+   "18 Láng Hạ"
+  ],
+  "learning_event.audience": [
+   1,
+   1,
+   "CBNV toàn Tập đoàn"
+  ],
+  "learning_event.agenda": [
+   0,
+   1,
+   ""
+  ],
+  "learning_event.course_edition": [
+   0,
+   1,
+   ""
+  ],
+  "learning_event.reported_attendees": [
+   1,
+   1,
+   "150"
+  ],
+  "learning_event.attendance_source": [
+   0,
+   1,
+   ""
+  ],
+  "learning_event.results": [
+   0,
+   1,
+   ""
+  ],
+  "reference.title": [
+   5,
+   5,
+   "Curriculum Vitae – Mehdi Hatamian"
+  ],
+  "reference.status": [
+   5,
+   5,
+   "Liên kết tham khảo 3 · Chưa đính kèm 2"
+  ],
+  "reference.summary": [
+   0,
+   5,
+   ""
+  ],
+  "reference.reference_type": [
+   5,
+   5,
+   "CV · Bio · Biên bản/tóm tắt buổi làm việc"
+  ],
+  "reference.external_url": [
+   3,
+   5,
+   "https://mehdihatamian.info"
+  ],
+  "reference.document_date": [
+   2,
+   5,
+   "2026-09-11"
+  ],
+  "reference.date_note": [
+   3,
+   5,
+   "Ngày ghi nhận trong nguồn: 2026-09-22…"
+  ],
+  "reference.edition": [
+   0,
+   5,
+   ""
+  ],
+  "reference.classification": [
+   4,
+   5,
+   "Công khai 3 · Nội bộ 1"
+  ],
+  "reference.notes": [
+   4,
+   5,
+   "Bio công khai trên website chuyên gia…"
+  ],
+  "partner.strategic_level": [
+   0,
+   69,
+   ""
+  ],
+  "unit.unit_type": [
+   28,
+   28,
+   "Đơn vị thành viên 27 · Ban/VP thuộc Tập đoàn 1"
+  ]
+ },
+ "relations": [
+  [
+   "collaboration",
+   "unit",
+   "unit",
+   158,
+   "subject_role",
+   0
+  ],
+  [
+   "use_case",
+   "unit",
+   "unit",
+   155,
+   "subject_role",
+   0
+  ],
+  [
+   "collaboration",
+   "partner",
+   "partner",
+   103,
+   "",
+   19
+  ],
+  [
+   "collaboration",
+   "use_case",
+   "use_case",
+   85,
+   "",
+   0
+  ],
+  [
+   "contact",
+   "unit",
+   "unit",
+   38,
+   "",
+   0
+  ],
+  [
+   "partner",
+   "contact",
+   "contact",
+   23,
+   "",
+   0
+  ],
+  [
+   "partner#consortium",
+   "partner",
+   "partner",
+   8,
+   "consortium_role, Vai trò",
+   2
+  ],
+  [
+   "reference",
+   "expert",
+   "expert",
+   4,
+   "",
+   0
+  ],
+  [
+   "collaboration",
+   "partner",
+   "partner#consortium",
+   2,
+   "",
+   0
+  ],
+  [
+   "engagement",
+   "unit",
+   "unit",
+   1,
+   "",
+   0
+  ],
+  [
+   "engagement",
+   "expert",
+   "expert",
+   1,
+   "",
+   0
+  ],
+  [
+   "reference",
+   "related",
+   "engagement",
+   1,
+   "",
+   0
+  ],
+  [
+   "reference",
+   "related",
+   "partner",
+   1,
+   "",
+   0
+  ],
+  [
+   "collaboration",
+   "partner",
+   "unit",
+   1,
+   "",
+   0
+  ]
+ ],
+ "role_counts": {
+  "collaboration.lead": 157,
+  "collaboration.supporting": 1,
+  "use_case.lead": 14,
+  "use_case.supporting": 141
+ },
+ "context_values": {
+  "subject_role": [
+   "lead",
+   "supporting"
+  ],
+  "consortium_role": [
+   "lead",
+   "member"
+  ],
+  "Vai trò": [
+   "Đứng đầu liên danh",
+   "Thành viên"
+  ]
+ },
+ "consortia": [
+  {
+   "title": "Liên danh VNPT – Qualcomm",
+   "members": [
+    "Qualcomm",
+    "VNPT (đầu mối)"
+   ],
+   "activities": 2,
+   "activity_lead_set": 0,
+   "files": 0
+  },
+  {
+   "title": "Liên danh CMC OpenAI – CMC TS",
+   "members": [
+    "CMC OpenAI (đầu mối)",
+    "CMC TS"
+   ],
+   "activities": 0,
+   "activity_lead_set": 0,
+   "files": 0
+  },
+  {
+   "title": "Liên danh ADT – AI Hay",
+   "members": [
+    "ADT Global/ADT Hi-tech (đầu mối)",
+    "AI Hay/1AI Technology"
+   ],
+   "activities": 0,
+   "activity_lead_set": 0,
+   "files": 0
+  },
+  {
+   "title": "Liên danh ADT – AIQ",
+   "members": [
+    "ADT Global/ADT Hi-tech (đầu mối)",
+    "AIQ"
+   ],
+   "activities": 0,
+   "activity_lead_set": 0,
+   "files": 0
+  }
+ ],
+ "documents": {
+  "documents": 42,
+  "hidden": 0,
+  "versions": 42,
+  "size_mb": 166.9,
+  "max_mb": 19.4,
+  "mime": {
+   "application/pdf": 42
+  },
+  "links_by_kind": {
+   "unit": 31,
+   "learning_event": 6,
+   "collaboration": 3,
+   "partner": 1,
+   "reference": 1
+  },
+  "pinned_version": 42,
+  "multi_linked_docs": 0,
+  "unlinked_docs": 0,
+  "folders": 0
+ },
+ "sources": {
+  "partner_workbook": 132,
+  "survey_use_case": 82,
+  "survey_partner": 57,
+  "survey_contact": 44,
+  "survey_data_asset": 42,
+  "survey": 33,
+  "unit_catalog": 28
+ },
+ "source_links": 427,
+ "sources_linked": 263,
+ "audit_total": 3459,
+ "audit_top": {
+  "source_link": 648,
+  "link": 637,
+  "create": 542,
+  "source_snapshot": 418,
+  "purge_record": 217,
+  "normalize_activity_status": 147,
+  "replace_use_case_link": 113,
+  "derive_partner_status": 77,
+  "normalize_activity_type": 76,
+  "convert_demand_to_activity": 70,
+  "replaced_by_standard_catalog": 69,
+  "update": 65,
+  "import_standard_catalog": 61
+ },
+ "memberships": {
+  "admin": 1
+ },
+ "standards": [
+  [
+   "BTC-01",
+   "AI tìm kiếm và tra cứu tri thức nội bộ chuyên ngành thăm dò - khai thác",
+   "AI cho tìm kiếm, thăm dò và khai thác",
+   "Tra cứu và tổng hợp dữ liệu, tài liệu, tri thức chuyên ngành thăm dò - khai thác",
+   "Có",
+   "Tập đoàn triển khai",
+   2026,
+   "PETROVIETNAM",
+   5,
+   1,
+   1,
+   0,
+   0
+  ],
+  [
+   "BTC-02",
+   "Tự động tổng hợp báo cáo và quản trị dữ liệu",
+   "AI cho tìm kiếm, thăm dò và khai thác",
+   "Cơ sở dữ liệu và tra cứu/tìm kiếm",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-03",
+   "Hiệu chỉnh và chuẩn hóa dữ liệu giếng khoan",
+   "AI cho tìm kiếm, thăm dò và khai thác",
+   "Hiệu chỉnh, xử lý và minh giải tài liệu giếng khoan",
+   "Có",
+   "Tập đoàn dẫn dắt, đơn vị triển khai",
+   2027,
+   "VPI",
+   4,
+   1,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-04",
+   "Xử lý và minh giải tài liệu giếng khoan",
+   "AI cho tìm kiếm, thăm dò và khai thác",
+   "Hiệu chỉnh, xử lý, minh giải, tổng hợp và phân tích tài liệu giếng khoan",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-05",
+   "Phân tích, đánh giá và tổng hợp kết quả giếng khoan",
+   "AI cho tìm kiếm, thăm dò và khai thác",
+   "Hiệu chỉnh, xử lý và minh giải tài liệu giếng khoan",
+   "Có",
+   "Tập đoàn dẫn dắt, đơn vị triển khai",
+   2027,
+   "PVEP",
+   4,
+   2,
+   1,
+   0,
+   0
+  ],
+  [
+   "BTC-06",
+   "Ứng dụng AI hỗ trợ minh giải cấu trúc địa chất",
+   "AI cho tìm kiếm, thăm dò và khai thác",
+   "Minh giải và tổng hợp tài liệu địa chấn",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   1,
+   1,
+   0,
+   0
+  ],
+  [
+   "BTC-07",
+   "AI hỗ trợ minh giải thuộc tính địa chấn đặc biệt",
+   "AI cho tìm kiếm, thăm dò và khai thác",
+   "Minh giải và tổng hợp tài liệu địa chấn",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   1,
+   1,
+   0,
+   0
+  ],
+  [
+   "BTC-08",
+   "AI phân tích tổng hợp tài liệu địa chất, địa chấn để đánh giá tiềm năng dầu khí",
+   "AI cho tìm kiếm, thăm dò và khai thác",
+   "Minh giải cấu trúc và thuộc tính địa chấn, đánh giá tiềm năng và hỗ trợ lựa chọn vị trí khoan",
+   "Có",
+   "Tập đoàn dẫn dắt, đơn vị triển khai",
+   2027,
+   "VSP",
+   4,
+   2,
+   1,
+   2,
+   0
+  ],
+  [
+   "BTC-09",
+   "Ứng dụng AI hỗ trợ lựa chọn các vị trí khoan thăm dò khai thác theo phương án địa chất",
+   "AI cho tìm kiếm, thăm dò và khai thác",
+   "Minh giải và tổng hợp tài liệu địa chấn",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-10",
+   "Trợ lý AI tự động hóa quản lý doanh thu, chi phí, phân chia sản phẩm dầu/khí",
+   "AI cho tìm kiếm, thăm dò và khai thác",
+   "Quản trị tài chính, hợp đồng và PSC dầu khí",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   1,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-11",
+   "Trợ lý AI quản trị, hỏi đáp, kiểm toán và rủi ro hợp đồng dầu khí",
+   "AI cho tìm kiếm, thăm dò và khai thác",
+   "Quản trị tài chính, hợp đồng và PSC dầu khí",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   1,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-12",
+   "Trợ lý AI phân tích kinh tế mỏ cận biên và gia hạn PSC",
+   "AI cho tìm kiếm, thăm dò và khai thác",
+   "Thẩm định phát triển mỏ dầu khí",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-13",
+   "Ứng dụng AI đưa ra các phương án khai thác phù hợp dựa trên mô hình hiện hữu",
+   "AI cho tìm kiếm, thăm dò và khai thác",
+   "Tự động hóa xây dựng mô hình tĩnh động và tối ưu phương án khai thác",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   1,
+   1,
+   0,
+   0
+  ],
+  [
+   "BTC-14",
+   "Quản lý năng lượng, phát thải và carbon/ESG",
+   "AI cho vận hành, hiệu suất, độ tin cậy và toàn vẹn tài sản",
+   "Giám sát, dự báo và tối ưu vận hành nhà máy",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-15",
+   "AI hỗ trợ tối ưu chế độ vận hành lò hơi thông qua điều chỉnh Oxy dư",
+   "AI cho vận hành, hiệu suất, độ tin cậy và toàn vẹn tài sản",
+   "Giám sát, dự báo và tối ưu vận hành nhà máy",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   1,
+   1,
+   1,
+   0
+  ],
+  [
+   "BTC-16",
+   "AI giám sát, tối ưu vận hành, năng lượng và phát thải nhà máy",
+   "AI cho vận hành, hiệu suất, độ tin cậy và toàn vẹn tài sản",
+   "Giám sát, phát hiện bất thường và tối ưu vận hành nhà máy, hệ thống",
+   "Có",
+   "Tập đoàn dẫn dắt, đơn vị triển khai",
+   2027,
+   "PVCFC",
+   7,
+   4,
+   2,
+   3,
+   0
+  ],
+  [
+   "BTC-17",
+   "AI phân tích dữ liệu PIG/MFL để nhận diện khuyết tật đường ống",
+   "AI cho vận hành, hiệu suất, độ tin cậy và toàn vẹn tài sản",
+   "Quản lý tài sản, giám sát tình trạng thiết bị và bảo trì dự báo",
+   "Có",
+   "Tập đoàn dẫn dắt, đơn vị triển khai",
+   2027,
+   "PVU",
+   1,
+   3,
+   3,
+   3,
+   0
+  ],
+  [
+   "BTC-18",
+   "AI và cảm biến giám sát rò rỉ, xâm nhập và ăn mòn đường ống",
+   "AI cho vận hành, hiệu suất, độ tin cậy và toàn vẹn tài sản",
+   "Giám sát, kiểm tra và đánh giá toàn vẹn đường ống",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-19",
+   "Điều phối lịch bảo dưỡng lớn",
+   "AI cho vận hành, hiệu suất, độ tin cậy và toàn vẹn tài sản",
+   "Lập kế hoạch và điều phối bảo dưỡng lớn",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-20",
+   "Digital Twin nhà máy điện và tối ưu vận hành chuỗi khí – điện",
+   "AI cho vận hành, hiệu suất, độ tin cậy và toàn vẹn tài sản",
+   "Mô phỏng và tối ưu vận hành bằng Digital Twin",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   1,
+   1,
+   0,
+   0
+  ],
+  [
+   "BTC-21",
+   "Digital Twin và AI/ML tối ưu vận hành nhà máy lọc hóa dầu",
+   "AI cho vận hành, hiệu suất, độ tin cậy và toàn vẹn tài sản",
+   "Mô phỏng và tối ưu vận hành bằng Digital Twin",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-22",
+   "Digital Twin và tối ưu vận hành hệ thống đường ống khí",
+   "AI cho vận hành, hiệu suất, độ tin cậy và toàn vẹn tài sản",
+   "Mô phỏng và tối ưu vận hành bằng Digital Twin",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-23",
+   "AI hỗ trợ chẩn đoán và dự báo hỏng hóc thiết bị quay nhà máy điện",
+   "AI cho vận hành, hiệu suất, độ tin cậy và toàn vẹn tài sản",
+   "Quản lý tài sản, giám sát tình trạng thiết bị và bảo trì dự báo",
+   "Có",
+   "Tập đoàn dẫn dắt, đơn vị triển khai",
+   2026,
+   "PVPOWER",
+   5,
+   3,
+   2,
+   2,
+   0
+  ],
+  [
+   "BTC-24",
+   "AI quản lý tài sản, phát hiện bất thường và bảo trì tiên đoán thiết bị công nghiệp",
+   "AI cho vận hành, hiệu suất, độ tin cậy và toàn vẹn tài sản",
+   "Quản lý tài sản, giám sát tình trạng và bảo trì dự báo",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   3,
+   1,
+   0,
+   0
+  ],
+  [
+   "BTC-25",
+   "Trợ lý AI hỏi đáp kiến thức vận hành nhà máy",
+   "AI cho vận hành, hiệu suất, độ tin cậy và toàn vẹn tài sản",
+   "Tra cứu, hỏi đáp và khai thác tri thức vận hành nhà máy",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   2,
+   2,
+   2,
+   0
+  ],
+  [
+   "BTC-26",
+   "AI dự báo và cân đối cung – cầu khí/LNG",
+   "AI cho hoạch định, thương mại và tối ưu chuỗi năng lượng",
+   "Dự báo, cân đối và điều độ khí/LNG",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-27",
+   "AI tối ưu điều độ LNG, nhập khẩu và tồn kho",
+   "AI cho hoạch định, thương mại và tối ưu chuỗi năng lượng",
+   "Dự báo, cân đối và điều độ khí/LNG",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-28",
+   "Cân đối/điều độ khí - LNG",
+   "AI cho hoạch định, thương mại và tối ưu chuỗi năng lượng",
+   "Dự báo, cân đối và điều độ khí/LNG",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-29",
+   "AI giám sát biên lợi nhuận, công suất và tồn kho lọc hóa dầu",
+   "AI cho hoạch định, thương mại và tối ưu chuỗi năng lượng",
+   "Giám sát hiệu quả sản xuất – kinh doanh, công suất và tồn kho",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-30",
+   "Mô phỏng kịch bản cân đối nguyên liệu - sản xuất - tồn kho",
+   "AI cho hoạch định, thương mại và tối ưu chuỗi năng lượng",
+   "Mô phỏng, cân đối và tối ưu nguyên liệu – sản xuất – tồn kho",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-31",
+   "AI nhận dạng, tra cứu và đối chiếu vật tư kỹ thuật",
+   "AI cho hoạch định, thương mại và tối ưu chuỗi năng lượng",
+   "Tra cứu, khai thác tri thức và văn bản nội bộ",
+   "Có",
+   "Tập đoàn dẫn dắt, đơn vị triển khai",
+   2027,
+   "PVPOWER",
+   9,
+   2,
+   2,
+   0,
+   0
+  ],
+  [
+   "BTC-32",
+   "AI cho kinh doanh và khách hàng",
+   "AI cho hoạch định, thương mại và tối ưu chuỗi năng lượng",
+   "Phân tích kinh doanh, khách hàng và phát triển sản phẩm, dịch vụ",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   4,
+   3,
+   3,
+   0
+  ],
+  [
+   "BTC-33",
+   "AI phân tích, dự báo thị trường, giá và hỗ trợ quyết định thương mại",
+   "AI cho hoạch định, thương mại và tối ưu chuỗi năng lượng",
+   "Phân tích, dự báo thị trường, giá, nhu cầu và hỗ trợ quyết định thương mại",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   1,
+   0,
+   1,
+   0
+  ],
+  [
+   "BTC-34",
+   "AI tự động hóa báo cáo thị trường và tồn kho hàng ngày",
+   "AI cho hoạch định, thương mại và tối ưu chuỗi năng lượng",
+   "Phân tích, dự báo thị trường, giá, nhu cầu và hỗ trợ quyết định thương mại",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   1,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-35",
+   "AI xây dựng và duy trì CSDL thông tin thị trường tổng hợp.",
+   "AI cho hoạch định, thương mại và tối ưu chuỗi năng lượng",
+   "Phân tích, dự báo thị trường, giá, nhu cầu và hỗ trợ quyết định thương mại",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-36",
+   "AI dự báo giá và phân tích thị trường phục vụ giao dịch thương mại.",
+   "AI cho hoạch định, thương mại và tối ưu chuỗi năng lượng",
+   "Phân tích, dự báo thị trường, giá, nhu cầu và hỗ trợ quyết định thương mại",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   1,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-37",
+   "Dự báo thị trường dùng chung",
+   "AI cho hoạch định, thương mại và tối ưu chuỗi năng lượng",
+   "Phân tích, dự báo thị trường, giá, nhu cầu và hỗ trợ quyết định thương mại",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-38",
+   "Trợ lý AI quản lý, rà soát và hỗ trợ soạn thảo hợp đồng thương mại",
+   "AI cho hoạch định, thương mại và tối ưu chuỗi năng lượng",
+   "Quản trị hợp đồng và nghiệp vụ thương mại",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   1,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-39",
+   "AI hỗ trợ đàm phán và quản lý vòng đời hợp đồng thương mại quốc tế.",
+   "AI cho hoạch định, thương mại và tối ưu chuỗi năng lượng",
+   "Quản trị hợp đồng và nghiệp vụ thương mại",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-40",
+   "Chatbot AI hỗ trợ khách hàng và tư vấn nông nghiệp",
+   "AI cho hoạch định, thương mại và tối ưu chuỗi năng lượng",
+   "Tư vấn khách hàng và hỗ trợ dịch vụ nông nghiệp",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-41",
+   "Phân tích danh mục đầu tư và phân bổ vốn",
+   "AI cho dự án đầu tư, EPCI và quản lý dự án",
+   "Phân tích danh mục đầu tư và phân bổ vốn",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-42",
+   "AI hậu kiểm và rà soát quy trình cấp vốn",
+   "AI cho dự án đầu tư, EPCI và quản lý dự án",
+   "Rà soát, thẩm định và kiểm soát hồ sơ dự án đầu tư",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   1,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-43",
+   "Trợ lý AI tra cứu, rà soát quy hoạch, pháp lý và tài liệu kỹ thuật dự án năng lượng",
+   "AI cho dự án đầu tư, EPCI và quản lý dự án",
+   "Rà soát, thẩm định và kiểm soát hồ sơ dự án đầu tư về quy hoạch, pháp lý và kỹ thuật",
+   "Có",
+   "Tập đoàn dẫn dắt, đơn vị triển khai",
+   2027,
+   "PVCHEM",
+   8,
+   1,
+   1,
+   0,
+   0
+  ],
+  [
+   "BTC-44",
+   "Trợ lý AI hỗ trợ thẩm định dự án lọc – hóa – khí",
+   "AI cho dự án đầu tư, EPCI và quản lý dự án",
+   "Rà soát, thẩm định và kiểm soát hồ sơ dự án đầu tư",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-45",
+   "Dự báo và quản lý rủi ro môi trường",
+   "AI cho an toàn, môi trường, rủi ro và kiểm soát tuân thủ",
+   "Dự báo và quản lý rủi ro môi trường",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-46",
+   "Camera AI giám sát an toàn, tuân thủ và ứng cứu sự cố",
+   "AI cho an toàn, môi trường, rủi ro và kiểm soát tuân thủ",
+   "Giám sát an toàn, phát hiện nguy cơ và hỗ trợ ứng cứu sự cố",
+   "Có",
+   "Tập đoàn dẫn dắt, đơn vị triển khai",
+   2026,
+   "BSR",
+   9,
+   3,
+   3,
+   1,
+   0
+  ],
+  [
+   "BTC-47",
+   "Trợ lý AI tra cứu, rà soát pháp lý và tuân thủ",
+   "AI cho an toàn, môi trường, rủi ro và kiểm soát tuân thủ",
+   "Pháp lý, thẩm quyền và kiểm soát tuân thủ",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   2,
+   0,
+   1,
+   0
+  ],
+  [
+   "BTC-48",
+   "AI rà soát hồ sơ trình HĐTV và kiểm tra thẩm quyền phê duyệt",
+   "AI cho an toàn, môi trường, rủi ro và kiểm soát tuân thủ",
+   "Pháp lý, thẩm quyền và kiểm soát tuân thủ",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   1,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-49",
+   "Quản lý năng lượng, phát thải và carbon/ESG",
+   "AI cho an toàn, môi trường, rủi ro và kiểm soát tuân thủ",
+   "Quản lý phát thải, carbon và ESG",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-51",
+   "AI phân tích KPI, báo cáo và lập kế hoạch SXKD",
+   "AI cho quản trị, điều hành và hiệu quả hoạt động doanh nghiệp",
+   "Phân tích chỉ tiêu, báo cáo quản trị và hỗ trợ lập kế hoạch sản xuất kinh doanh",
+   "Có",
+   "Tập đoàn triển khai",
+   2027,
+   "PETROVIETNAM",
+   27,
+   5,
+   2,
+   2,
+   0
+  ],
+  [
+   "BTC-52",
+   "AI cho tài chính, chi phí và tài sản",
+   "AI cho quản trị, điều hành và hiệu quả hoạt động doanh nghiệp",
+   "Phân tích tài chính, chi phí, ngân sách và tài sản",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   2,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-53",
+   "AI phân tích tài chính, chi phí và ngân sách",
+   "AI cho quản trị, điều hành và hiệu quả hoạt động doanh nghiệp",
+   "Phân tích tài chính, chi phí, ngân sách và tài sản",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   1,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-54",
+   "AI cho hợp đồng, đấu thầu và kiểm toán",
+   "AI cho quản trị, điều hành và hiệu quả hoạt động doanh nghiệp",
+   "Quản lý hợp đồng, đấu thầu và kiểm toán",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   1,
+   1,
+   0,
+   0
+  ],
+  [
+   "BTC-55",
+   "Trợ lý AI tra cứu và khai thác tri thức doanh nghiệp",
+   "AI cho quản trị, điều hành và hiệu quả hoạt động doanh nghiệp",
+   "Tra cứu, khai thác tri thức và văn bản nội bộ",
+   "Có",
+   "Tập đoàn triển khai",
+   2027,
+   "PETROVIETNAM",
+   27,
+   8,
+   6,
+   4,
+   0
+  ],
+  [
+   "BTC-56",
+   "Trợ lý AI nghiệp vụ Đảng – Đoàn và hỗ trợ soạn thảo văn bản",
+   "AI cho quản trị, điều hành và hiệu quả hoạt động doanh nghiệp",
+   "Tra cứu nghiệp vụ Đảng – Đoàn và hỗ trợ soạn thảo văn bản",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   1,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-57",
+   "Trợ lý AI tra cứu và hỗ trợ nghiệp vụ nhân sự",
+   "AI cho quản trị, điều hành và hiệu quả hoạt động doanh nghiệp",
+   "Tra cứu và hỗ trợ nghiệp vụ nhân sự",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   2,
+   0,
+   0,
+   0
+  ],
+  [
+   "BTC-58",
+   "Trợ lý AI tích hợp ERP hỗ trợ tra cứu và tác nghiệp nghiệp vụ",
+   "AI cho quản trị, điều hành và hiệu quả hoạt động doanh nghiệp",
+   "Tự động hóa tác nghiệp, văn bản và điều hành công việc",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   2,
+   1,
+   1,
+   0
+  ],
+  [
+   "BTC-59",
+   "AI xử lý văn bản và trợ lý tổng hợp, thư ký",
+   "AI cho quản trị, điều hành và hiệu quả hoạt động doanh nghiệp",
+   "Tự động hóa tác nghiệp, xử lý văn bản và điều hành công việc",
+   "Có",
+   "Tập đoàn triển khai",
+   2026,
+   "PETROVIETNAM",
+   27,
+   10,
+   6,
+   5,
+   0
+  ],
+  [
+   "BTC-60",
+   "AI theo dõi chỉ đạo, nhiệm vụ và cảnh báo tiến độ",
+   "AI cho quản trị, điều hành và hiệu quả hoạt động doanh nghiệp",
+   "Tự động hóa tác nghiệp, văn bản và điều hành công việc",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   2,
+   2,
+   0,
+   0
+  ],
+  [
+   "BTC-61",
+   "AI hỗ trợ R&D công nghệ, vật liệu, xúc tác và sản phẩm mới",
+   "AI cho nghiên cứu, đổi mới sáng tạo và sản phẩm, công nghệ",
+   "Hỗ trợ nghiên cứu, phát triển công nghệ, vật liệu và sản phẩm mới chuyên ngành",
+   "Có",
+   "Tập đoàn dẫn dắt, đơn vị triển khai",
+   2027,
+   "VPI",
+   4,
+   5,
+   2,
+   3,
+   0
+  ],
+  [
+   "BTC-62",
+   "Machine Learning hỗ trợ bón phân chính xác cho cây trồng",
+   "AI cho nghiên cứu, đổi mới sáng tạo và sản phẩm, công nghệ",
+   "Phân tích dữ liệu cây trồng và tối ưu bón phân",
+   "Không",
+   null,
+   null,
+   null,
+   0,
+   0,
+   0,
+   0,
+   0
+  ]
+ ]
+}

@@ -1,0 +1,1036 @@
+[
+ {
+  "kind": "unit",
+  "label": "Đơn vị",
+  "singular": "đơn vị",
+  "description": "Thông tin và hiện trạng các đơn vị trong Tập đoàn.",
+  "statuses": [
+   "Đang hoạt động",
+   "Ngừng hoạt động"
+  ],
+  "fields": [
+   {
+    "key": "unit_type",
+    "label": "Phân loại đơn vị",
+    "type": "select",
+    "options": [
+     "Đơn vị thành viên",
+     "Ban/Văn phòng/Tổ chức thuộc Tập đoàn"
+    ],
+    "suggestions": null,
+    "group": null,
+    "hidden": false
+   },
+   {
+    "key": "abbreviation",
+    "label": "Tên viết tắt",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": null,
+    "hidden": false
+   },
+   {
+    "key": "sector",
+    "label": "Lĩnh vực hoạt động",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": null,
+    "hidden": false
+   },
+   {
+    "key": "address",
+    "label": "Địa chỉ",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": null,
+    "hidden": false
+   },
+   {
+    "key": "website",
+    "label": "Website",
+    "type": "url",
+    "options": null,
+    "suggestions": null,
+    "group": null,
+    "hidden": false
+   }
+  ]
+ },
+ {
+  "kind": "contact",
+  "label": "Đầu mối & giảng viên",
+  "singular": "người liên hệ",
+  "description": "Danh bạ đầu mối, giảng viên và diễn giả dùng chung.",
+  "statuses": [
+   "Còn hiệu lực",
+   "Đã thay đổi",
+   "Chưa xác minh"
+  ],
+  "fields": [
+   {
+    "key": "position",
+    "label": "Chức danh",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Vai trò và công tác",
+    "hidden": false
+   },
+   {
+    "key": "department",
+    "label": "Phòng / ban",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Vai trò và công tác",
+    "hidden": false
+   },
+   {
+    "key": "email",
+    "label": "Email công việc",
+    "type": "email",
+    "options": null,
+    "suggestions": null,
+    "group": "Thông tin liên hệ",
+    "hidden": false
+   },
+   {
+    "key": "phone",
+    "label": "Điện thoại",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Thông tin liên hệ",
+    "hidden": false
+   },
+   {
+    "key": "expertise",
+    "label": "Chuyên môn / lĩnh vực giảng dạy",
+    "type": "textarea",
+    "options": null,
+    "suggestions": null,
+    "group": "Chuyên môn và giới thiệu",
+    "hidden": false
+   },
+   {
+    "key": "biography",
+    "label": "Giới thiệu",
+    "type": "textarea",
+    "options": null,
+    "suggestions": null,
+    "group": "Chuyên môn và giới thiệu",
+    "hidden": false
+   },
+   {
+    "key": "additional_emails",
+    "label": "Email bổ sung",
+    "type": "textarea",
+    "options": null,
+    "suggestions": null,
+    "group": "Thông tin liên hệ",
+    "hidden": false
+   },
+   {
+    "key": "role",
+    "label": "Vai trò đầu mối",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Vai trò và công tác",
+    "hidden": false
+   },
+   {
+    "key": "is_primary",
+    "label": "Đầu mối chính",
+    "type": "select",
+    "options": [
+     "Có",
+     "Không"
+    ],
+    "suggestions": null,
+    "group": "Vai trò và công tác",
+    "hidden": false
+   },
+   {
+    "key": "work_status",
+    "label": "Tình trạng công tác",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Vai trò và công tác",
+    "hidden": false
+   }
+  ]
+ },
+ {
+  "kind": "engagement",
+  "label": "Đợt làm việc",
+  "singular": "đợt làm việc",
+  "description": "Lịch sử trao đổi, thành phần và tài liệu làm việc với đơn vị.",
+  "statuses": [
+   "Đã diễn ra",
+   "Đang diễn ra",
+   "Dự kiến",
+   "Chưa xác minh"
+  ],
+  "fields": [
+   {
+    "key": "start_date",
+    "label": "Ngày bắt đầu",
+    "type": "date",
+    "options": null,
+    "suggestions": null,
+    "group": "Thời gian và thành phần",
+    "hidden": false
+   },
+   {
+    "key": "end_date",
+    "label": "Ngày kết thúc",
+    "type": "date",
+    "options": null,
+    "suggestions": null,
+    "group": "Thời gian và thành phần",
+    "hidden": false
+   },
+   {
+    "key": "period_label",
+    "label": "Thời gian nếu chỉ biết tháng / quý",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Thời gian và thành phần",
+    "hidden": false
+   },
+   {
+    "key": "location",
+    "label": "Địa điểm / hình thức",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Thời gian và thành phần",
+    "hidden": false
+   },
+   {
+    "key": "participants",
+    "label": "Thành phần được ghi nhận",
+    "type": "textarea",
+    "options": null,
+    "suggestions": null,
+    "group": "Thời gian và thành phần",
+    "hidden": false
+   },
+   {
+    "key": "conclusions",
+    "label": "Nội dung và kết luận",
+    "type": "textarea",
+    "options": null,
+    "suggestions": null,
+    "group": "Nội dung và kết quả",
+    "hidden": false
+   },
+   {
+    "key": "next_notes",
+    "label": "Nội dung trao đổi tiếp theo",
+    "type": "textarea",
+    "options": null,
+    "suggestions": null,
+    "group": "Nội dung và kết quả",
+    "hidden": false
+   },
+   {
+    "key": "responsible",
+    "label": "Đầu mối phụ trách",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Thời gian và thành phần",
+    "hidden": false
+   }
+  ]
+ },
+ {
+  "kind": "partner",
+  "label": "Đối tác",
+  "singular": "đối tác",
+  "description": "Danh mục đối tác, trạng thái hợp tác chung và các hoạt động đã làm cùng đối tác.",
+  "statuses": [
+   "Đang hợp tác",
+   "Tiềm năng",
+   "Tạm dừng"
+  ],
+  "fields": [
+   {
+    "key": "short_name",
+    "label": "Tên ngắn",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Thông tin đối tác",
+    "hidden": false
+   },
+   {
+    "key": "partner_type",
+    "label": "Loại đối tác",
+    "type": "select",
+    "options": [
+     "Công ty công nghệ",
+     "Đơn vị đào tạo và NCKH",
+     "Cơ quan nhà nước",
+     "Tư vấn",
+     "Truyền thông/sự kiện",
+     "Liên danh"
+    ],
+    "suggestions": null,
+    "group": "Thông tin đối tác",
+    "hidden": false
+   },
+   {
+    "key": "strategic_level",
+    "label": "Hợp tác chiến lược",
+    "type": "select",
+    "options": [
+     "Không",
+     "Biên bản ghi nhớ cấp đơn vị",
+     "Biên bản ghi nhớ cấp tập đoàn",
+     "Hợp tác chiến lược cấp đơn vị",
+     "Hợp tác chiến lược cấp tập đoàn"
+    ],
+    "suggestions": null,
+    "group": "Thông tin đối tác",
+    "hidden": false
+   },
+   {
+    "key": "country",
+    "label": "Quốc gia",
+    "type": "select",
+    "options": [
+     "Việt Nam",
+     "Hoa Kỳ",
+     "Trung Quốc",
+     "Nhật Bản",
+     "Hàn Quốc",
+     "Singapore",
+     "Ấn Độ",
+     "Vương quốc Anh",
+     "Pháp",
+     "Đức",
+     "Hà Lan",
+     "Na Uy",
+     "Thụy Sĩ",
+     "Israel",
+     "Liên bang Nga",
+     "Các Tiểu vương quốc Ả Rập Thống nhất",
+     "Ả Rập Xê Út",
+     "Úc",
+     "Canada",
+     "Khác"
+    ],
+    "suggestions": null,
+    "group": "Thông tin đối tác",
+    "hidden": false
+   },
+   {
+    "key": "website",
+    "label": "Website",
+    "type": "url",
+    "options": null,
+    "suggestions": null,
+    "group": "Hồ sơ giới thiệu",
+    "hidden": false
+   },
+   {
+    "key": "specialties",
+    "label": "Năng lực và giải pháp",
+    "type": "tags",
+    "options": null,
+    "suggestions": null,
+    "group": "Hồ sơ giới thiệu",
+    "hidden": false
+   }
+  ]
+ },
+ {
+  "kind": "collaboration",
+  "label": "Triển khai & hợp tác",
+  "singular": "hoạt động",
+  "description": "Bài toán đơn vị, POC, đề tài KHCN và các nội dung hợp tác với đối tác; mỗi hồ sơ gắn tối đa một bài toán chuẩn.",
+  "statuses": [
+   "Đề xuất",
+   "Đang trao đổi",
+   "POC",
+   "Triển khai chính thức",
+   "Pilot",
+   "Vận hành",
+   "Tạm dừng",
+   "Dừng"
+  ],
+  "fields": [
+   {
+    "key": "cooperation_types",
+    "label": "Loại hoạt động",
+    "type": "select",
+    "options": [
+     "Bài toán đơn vị",
+     "POC",
+     "Đề tài KHCN",
+     "Hợp tác đối tác",
+     "Hạ tầng",
+     "Đào tạo",
+     "MOU / hợp tác chiến lược",
+     "Tư vấn"
+    ],
+    "suggestions": null,
+    "group": "Phân loại và phạm vi",
+    "hidden": false
+   },
+   {
+    "key": "declared_title",
+    "label": "Tên do đơn vị khai báo",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Phân loại và phạm vi",
+    "hidden": false
+   },
+   {
+    "key": "scope",
+    "label": "Mô tả / phạm vi",
+    "type": "textarea",
+    "options": null,
+    "suggestions": null,
+    "group": "Phân loại và phạm vi",
+    "hidden": false
+   },
+   {
+    "key": "lead",
+    "label": "Đầu mối / bên chủ trì",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Thời gian và tổ chức",
+    "hidden": false
+   },
+   {
+    "key": "start_date",
+    "label": "Thời gian bắt đầu",
+    "type": "date",
+    "options": null,
+    "suggestions": null,
+    "group": "Thời gian và tổ chức",
+    "hidden": false
+   },
+   {
+    "key": "end_date",
+    "label": "Thời gian kết thúc",
+    "type": "date",
+    "options": null,
+    "suggestions": null,
+    "group": "Thời gian và tổ chức",
+    "hidden": false
+   },
+   {
+    "key": "agreement",
+    "label": "Hợp đồng / thỏa thuận liên quan",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Thời gian và tổ chức",
+    "hidden": false
+   },
+   {
+    "key": "results",
+    "label": "Kết quả",
+    "type": "textarea",
+    "options": null,
+    "suggestions": null,
+    "group": "Kết quả và bước tiếp theo",
+    "hidden": false
+   },
+   {
+    "key": "conclusion",
+    "label": "Kết luận",
+    "type": "textarea",
+    "options": null,
+    "suggestions": null,
+    "group": "Kết quả và bước tiếp theo",
+    "hidden": false
+   },
+   {
+    "key": "source_status",
+    "label": "Tình trạng theo nguồn",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Kết quả và bước tiếp theo",
+    "hidden": false
+   },
+   {
+    "key": "last_meeting_date",
+    "label": "Ngày làm việc gần nhất",
+    "type": "date",
+    "options": null,
+    "suggestions": null,
+    "group": "Kết quả và bước tiếp theo",
+    "hidden": false
+   },
+   {
+    "key": "next_notes",
+    "label": "Bước tiếp theo",
+    "type": "textarea",
+    "options": null,
+    "suggestions": null,
+    "group": "Kết quả và bước tiếp theo",
+    "hidden": false
+   }
+  ]
+ },
+ {
+  "kind": "use_case",
+  "label": "Bài toán chuẩn",
+  "singular": "bài toán chuẩn",
+  "description": "Danh mục bài toán chuẩn theo 7 chương trình AI; mỗi bài toán gom các hoạt động của đơn vị và đối tác.",
+  "statuses": [
+   "Chính thức",
+   "Chờ rà soát"
+  ],
+  "fields": [
+   {
+    "key": "program",
+    "label": "Chương trình AI",
+    "type": "select",
+    "options": [
+     "AI cho tìm kiếm, thăm dò và khai thác",
+     "AI cho vận hành, hiệu suất, độ tin cậy và toàn vẹn tài sản",
+     "AI cho hoạch định, thương mại và tối ưu chuỗi năng lượng",
+     "AI cho dự án đầu tư, EPCI và quản lý dự án",
+     "AI cho an toàn, môi trường, rủi ro và kiểm soát tuân thủ",
+     "AI cho quản trị, điều hành và hiệu quả hoạt động doanh nghiệp",
+     "AI cho nghiên cứu, đổi mới sáng tạo và sản phẩm, công nghệ"
+    ],
+    "suggestions": null,
+    "group": "Phân loại",
+    "hidden": false
+   },
+   {
+    "key": "category",
+    "label": "Nhóm bài toán",
+    "type": "text",
+    "options": null,
+    "suggestions": [],
+    "group": "Phân loại",
+    "hidden": false
+   },
+   {
+    "key": "objective",
+    "label": "Mô tả bài toán",
+    "type": "textarea",
+    "options": null,
+    "suggestions": null,
+    "group": "Phân loại",
+    "hidden": false
+   },
+   {
+    "key": "is_priority",
+    "label": "Thuộc danh mục ưu tiên",
+    "type": "select",
+    "options": [
+     "Có",
+     "Không"
+    ],
+    "suggestions": null,
+    "group": "Định hướng triển khai",
+    "hidden": false
+   },
+   {
+    "key": "leadership_level",
+    "label": "Mức dẫn dắt của Tập đoàn",
+    "type": "select",
+    "options": [
+     "Tập đoàn triển khai",
+     "Tập đoàn dẫn dắt, đơn vị triển khai",
+     "Đơn vị chủ động"
+    ],
+    "suggestions": null,
+    "group": "Định hướng triển khai",
+    "hidden": false
+   },
+   {
+    "key": "start_year",
+    "label": "Năm dự kiến bắt đầu",
+    "type": "number",
+    "options": null,
+    "suggestions": null,
+    "group": "Định hướng triển khai",
+    "hidden": false
+   },
+   {
+    "key": "sector",
+    "label": "Lĩnh vực",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": null,
+    "hidden": true
+   },
+   {
+    "key": "scope",
+    "label": "Phạm vi áp dụng",
+    "type": "textarea",
+    "options": null,
+    "suggestions": null,
+    "group": null,
+    "hidden": true
+   },
+   {
+    "key": "expected_value",
+    "label": "Giá trị kỳ vọng",
+    "type": "textarea",
+    "options": null,
+    "suggestions": null,
+    "group": null,
+    "hidden": true
+   }
+  ]
+ },
+ {
+  "kind": "learning_event",
+  "label": "Đào tạo & hội thảo",
+  "singular": "hoạt động đào tạo",
+  "description": "Đào tạo, hội thảo, khóa học và tọa đàm: thời gian, đối tượng, file và các đối tác, chuyên gia tham gia.",
+  "statuses": [
+   "Dự kiến",
+   "Đang diễn ra",
+   "Đã tổ chức",
+   "Hoãn",
+   "Hủy",
+   "Chưa xác minh"
+  ],
+  "fields": [
+   {
+    "key": "event_type",
+    "label": "Loại hoạt động",
+    "type": "text",
+    "options": null,
+    "suggestions": [
+     "Đào tạo",
+     "Hội thảo",
+     "Khóa học",
+     "Tọa đàm"
+    ],
+    "group": null,
+    "hidden": false
+   },
+   {
+    "key": "topic",
+    "label": "Chủ đề",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": null,
+    "hidden": false
+   },
+   {
+    "key": "start_date",
+    "label": "Ngày bắt đầu",
+    "type": "date",
+    "options": null,
+    "suggestions": null,
+    "group": null,
+    "hidden": false
+   },
+   {
+    "key": "end_date",
+    "label": "Ngày kết thúc",
+    "type": "date",
+    "options": null,
+    "suggestions": null,
+    "group": null,
+    "hidden": false
+   },
+   {
+    "key": "period_label",
+    "label": "Tháng / quý nếu chưa rõ ngày",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": null,
+    "hidden": false
+   },
+   {
+    "key": "format",
+    "label": "Hình thức",
+    "type": "select",
+    "options": [
+     "Trực tiếp",
+     "Trực tuyến",
+     "Kết hợp"
+    ],
+    "suggestions": null,
+    "group": null,
+    "hidden": false
+   },
+   {
+    "key": "location",
+    "label": "Địa điểm",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": null,
+    "hidden": false
+   },
+   {
+    "key": "audience",
+    "label": "Đối tượng / thành phần",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": null,
+    "hidden": false
+   },
+   {
+    "key": "agenda",
+    "label": "Chương trình",
+    "type": "textarea",
+    "options": null,
+    "suggestions": null,
+    "group": null,
+    "hidden": true
+   },
+   {
+    "key": "course_edition",
+    "label": "Đề cương / phiên bản đã sử dụng",
+    "type": "textarea",
+    "options": null,
+    "suggestions": null,
+    "group": null,
+    "hidden": true
+   },
+   {
+    "key": "reported_attendees",
+    "label": "Số người thực dự do nguồn báo cáo",
+    "type": "number",
+    "options": null,
+    "suggestions": null,
+    "group": null,
+    "hidden": true
+   },
+   {
+    "key": "attendance_source",
+    "label": "Nguồn và phạm vi số liệu tham dự",
+    "type": "textarea",
+    "options": null,
+    "suggestions": null,
+    "group": null,
+    "hidden": true
+   },
+   {
+    "key": "results",
+    "label": "Kết quả đã ghi nhận",
+    "type": "textarea",
+    "options": null,
+    "suggestions": null,
+    "group": null,
+    "hidden": false
+   }
+  ]
+ },
+ {
+  "kind": "expert",
+  "label": "Chuyên gia",
+  "singular": "chuyên gia",
+  "description": "Năng lực, tổ chức công tác và các nội dung trao đổi với chuyên gia.",
+  "statuses": [
+   "Đã trao đổi",
+   "Đang hợp tác",
+   "Chưa liên hệ",
+   "Tạm dừng"
+  ],
+  "fields": [
+   {
+    "key": "organization",
+    "label": "Nơi công tác",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Thông tin chung",
+    "hidden": false
+   },
+   {
+    "key": "expertise_summary",
+    "label": "Lĩnh vực / năng lực chuyên môn",
+    "type": "textarea",
+    "options": null,
+    "suggestions": null,
+    "group": "Thông tin chung",
+    "hidden": false
+   },
+   {
+    "key": "work_history",
+    "label": "Quá trình công tác",
+    "type": "textarea",
+    "options": null,
+    "suggestions": null,
+    "group": "Thông tin chung",
+    "hidden": false
+   },
+   {
+    "key": "honorific",
+    "label": "Danh xưng",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Thông tin chuyên gia",
+    "hidden": false
+   },
+   {
+    "key": "academic_title",
+    "label": "Học hàm",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Thông tin chuyên gia",
+    "hidden": false
+   },
+   {
+    "key": "degree",
+    "label": "Học vị",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Thông tin chuyên gia",
+    "hidden": false
+   },
+   {
+    "key": "expert_type",
+    "label": "Loại chuyên gia",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Thông tin chuyên gia",
+    "hidden": false
+   },
+   {
+    "key": "current_position",
+    "label": "Chức vụ hiện tại",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Thông tin chuyên gia",
+    "hidden": false
+   },
+   {
+    "key": "country",
+    "label": "Quốc gia",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Liên hệ và địa bàn",
+    "hidden": false
+   },
+   {
+    "key": "city",
+    "label": "Thành phố",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Liên hệ và địa bàn",
+    "hidden": false
+   },
+   {
+    "key": "email",
+    "label": "Email chính",
+    "type": "email",
+    "options": null,
+    "suggestions": null,
+    "group": "Liên hệ và địa bàn",
+    "hidden": false
+   },
+   {
+    "key": "additional_emails",
+    "label": "Email bổ sung",
+    "type": "textarea",
+    "options": null,
+    "suggestions": null,
+    "group": "Liên hệ và địa bàn",
+    "hidden": false
+   },
+   {
+    "key": "phone",
+    "label": "Điện thoại",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Liên hệ và địa bàn",
+    "hidden": false
+   },
+   {
+    "key": "website",
+    "label": "Website / hồ sơ công khai",
+    "type": "url",
+    "options": null,
+    "suggestions": null,
+    "group": "Liên hệ và địa bàn",
+    "hidden": false
+   },
+   {
+    "key": "languages",
+    "label": "Ngôn ngữ làm việc",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Liên hệ và địa bàn",
+    "hidden": false
+   },
+   {
+    "key": "roles",
+    "label": "Vai trò có thể tham gia",
+    "type": "textarea",
+    "options": null,
+    "suggestions": null,
+    "group": "Hình thức tham gia",
+    "hidden": false
+   },
+   {
+    "key": "participation",
+    "label": "Nội dung và hình thức tham gia",
+    "type": "textarea",
+    "options": null,
+    "suggestions": null,
+    "group": "Hình thức tham gia",
+    "hidden": false
+   },
+   {
+    "key": "availability",
+    "label": "Khả năng bố trí thời gian",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Hình thức tham gia",
+    "hidden": false
+   },
+   {
+    "key": "commercial_terms",
+    "label": "Điều kiện hợp tác / thương mại",
+    "type": "textarea",
+    "options": null,
+    "suggestions": null,
+    "group": "Hình thức tham gia",
+    "hidden": false
+   },
+   {
+    "key": "priority",
+    "label": "Mức ưu tiên",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Hình thức tham gia",
+    "hidden": false
+   },
+   {
+    "key": "contact_consent",
+    "label": "Thông tin đồng ý liên hệ",
+    "type": "textarea",
+    "options": null,
+    "suggestions": null,
+    "group": "Liên hệ và chia sẻ",
+    "hidden": false
+   },
+   {
+    "key": "sharing_terms",
+    "label": "Phạm vi chia sẻ được ghi nhận",
+    "type": "textarea",
+    "options": null,
+    "suggestions": null,
+    "group": "Liên hệ và chia sẻ",
+    "hidden": false
+   },
+   {
+    "key": "classification",
+    "label": "Phân loại thông tin",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Liên hệ và chia sẻ",
+    "hidden": false
+   }
+  ]
+ },
+ {
+  "kind": "reference",
+  "label": "Thư mục tài liệu",
+  "singular": "thư mục tài liệu",
+  "description": "File, thư mục và các thông tin tài liệu đã lưu.",
+  "statuses": [
+   "Liên kết tham khảo",
+   "Chưa đính kèm"
+  ],
+  "fields": [
+   {
+    "key": "reference_type",
+    "label": "Loại tài liệu",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Thông tin tài liệu",
+    "hidden": false
+   },
+   {
+    "key": "external_url",
+    "label": "Liên kết công khai",
+    "type": "url",
+    "options": null,
+    "suggestions": null,
+    "group": "Thông tin tài liệu",
+    "hidden": false
+   },
+   {
+    "key": "document_date",
+    "label": "Ngày tài liệu",
+    "type": "date",
+    "options": null,
+    "suggestions": null,
+    "group": "Mốc thời gian và phiên bản",
+    "hidden": false
+   },
+   {
+    "key": "date_note",
+    "label": "Ghi chú về thời điểm",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Mốc thời gian và phiên bản",
+    "hidden": false
+   },
+   {
+    "key": "edition",
+    "label": "Phiên bản",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Mốc thời gian và phiên bản",
+    "hidden": false
+   },
+   {
+    "key": "classification",
+    "label": "Phân loại thông tin",
+    "type": "text",
+    "options": null,
+    "suggestions": null,
+    "group": "Phạm vi sử dụng",
+    "hidden": false
+   },
+   {
+    "key": "notes",
+    "label": "Ghi chú tài liệu",
+    "type": "textarea",
+    "options": null,
+    "suggestions": null,
+    "group": "Phạm vi sử dụng",
+    "hidden": false
+   }
+  ]
+ }
+]

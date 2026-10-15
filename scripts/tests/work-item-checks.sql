@@ -1,0 +1,45 @@
+\set ON_ERROR_STOP on
+create function pg_temp.group_of(p_title text) returns text language sql as $$ select d.item_group from ai_management.collaboration_details d join ai_management.records r on r.id=d.record_id where r.title=p_title $$;
+create function pg_temp.category_of(p_title text) returns text language sql as $$ select d.item_category from ai_management.collaboration_details d join ai_management.records r on r.id=d.record_id where r.title=p_title $$;
+select public.catalog_test_assert(pg_temp.group_of('Hoạt động đào tạo cũ')='Nhân lực, đào tạo' and pg_temp.category_of('Hoạt động đào tạo cũ')='Đào tạo, khóa học','old training type becomes the people and training group');
+select public.catalog_test_assert(pg_temp.group_of('Ký MOU nghiên cứu')='Ký kết hợp tác' and pg_temp.category_of('Ký MOU nghiên cứu')='Biên bản ghi nhớ (MOU)','MOU keywords become the agreement group');
+select public.catalog_test_assert(pg_temp.group_of('Tư vấn AI governance')='Quản trị AI','governance keywords become the AI governance group');
+select public.catalog_test_assert(pg_temp.group_of('Hợp tác trung tâm dữ liệu')='Dữ liệu, CSDL','data keywords become the data group');
+select public.catalog_test_assert(pg_temp.group_of('Triển khai nền tảng AI')='Nền tảng, hạ tầng, công nghệ','infrastructure keywords become the platform group');
+select public.catalog_test_assert(pg_temp.group_of('Trợ lý AI cho đơn vị')='Bài toán' and pg_temp.category_of('Trợ lý AI cho đơn vị')='Ứng dụng AI tại đơn vị','other activities stay with problems');
+select public.catalog_test_assert(not exists(select 1 from ai_management.collaboration_details d where exists(select 1 from ai_management.relations l where l.source_id=d.record_id and l.relation='use_case') and d.item_group<>'Bài toán'),'activities with a standard problem are in the problem group');
+select public.catalog_test_assert(not exists(select 1 from ai_management.collaboration_details where item_group is null),'every activity has a group');
+select public.catalog_test_assert((select count(*) from ai_management.audit where action='assign_item_group')=(select count(*) from ai_management.collaboration_details),'each grouping is audited with its reason');
+select public.catalog_test_assert(not exists(select 1 from information_schema.columns where table_schema='ai_management' and table_name='collaboration_details' and column_name='cooperation_types'),'the old activity type is dropped');
+select public.catalog_test_assert(not exists(select 1 from ai_management.records where kind='use_case' and status not in ('Đang thực hiện','Hoàn thành','Tạm dừng')),'standard problems follow the item lifecycle');
+set role authenticated;
+select set_config('request.jwt.claim.sub','10000000-0000-4000-8000-000000000002',false);
+do $$ declare item jsonb; second jsonb; activity jsonb; unit jsonb; standard jsonb; overview jsonb;
+begin
+ item:=public.ai_catalog_save('{"kind":"work_item","title":"GPU dùng chung","status":"Đang thực hiện","data":{"item_group":"Nền tảng, hạ tầng, công nghệ","scope_level":"Tập đoàn","apply_scope":"Đơn vị cụ thể","owner":"Nguyễn Văn A","coordinator":"Trần Thị B","start_month":"2026-11"}}');
+ perform public.catalog_test_assert(item->>'code'~'^HT-[0-9]{2}$','a work item gets its group code');
+ second:=public.ai_catalog_save('{"kind":"work_item","title":"Hạ tầng thứ hai","status":"Đang thực hiện","data":{"item_group":"Nền tảng, hạ tầng, công nghệ"}}');
+ perform public.catalog_test_assert(substring(second->>'code' from 4)::integer=substring(item->>'code' from 4)::integer+1,'codes count up within a group');
+ perform public.catalog_test_error($q$select public.ai_catalog_save('{"kind":"work_item","title":"Thiếu nhóm","status":"Đang thực hiện","data":{}}')$q$,'VALIDATION','a work item needs a group');
+ perform public.catalog_test_error($q$select public.ai_catalog_save('{"kind":"work_item","title":"Sai tháng","status":"Đang thực hiện","data":{"item_group":"Quản trị AI","start_month":"2026-13"}}')$q$,'VALIDATION','start month is checked');
+ perform public.catalog_test_error($q$select public.ai_catalog_save('{"kind":"collaboration","title":"Sai phân loại","status":"Đề xuất","data":{"item_group":"Quản trị AI","item_category":"Điện toán đám mây"}}')$q$,'VALIDATION','a category must belong to its group');
+ unit:=public.ai_catalog_save('{"kind":"unit","title":"Đơn vị áp dụng hạng mục","status":"Đang hoạt động","data":{"unit_type":"Đơn vị thành viên","abbreviation":"DVAD"}}');
+ perform public.ai_catalog_link(jsonb_build_object('source_id',item->>'id','target_id',unit->>'id','relation','unit','context',jsonb_build_object('subject_role','supporting')));
+ activity:=public.ai_catalog_save('{"kind":"collaboration","title":"Mua GPU","status":"POC","data":{"item_group":"Nền tảng, hạ tầng, công nghệ","item_category":"Hạ tầng tính toán (GPU, máy chủ)"}}');
+ perform public.ai_catalog_link(jsonb_build_object('source_id',activity->>'id','target_id',item->>'id','relation','use_case'));
+ standard:=public.ai_catalog_save('{"kind":"use_case","title":"Bài toán kiểm thử hạng mục","status":"Đang thực hiện","data":{}}');
+ perform public.catalog_test_error(format('select public.ai_catalog_link(%L::jsonb)',jsonb_build_object('source_id',activity->>'id','target_id',standard->>'id','relation','use_case')),'only one','an activity takes one item across standards and work items');
+ perform public.catalog_test_error(format('select public.ai_catalog_link(%L::jsonb)',jsonb_build_object('source_id',activity->>'id','target_id',unit->>'id','relation','use_case')),'incompatible','the item relation only targets items');
+ overview:=public.ai_catalog_overview();
+ perform public.catalog_test_assert(exists(select 1 from jsonb_array_elements(overview->'work_items') w where w->>'id'=item->>'id' and w->>'owner'='Nguyễn Văn A' and w->>'start_month'='2026-11' and w->'unit_ids' ? (unit->>'id')),'the overview lists work items with their units');
+ perform public.catalog_test_assert(exists(select 1 from jsonb_array_elements(overview->'activities') a where a->>'id'=activity->>'id' and a->>'work_item_id'=item->>'id' and a->>'standard_id' is null and a->>'item_group'='Nền tảng, hạ tầng, công nghệ'),'activities carry their work item and group');
+ -- The item page adds activities; the activity page adds a work item; the item page adds applying units.
+ activity:=public.ai_catalog_create_related((item->>'id')::uuid,'{"kind":"collaboration","title":"Hoạt động từ hạng mục","status":"Đề xuất","data":{"item_group":"Nền tảng, hạ tầng, công nghệ"}}','use_case','to-parent');
+ perform public.catalog_test_assert(exists(select 1 from jsonb_array_elements(public.ai_catalog_get((activity->>'id')::uuid)->'links') l where l->>'target_id'=item->>'id' and l->>'relation'='use_case'),'an activity added from a work item is linked to it');
+ activity:=public.ai_catalog_save('{"kind":"collaboration","title":"Hoạt động tạo hạng mục","status":"Đề xuất","data":{"item_group":"Dữ liệu, CSDL"}}');
+ second:=public.ai_catalog_create_related((activity->>'id')::uuid,'{"kind":"work_item","title":"Hạng mục tạo từ hoạt động","status":"Đang thực hiện","data":{"item_group":"Dữ liệu, CSDL"}}','use_case','from-parent');
+ perform public.catalog_test_assert(second->>'code'~'^DL-[0-9]{2}$','a work item added from an activity gets its group code');
+ unit:=public.ai_catalog_create_related((item->>'id')::uuid,'{"kind":"unit","title":"Đơn vị thêm từ hạng mục","status":"Đang hoạt động","data":{"unit_type":"Đơn vị thành viên"}}','unit','from-parent');
+ perform public.catalog_test_assert(exists(select 1 from jsonb_array_elements(public.ai_catalog_get((item->>'id')::uuid)->'links') l where l->>'target_id'=unit->>'id' and l->>'relation'='unit'),'a work item takes applying units');
+end $$;
+reset role;

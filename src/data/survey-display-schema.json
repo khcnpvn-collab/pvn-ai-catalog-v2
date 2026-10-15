@@ -1,0 +1,1167 @@
+{
+  "source": "Read-only labels captured from pvn-ai-survey/src/lib/survey/schema.ts",
+  "capturedOn": "2026-10-08",
+  "sections": [
+    {
+      "id": "A1",
+      "title": "A1. Thông tin đơn vị",
+      "partTitle": "PHẦN A · THÔNG TIN CHUNG",
+      "questions": [
+        {
+          "id": "a1_name",
+          "type": "text",
+          "label": "Tên đầy đủ của đơn vị"
+        },
+        {
+          "id": "a1_field",
+          "type": "text",
+          "label": "Lĩnh vực hoạt động của đơn vị"
+        },
+        {
+          "id": "a1_time",
+          "type": "text",
+          "label": "Thời gian điền thông tin trong phiếu"
+        },
+        {
+          "id": "a1_contact",
+          "type": "grid",
+          "label": "Đầu mối tổng hợp thông tin",
+          "cols": [
+            {
+              "k": "name",
+              "label": "Họ và tên",
+              "type": "text"
+            },
+            {
+              "k": "title",
+              "label": "Chức vụ",
+              "type": "text"
+            },
+            {
+              "k": "email",
+              "label": "Email",
+              "type": "email"
+            },
+            {
+              "k": "phone",
+              "label": "Số điện thoại",
+              "type": "phone"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "A2",
+      "title": "A2. Văn bản & quản trị nền tảng",
+      "partTitle": "PHẦN A · THÔNG TIN CHUNG",
+      "questions": [
+        {
+          "id": "a2_docs",
+          "type": "matrix",
+          "label": "Tình trạng các văn bản định hướng và quản lý của Đơn vị",
+          "attach": true,
+          "cols": [
+            {
+              "label": "Tình trạng",
+              "type": "radio",
+              "opts": [
+                "Đã ban hành/Phê duyệt",
+                "Đang dự thảo",
+                "Chưa có"
+              ]
+            }
+          ],
+          "rows": [
+            "Chiến lược/Kế hoạch triển khai KHCN - ĐMST - CĐS của đơn vị",
+            "Chiến lược/Kế hoạch/Lộ trình cụ thể về AI",
+            "Quy chế/quy trình liên quan đến ứng dụng AI"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B1",
+      "title": "B1. Kết quả kinh doanh quan trọng gắn với AI (2026–2030)",
+      "partTitle": "PHẦN B · THÔNG TIN TỔNG QUAN",
+      "questions": [
+        {
+          "id": "b1_results",
+          "type": "grid",
+          "label": "Các kết quả SXKD quan trọng của đơn vị mà AI có thể hỗ trợ",
+          "cols": [
+            {
+              "k": "kq",
+              "label": "Kết quả SXKD",
+              "type": "textarea"
+            },
+            {
+              "k": "nhom",
+              "label": "Nhóm mục tiêu",
+              "type": "radios",
+              "opts": [
+                "Tăng trưởng, doanh thu và thị trường",
+                "Năng suất, chất lượng và hiệu quả quy trình",
+                "Hiệu quả tài sản và vận hành",
+                "Khách hàng và chất lượng dịch vụ",
+                "An toàn, môi trường, tuân thủ và quản trị rủi ro",
+                "Đổi mới, sản phẩm, dịch vụ và mô hình kinh doanh mới",
+                "Khác"
+              ]
+            },
+            {
+              "k": "tacdong",
+              "label": "Tác động của AI",
+              "type": "radios",
+              "opts": [
+                "Trực tiếp",
+                "Gián tiếp",
+                "Chưa xác định"
+              ]
+            },
+            {
+              "k": "vande",
+              "label": "Vấn đề AI hỗ trợ",
+              "type": "textarea"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B2",
+      "title": "B2. Nhận định của Lãnh đạo về AI, chi phí và kiến nghị chung",
+      "partTitle": "PHẦN B · THÔNG TIN TỔNG QUAN",
+      "questions": [
+        {
+          "id": "b3_impact_sxkd",
+          "type": "radio",
+          "label": "Tới năm 2030, AI ảnh hưởng đến hoạt động SXKD và quản trị của đơn vị ở mức nào?",
+          "opts": [
+            "Thay đổi một phần - một số quy trình nhanh hơn, chính xác hơn; cấu trúc công việc không đổi",
+            "Thay đổi đáng kể - nhiều quy trình chính phải thiết kế lại, một số vai trò thay đổi nội dung công việc",
+            "Thay đổi cốt lõi - cách vận hành và ra quyết định khác hẳn hiện nay",
+            "Chưa đủ thông tin để nhận định"
+          ]
+        },
+        {
+          "id": "b3_impact_field",
+          "type": "radio",
+          "label": "Tới năm 2030, AI ảnh hưởng thế nào đến lĩnh vực đơn vị đang hoạt động?",
+          "opts": [
+            "Thay đổi một phần - AI trở thành công cụ hỗ trợ phổ biến trong ngành; chuẩn mực về năng suất, chi phí và tương quan cạnh tranh cơ bản không đổi",
+            "Thay đổi đáng kể - chuẩn mực của ngành về năng suất, chi phí, an toàn và chất lượng dự báo được nâng lên rõ rệt; doanh nghiệp không theo kịp sẽ mất dần lợi thế",
+            "Thay đổi cốt lõi - cấu trúc chuỗi giá trị, mô hình kinh doanh hoặc vị thế cạnh tranh trong ngành bị định hình lại; xuất hiện đối thủ và cách làm mới",
+            "Chưa đủ thông tin để nhận định"
+          ]
+        },
+        {
+          "id": "b3_rating",
+          "type": "rating",
+          "label": "Đánh giá các góc nhìn sau đổi với Đơn vị",
+          "scaleLabels": [
+            "1 · Không phù hợp/đồng ý",
+            "2 · Phù hợp/đồng ý một phần",
+            "3 · Phần lớn phù hợp/đồng ý",
+            "4 · Hoàn toàn phù hợp/đồng ý"
+          ],
+          "rows": [
+            "Đơn vị sẵn sàng thử nghiệm cách làm mới trong phạm vi kiểm soát, ngay cả khi kết quả ban đầu chưa chắc chắn.",
+            "Đơn vị có khả năng điều chỉnh cách phân công và quy trình làm việc để phù hợp với việc ứng dụng AI vào nghiệp vụ.",
+            "Yêu cầu về bảo mật, an toàn và tuân thủ hiện đang làm hạn chế đáng kể khả năng thử nghiệm hoặc ứng dụng AI tại đơn vị.",
+            "Đơn vị đã có hình thức khuyến khích chia sẻ kinh nghiệm và phối hợp giữa các bộ phận trong quá trình ứng dụng AI.",
+            "Khả năng bố trí ngân sách là một trong những rào cản đối với việc ứng dụng AI tại đơn vị.",
+            "Khả năng cập nhật và tiếp cận, đánh giá công nghệ là một trong những rào cản đối với việc ứng dụng AI tại đơn vị.",
+            "Người lao động của đơn vị sẵn sàng thay đổi cách làm việc khi có công cụ AI phù hợp.",
+            "Việc ứng dụng AI tại đơn vị hiện vẫn chủ yếu phụ thuộc vào một số cá nhân chủ động hoặc am hiểu công nghệ."
+          ]
+        },
+        {
+          "id": "b2_budget",
+          "type": "number",
+          "label": "Ước tính ngân sách hàng năm (trung bình giai đoạn 2026-2030) của đơn vị cho AI",
+          "unit": "Triệu đồng/năm"
+        },
+        {
+          "id": "b2_costmajor",
+          "type": "ranking",
+          "label": "Xếp hạng các nhóm chi phí AI (với 1 là nhóm chiếm tỷ trọng lớn nhất)",
+          "opts": [
+            "Nhân sự & tư vấn",
+            "Công nghệ & hạ tầng",
+            "Dữ liệu & phát triển giải pháp",
+            "Vận hành, bảo mật & đào tạo",
+            "Khác"
+          ]
+        },
+        {
+          "id": "b2_diff",
+          "type": "checkbox",
+          "label": "Khó khăn liên quan đến nguồn vốn và ngân sách cho AI",
+          "opts": [
+            "Chưa xác định được nguồn ngân sách",
+            "Chưa có định mức, đơn giá phù hợp cho nội dung công nghệ/AI",
+            "Thủ tục đấu thầu, mua sắm kéo dài",
+            "Chưa được phê duyệt chủ trương hoặc kế hoạch",
+            "Vướng phân cấp thẩm quyền, phải trình lên cấp trên",
+            {
+              "t": "Chưa gặp khó khăn về ngân sách"
+            },
+            {
+              "t": "Khác",
+              "other": true
+            }
+          ]
+        },
+        {
+          "id": "b4_expect",
+          "type": "ranking",
+          "label": "Đánh giá mức độ ưu tiên đối với các nội dung Đơn vị kỳ vọng nhận được hỗ trợ từ Tập đoàn",
+          "opts": [
+            "Hỗ trợ triển khai & điều phối bài toán AI",
+            "Dữ liệu dùng chung",
+            "Hạ tầng & nền tảng AI dùng chung",
+            "Đào tạo, phát triển nhân lực AI",
+            "Khung quản trị, tiêu chuẩn, quy chế AI",
+            "Cập nhật xu hướng công nghệ AI và chia sẻ kinh nghiệm"
+          ]
+        },
+        {
+          "id": "b4_other",
+          "type": "textarea",
+          "label": "Kiến nghị khác"
+        }
+      ]
+    },
+    {
+      "id": "C1",
+      "title": "C1. Các bài toán ứng dụng AI",
+      "partTitle": "PHẦN C · THÔNG TIN CHI TIẾT",
+      "questions": [
+        {
+          "id": "c1_catalog",
+          "type": "checkboxGroup",
+          "label": "Đơn vị đã triển khai, đang quan tâm hoặc thấy có nhu cầu với những bài toán AI nào?",
+          "groups": [
+            {
+              "t": "Thăm dò, khai thác, quản trị mỏ",
+              "opts": [
+                "Hỗ trợ xử lý, minh giải địa chấn và xây dựng mô hình địa chất",
+                "Tái tạo đường cong địa vật lý giếng bị thiếu hoặc chất lượng thấp",
+                "Nhận diện khả năng gia tăng sản lượng và tối ưu can thiệp giếng",
+                "Tối ưu vận hành khai thác giếng bằng AI (Gas Lift, ESP và bơm ép duy trì áp suất vỉa)",
+                "Hỗ trợ, cảnh báo và tối ưu hoạt động khoan",
+                "Dự báo khai thác, tối ưu mô phỏng vỉa chứa"
+              ]
+            },
+            {
+              "t": "Thiết bị, độ tin cậy, vận hành nhà máy và công trình",
+              "opts": [
+                "Phát hiện bất thường của thiết bị và quá trình từ dữ liệu vận hành",
+                "Dự báo hư hỏng, bảo trì tiên đoán",
+                "Tối ưu tiêu hao năng lượng, suất hao nhiệt và hiệu suất vận hành",
+                "Quản lý toàn vẹn đường ống, thiết bị và kiểm định theo rủi ro",
+                "Kiểm tra công trình bằng hình ảnh, UAV, ROV hoặc robot",
+                "Camera AI giám sát an ninh, an toàn và kiểm soát ra vào",
+                "Trợ lý tra cứu tài liệu kỹ thuật, hướng dẫn và bản vẽ tại hiện trường"
+              ]
+            },
+            {
+              "t": "Thị trường, kinh doanh và chuỗi cung ứng",
+              "opts": [
+                "Dự báo giá dầu, khí, LNG và các sản phẩm",
+                "Dự báo nhu cầu, sản lượng bán và tồn kho",
+                "Tối ưu kế hoạch sản xuất, tồn kho và logistics",
+                "Hỗ trợ chào giá, huy động và phân bổ nguồn điện, khí"
+              ]
+            },
+            {
+              "t": "Quản trị, hồ sơ và văn bản",
+              "opts": [
+                "Trợ lý hỏi–đáp văn bản, quy định nội bộ có trích dẫn nguồn",
+                "Trích xuất và rà soát hợp đồng, hồ sơ thanh toán, hồ sơ đấu thầu",
+                "Tự động lập báo cáo định kỳ",
+                "Lập biên bản họp, tóm tắt nội dung và hỗ trợ soạn thảo",
+                "Trợ lý nhân sự và đào tạo nội bộ",
+                "Chuẩn hóa dữ liệu vật tư, thông số kỹ thuật và danh mục"
+              ]
+            },
+            {
+              "t": "An toàn, môi trường và tuân thủ",
+              "opts": [
+                "Phân tích sự cố và sự việc suýt xảy ra tai nạn",
+                "Theo dõi tuân thủ và cảnh báo các hoạt động kiểm tra đến hạn",
+                "Tổng hợp, phân tích dữ liệu phát thải, ESG và đề xuất khuyến nghị",
+                "Hỗ trợ nhận biết tình huống và ứng phó khẩn cấp"
+              ]
+            },
+            {
+              "t": "Dự án đầu tư, EPCI và bàn giao vận hành",
+              "opts": [
+                "Dự báo và cảnh báo sớm rủi ro tiến độ, chi phí dự án",
+                "Rà soát hồ sơ thiết kế, phát hiện xung đột giao diện giữa các gói thầu",
+                "Kiểm soát khối lượng, phát sinh, hồ sơ nghiệm thu và thanh toán",
+                "Chuẩn bị, chuẩn hóa và bàn giao dữ liệu hoàn công sẵn sàng cho vận hành"
+              ]
+            },
+            {
+              "t": "Nghiên cứu và sản phẩm công nghệ",
+              "opts": [
+                "Trợ lý nghiên cứu và tổng hợp tài liệu khoa học",
+                "Phát triển mô hình AI chuyên ngành do đơn vị tự xây dựng",
+                "Phát triển sản phẩm AI có khả năng chuyển giao hoặc thương mại hóa"
+              ]
+            },
+            {
+              "t": "Khác",
+              "opts": [
+                {
+                  "t": "Khác",
+                  "other": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "c1_usecases",
+          "type": "grid",
+          "label": "Danh mục bài toán AI đơn vị đã, đang hoặc có kế hoạch triển khai",
+          "cols": [
+            {
+              "k": "ten",
+              "label": "Tên bài toán",
+              "type": "text"
+            },
+            {
+              "k": "nhom",
+              "label": "Nhóm bài toán",
+              "type": "select",
+              "opts": [
+                "Thăm dò, khai thác, quản trị mỏ",
+                "Thiết bị, độ tin cậy, vận hành nhà máy và công trình",
+                "Thị trường, kinh doanh và chuỗi cung ứng",
+                "Quản trị, hồ sơ và văn bản",
+                "An toàn, môi trường và tuân thủ",
+                "Dự án đầu tư, EPCI và bàn giao vận hành",
+                "Nghiên cứu và sản phẩm công nghệ",
+                "Khác"
+              ]
+            },
+            {
+              "k": "trangthai",
+              "label": "Trạng thái",
+              "type": "radios",
+              "opts": [
+                "Ý tưởng",
+                "POC (thử nghiệm)",
+                "Đang áp dụng",
+                "Dừng triển khai"
+              ]
+            },
+            {
+              "k": "nam",
+              "label": "Thời gian thực hiện",
+              "type": "select",
+              "opts": [
+                "Trước 2026",
+                "2026",
+                "2027",
+                "2028",
+                "2029",
+                "2030"
+              ]
+            },
+            {
+              "k": "kqld",
+              "label": "Kết quả sản xuất kinh doanh liên quan",
+              "type": "selectFrom",
+              "opts": [
+                "Không liên quan đến kết quả SXKD"
+              ]
+            },
+            {
+              "k": "dulieu",
+              "label": "Dữ liệu đầu vào chính",
+              "type": "textarea"
+            }
+          ],
+          "noDataLabel": "Chưa có bài toán AI đã, đang hoặc có kế hoạch triển khai"
+        },
+        {
+          "id": "c1_key",
+          "type": "keycards",
+          "label": "Khai báo chi tiết thông tin từng bài toán AI",
+          "noDataLabel": "Không có bài toán AI để khai chi tiết",
+          "fields": [
+            {
+              "k": "mota",
+              "group": "Tổng quan và hiệu quả",
+              "label": "Mô tả bài toán",
+              "type": "textarea"
+            },
+            {
+              "k": "phamvi",
+              "group": "Tổng quan và hiệu quả",
+              "label": "Phạm vi áp dụng",
+              "type": "textarea"
+            },
+            {
+              "k": "daumoi",
+              "group": "Tổng quan và hiệu quả",
+              "label": "Đầu mối sử dụng",
+              "type": "text"
+            },
+            {
+              "k": "danhgiahieuqua",
+              "group": "Tổng quan và hiệu quả",
+              "label": "Đơn vị hiện có thể đánh giá hiệu quả của bài toán AI theo những phương thức nào dưới đây?",
+              "type": "checks",
+              "opts": [
+                {
+                  "t": "So sánh trước và sau khi áp dụng AI"
+                },
+                {
+                  "t": "Đánh giá chất lượng kết quả AI"
+                },
+                {
+                  "t": "Đánh giá mức độ đạt mục tiêu và giá trị mang lại"
+                },
+                {
+                  "t": "Đánh giá tác động đối với người dùng, an toàn và rủi ro"
+                },
+                {
+                  "t": "Đánh giá thông qua chuyên gia hoặc thử nghiệm đối chứng"
+                },
+                {
+                  "t": "Đơn vị chưa có phương thức phù hợp để đánh giá hiệu quả bài toán AI"
+                }
+              ]
+            },
+            {
+              "k": "dulieunhom",
+              "group": "Dữ liệu đầu vào",
+              "label": "Các nhóm dữ liệu đầu vào",
+              "type": "grouptable",
+              "columns": [
+                {
+                  "k": "nhomdulieu",
+                  "label": "Nhóm dữ liệu đầu vào sử dụng",
+                  "type": "text"
+                },
+                {
+                  "k": "truongdulieuchinh",
+                  "label": "Các trường dữ liệu chính",
+                  "type": "textarea"
+                },
+                {
+                  "k": "hethongnguon",
+                  "label": "Hệ thống hoặc CSDL nguồn",
+                  "type": "textarea"
+                },
+                {
+                  "k": "sansangdulieu",
+                  "label": "Mức độ sẵn sàng của dữ liệu",
+                  "type": "radios",
+                  "opts": [
+                    "Cao: đầy đủ, số hóa, truy cập và sử dụng được",
+                    "Trung bình: cần làm sạch, chuẩn hóa hoặc tích hợp",
+                    "Thấp: thiếu, phân tán, thủ công hoặc khó truy cập",
+                    "Chưa đánh giá"
+                  ]
+                },
+                {
+                  "k": "quanlydacbiet",
+                  "label": "Thuộc nhóm quản lý đặc biệt?",
+                  "type": "radios",
+                  "opts": [
+                    "Bí mật nhà nước",
+                    "Dữ liệu cá nhân",
+                    "Dữ liệu quan trọng hoặc dữ liệu cốt lõi theo quy định pháp luật về dữ liệu",
+                    "Bí mật kinh doanh, thông tin thương mại hoặc thông tin hạn chế theo hợp đồng",
+                    "Dữ liệu vận hành, điều khiển, OT hoặc thông tin về công trình, hạ tầng quan trọng",
+                    "Không thuộc các nhóm trên"
+                  ]
+                }
+              ]
+            },
+            {
+              "k": "moitruong",
+              "group": "Hạ tầng và phương thức triển khai",
+              "label": "Môi trường triển khai và vận hành",
+              "type": "checks",
+              "opts": [
+                "Hạ tầng riêng của đơn vị hoặc Tập đoàn - on-premise",
+                "Đám mây riêng - private cloud",
+                "Đám mây công cộng - public cloud",
+                "Thiết bị hoặc hạ tầng xử lý tại hiện trường - edge",
+                {
+                  "t": "Chưa xác định mô hình triển khai"
+                },
+                {
+                  "t": "Không có yêu cầu bắt buộc về mô hình triển khai"
+                }
+              ]
+            },
+            {
+              "k": "vitridulieu",
+              "group": "Hạ tầng và phương thức triển khai",
+              "label": "Yêu cầu về vị trí lưu trữ và xử lý dữ liệu",
+              "type": "radios",
+              "opts": [
+                "Chỉ được lưu trữ và xử lý trên hạ tầng của đơn vị hoặc Tập đoàn",
+                "Có thể sử dụng hạ tầng khác nhưng dữ liệu phải được lưu trữ và xử lý tại Việt Nam",
+                "Có thể lưu trữ hoặc xử lý một phần dữ liệu ngoài Việt Nam",
+                "Chưa xác định yêu cầu về vị trí dữ liệu",
+                "Không có yêu cầu bắt buộc về vị trí dữ liệu"
+              ]
+            },
+            {
+              "k": "hatangdacthu",
+              "group": "Hạ tầng và phương thức triển khai",
+              "label": "Yêu cầu hạ tầng đặc thù",
+              "type": "checks",
+              "opts": [
+                "Năng lực tính toán chuyên dụng hoặc hiệu năng cao (GPU, TPU, NPU hoặc cụm HPC)",
+                "Hạ tầng lưu trữ dung lượng lớn hoặc có tốc độ truy xuất cao",
+                "Kết nối mạng băng thông lớn, độ trễ thấp hoặc đường truyền chuyên dụng",
+                {
+                  "t": "Không có yêu cầu hạ tầng đặc thù"
+                },
+                {
+                  "t": "Chưa xác định yêu cầu hạ tầng"
+                }
+              ]
+            },
+            {
+              "k": "phuongthuctrienkhai",
+              "group": "Hạ tầng và phương thức triển khai",
+              "label": "Phương thức triển khai dự kiến",
+              "type": "checks",
+              "opts": [
+                "Đơn vị tự triển khai",
+                "Đồng phát triển với đối tác",
+                "Phối hợp với Tập đoàn/đơn vị trong Tập đoàn",
+                "Mua hoặc thuê sản phẩm có sẵn",
+                {
+                  "t": "Chưa xác định"
+                }
+              ]
+            },
+            {
+              "k": "sucorui",
+              "group": "Rủi ro, đối tác và thị trường",
+              "label": "Sự cố / rủi ro",
+              "type": "textarea"
+            },
+            {
+              "k": "khokhan",
+              "group": "Rủi ro, đối tác và thị trường",
+              "label": "Khó khăn và điểm nghẽn (của bài toán)",
+              "type": "textarea"
+            },
+            {
+              "k": "doitac",
+              "group": "Rủi ro, đối tác và thị trường",
+              "label": "Đối tác",
+              "type": "partners",
+              "noDataLabel": "Không có đối tác",
+              "opts": [
+                "Khảo sát bài toán/thị trường",
+                "PoC",
+                "Đã ký kết/Đang triển khai",
+                "Kết thúc"
+              ]
+            },
+            {
+              "k": "giaiphaptt",
+              "group": "Rủi ro, đối tác và thị trường",
+              "label": "Giải pháp tương tự trên thị trường",
+              "type": "textarea"
+            }
+          ]
+        },
+        {
+          "id": "c1_share",
+          "type": "textarea",
+          "label": "Kinh nghiệm & các kiến nghị chung về bài toán AI"
+        }
+      ]
+    },
+    {
+      "id": "C2",
+      "title": "C2. Dữ liệu cho phát triển AI",
+      "partTitle": "PHẦN C · THÔNG TIN CHI TIẾT",
+      "questions": [
+        {
+          "id": "c2_catalog",
+          "type": "grid",
+          "rowLabel": "Cơ sở dữ liệu",
+          "label": "Danh mục CSDL nghiệp vụ phù hợp cho phát triển AI",
+          "cols": [
+            {
+              "k": "ten",
+              "label": "Tên cơ sở dữ liệu",
+              "type": "text"
+            },
+            {
+              "k": "dinhdang",
+              "label": "Định dạng dữ liệu và công nghệ",
+              "type": "text"
+            },
+            {
+              "k": "hethongnguon",
+              "label": "Hệ thống nguồn",
+              "type": "text"
+            },
+            {
+              "k": "daumoi",
+              "label": "Đầu mối chủ quản nghiệp vụ dữ liệu",
+              "type": "text"
+            },
+            {
+              "k": "tieuchuan",
+              "label": "Tiêu chuẩn/quy định dữ liệu đang áp dụng",
+              "type": "text"
+            },
+            {
+              "k": "baomat",
+              "label": "Mức độ bảo mật của CSDL",
+              "type": "text"
+            },
+            {
+              "k": "noidung",
+              "label": "Nội dung và phạm vi dữ liệu",
+              "type": "textarea"
+            },
+            {
+              "k": "tansuat",
+              "label": "Tần suất cập nhật dữ liệu",
+              "type": "radios",
+              "opts": [
+                "Theo thời gian thực",
+                "Theo lô/batch trong ngày",
+                "Hằng ngày",
+                "Hằng tuần/tháng",
+                "Định kỳ khác",
+                "Dữ liệu tĩnh không còn cập nhật"
+              ]
+            },
+            {
+              "k": "chatluong",
+              "label": "Mức độ quản lý và chất lượng dữ liệu",
+              "type": "radios",
+              "opts": [
+                "Tốt: đầy đủ, chính xác, thống nhất, được kiểm soát",
+                "Trung bình: dùng được nhưng còn thiếu, trùng lặp hoặc chưa chuẩn hóa",
+                "Thấp: phân tán, sai lệch, thiếu nhiều hoặc khó sử dụng"
+              ]
+            },
+            {
+              "k": "moitruong",
+              "label": "Môi trường triển khai và vận hành",
+              "type": "checks",
+              "opts": [
+                "Hạ tầng riêng của đơn vị hoặc Tập đoàn - on-premise",
+                "Đám mây riêng - private cloud",
+                "Đám mây công cộng - public cloud",
+                "Thiết bị hoặc hạ tầng xử lý tại hiện trường - edge",
+                {
+                  "t": "Chưa xác định mô hình triển khai"
+                },
+                {
+                  "t": "Không có yêu cầu bắt buộc về mô hình triển khai"
+                }
+              ]
+            },
+            {
+              "k": "vitri",
+              "label": "Yêu cầu về vị trí lưu trữ và xử lý dữ liệu",
+              "type": "radios",
+              "opts": [
+                "Chỉ được lưu trữ và xử lý trên hạ tầng của đơn vị hoặc Tập đoàn",
+                "Có thể sử dụng hạ tầng khác nhưng dữ liệu phải được lưu trữ và xử lý tại Việt Nam",
+                "Có thể lưu trữ hoặc xử lý một phần dữ liệu ngoài Việt Nam",
+                "Chưa xác định yêu cầu về vị trí dữ liệu",
+                "Không có yêu cầu bắt buộc về vị trí dữ liệu"
+              ]
+            },
+            {
+              "k": "truyxuat",
+              "label": "Phương thức truy xuất và kết nối dữ liệu",
+              "type": "checks",
+              "opts": [
+                "Kết nối tự động qua API, web service hoặc endpoint",
+                "Kết nối trực tiếp CSDL, data warehouse, data lake hoặc kho dữ liệu tập trung",
+                "Khai thác qua hệ thống báo cáo, BI hoặc dashboard",
+                "Xuất Excel, CSV hoặc định dạng tương đương",
+                "Thư mục dùng chung, SharePoint hoặc hệ QLTL",
+                "Phần mềm nghiệp vụ (tra cứu, tải, nhập liệu)",
+                "Kết nối trực tiếp từ thiết bị, cảm biến, OT/IoT, SCADA hoặc DCS",
+                "Yêu cầu bộ phận quản lý dữ liệu/đơn vị khác cung cấp thủ công",
+                {
+                  "t": "Chưa có phương thức truy xuất/kết nối ổn định"
+                }
+              ]
+            },
+            {
+              "k": "chiaSe",
+              "label": "Khả năng chia sẻ và tái sử dụng trong Tập đoàn",
+              "type": "radios",
+              "opts": [
+                "Có thể chia sẻ ngay",
+                "Có thể chia sẻ nếu đáp ứng điều kiện",
+                "Chỉ chia sẻ được một phần",
+                "Không thể chia sẻ"
+              ]
+            }
+          ],
+          "noDataLabel": "Không có CSDL phù hợp cho AI"
+        },
+        {
+          "id": "c2_obstacles",
+          "type": "checkboxGroup",
+          "label": "Vướng mắc chung về dữ liệu của Đơn vị để phát triển ứng dụng AI",
+          "groups": [
+            {
+              "t": "Dữ liệu, chất lượng và khả năng kết nối",
+              "opts": [
+                "Dữ liệu phân tán ở nhiều hệ thống, định dạng hoặc đơn vị khác nhau, khó kết nối và tổng hợp",
+                "Dữ liệu chưa đầy đủ, chưa được số hóa, chất lượng thấp hoặc thiếu các trường thông tin quan trọng",
+                "Dữ liệu chưa được chuẩn hóa hoặc chưa có quy tắc dùng chung về cấu trúc, mã, danh mục và thuật ngữ",
+                "Khối lượng lớn dữ liệu, tri thức còn nằm trong hồ sơ giấy, PDF, hình ảnh hoặc tài liệu phi cấu trúc, khó khai thác tự động"
+              ]
+            },
+            {
+              "t": "Nền tảng và công cụ dữ liệu",
+              "opts": [
+                "Chưa có kho, nền tảng hoặc cơ chế phù hợp để tập trung, chia sẻ và khai thác dữ liệu chuyên ngành",
+                "Chưa có đủ không gian lưu trữ hoặc năng lực xử lý dữ liệu phục vụ các bài toán AI",
+                "Thiếu công cụ quản lý metadata, danh mục dữ liệu, truy xuất nguồn gốc hoặc kiểm soát chất lượng dữ liệu",
+                "Khó tích hợp dữ liệu từ hệ thống nghiệp vụ, thiết bị, hệ thống vận hành hoặc các nguồn dữ liệu hiện có"
+              ]
+            },
+            {
+              "t": "Quản trị và tổ chức dữ liệu",
+              "opts": [
+                "Chưa xác định rõ đơn vị, bộ phận hoặc cá nhân chịu trách nhiệm đối với từng nhóm dữ liệu",
+                "Chưa có quy trình hoặc cơ chế thống nhất về tạo lập, cập nhật, chia sẻ, khai thác và kiểm soát chất lượng dữ liệu",
+                "Thiếu nhân sự có năng lực về quản trị, kiến trúc, kỹ thuật hoặc phân tích dữ liệu",
+                "Việc phối hợp giữa bộ phận nghiệp vụ, dữ liệu, CNTT và các đơn vị liên quan còn hạn chế"
+              ]
+            },
+            {
+              "t": "Quyền truy cập, pháp lý và bảo mật",
+              "opts": [
+                "Chưa xác định rõ quyền sở hữu, quyền quản lý hoặc quyền khai thác, sử dụng dữ liệu",
+                "Ràng buộc pháp lý, hợp đồng, PSC, liên doanh hoặc thỏa thuận với đối tác hạn chế việc sử dụng dữ liệu cho mục đích AI",
+                "Dữ liệu do nhà cung cấp, nhà sản xuất thiết bị hoặc đối tác quản lý nên đơn vị không thể hoặc khó tiếp cận",
+                "Khó phân loại dữ liệu và xác định yêu cầu bảo mật, chia sẻ, lưu trữ hoặc xử lý phù hợp",
+                "Chưa có tiêu chuẩn hoặc hướng dẫn thống nhất về phân loại, bảo mật và chia sẻ dữ liệu"
+              ]
+            },
+            {
+              "t": "Nguồn lực triển khai",
+              "opts": [
+                "Chi phí thu thập, làm sạch, chuẩn hóa, số hóa hoặc tích hợp dữ liệu lớn",
+                "Không đủ nhân lực, thời gian hoặc ngân sách để xử lý và chuẩn bị dữ liệu phục vụ AI",
+                "Việc xử lý vướng mắc dữ liệu vượt thẩm quyền của đơn vị hoặc cần phối hợp, điều phối ở cấp Tập đoàn"
+              ]
+            },
+            {
+              "t": "",
+              "opts": [
+                {
+                  "t": "Chưa ghi nhận vướng mắc đáng kể về dữ liệu"
+                },
+                {
+                  "t": "Chưa đủ thông tin để đánh giá"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "c2_obstacles_other",
+          "type": "textarea",
+          "label": "Vướng mắc khác"
+        },
+        {
+          "id": "c2_share",
+          "type": "textarea",
+          "label": "Bài học kinh nghiệm và kiến nghị về dữ liệu"
+        }
+      ]
+    },
+    {
+      "id": "C3",
+      "title": "C3. Hạ tầng, công cụ triển khai AI",
+      "partTitle": "PHẦN C · THÔNG TIN CHI TIẾT",
+      "questions": [
+        {
+          "id": "c3_infra",
+          "type": "matrix",
+          "label": "Hiện trạng và nhu cầu hạ tầng, công cụ phục vụ triển khai AI",
+          "cols": [
+            {
+              "label": "Nhu cầu",
+              "type": "radio",
+              "opts": [
+                "Có",
+                "Không",
+                "Chưa xác định"
+              ]
+            },
+            {
+              "label": "Mức độ sẵn sàng tại đơn vị",
+              "type": "radio",
+              "opts": [
+                "Chưa có",
+                "Đã có kế hoạch/đang triển khai",
+                "Đã có/đang sử dụng"
+              ]
+            },
+            {
+              "label": "Phương án triển khai phù hợp",
+              "type": "radio",
+              "opts": [
+                "Đơn vị tự đầu tư, triển khai",
+                "Sử dụng năng lực dùng chung của Tập đoàn",
+                "Kết hợp cả hai"
+              ]
+            }
+          ],
+          "rows": [
+            "Công cụ AI tạo sinh trên đám mây, cấp chính thức cho người lao động",
+            "Kết nối, trích xuất dữ liệu vận hành cho AI từ DCS, SCADA, PI/historian, ERP, kể cả đường truyền băng thông lớn, độ trễ thấp cần thiết",
+            "Kho, nền tảng dữ liệu tập trung phục vụ phân tích và AI - data warehouse, data lake",
+            "Năng lực tính toán chuyên dụng cho AI - GPU, TPU, NPU - hoặc tính toán hiệu năng cao HPC",
+            "Thiết bị hoặc hạ tầng xử lý tại hiện trường - edge computing",
+            "Môi trường phát triển, thử nghiệm và kiểm thử AI có kiểm soát trên dữ liệu thật - AI Sandbox",
+            "Nền tảng MLOps để triển khai, quản lý phiên bản và giám sát mô hình AI/ML"
+          ]
+        },
+        {
+          "id": "c3_tools",
+          "type": "grid",
+          "label": "Danh mục công cụ AI đơn vị cung cấp cho người lao động (nếu có)",
+          "cols": [
+            {
+              "k": "ten",
+              "label": "Tên công cụ",
+              "type": "text"
+            },
+            {
+              "k": "doituong",
+              "label": "Đối tượng được cung cấp",
+              "type": "text"
+            },
+            {
+              "k": "soluong",
+              "label": "Số lượng hiện tại cung cấp",
+              "type": "number"
+            },
+            {
+              "k": "soluong2027",
+              "label": "Số lượng dự kiến cung cấp năm 2027",
+              "type": "number"
+            }
+          ],
+          "noDataLabel": "Không có công cụ AI cung cấp cho người lao động"
+        },
+        {
+          "id": "c3_obstacles",
+          "type": "textarea",
+          "label": "Vướng mắc về hạ tầng phục vụ AI và công cụ AI tại đơn vị & kiến nghị"
+        }
+      ]
+    },
+    {
+      "id": "C4",
+      "title": "C4. Quản trị đối với AI",
+      "partTitle": "PHẦN C · THÔNG TIN CHI TIẾT",
+      "questions": [
+        {
+          "id": "c4_governance",
+          "type": "matrix",
+          "label": "Hiện trạng quản trị rủi ro AI tại đơn vị",
+          "cols": [
+            {
+              "label": "Hiện trạng tại đơn vị",
+              "type": "radio",
+              "opts": [
+                "Chưa có",
+                "Đang xây dựng hoặc hoàn thiện",
+                "Đã ban hành/đã áp dụng"
+              ]
+            },
+            {
+              "label": "Cấp áp dụng phù hợp",
+              "type": "radio",
+              "opts": [
+                "Đơn vị tự quy định và tổ chức thực hiện",
+                "Tập đoàn ban hành khung hoặc chuẩn chung",
+                "Tập đoàn ban hành khung chung, đơn vị cụ thể hóa"
+              ]
+            }
+          ],
+          "rows": [
+            "Hướng dẫn sử dụng AI cho người lao động - được dùng công cụ nào, không được đưa dữ liệu nào lên",
+            "Tiêu chí phân loại mức độ rủi ro của bài toán AI và yêu cầu kiểm soát tương ứng",
+            "Quy trình đăng ký, thẩm định, phê duyệt, kiểm thử, nghiệm thu và đưa AI vào sử dụng thật",
+            "Quy tắc phân loại bảo mật dữ liệu và điều kiện được đưa dữ liệu vào công cụ AI; yêu cầu về chất lượng, nguồn gốc, quyền sử dụng và chia sẻ dữ liệu phục vụ AI",
+            "Yêu cầu về vai trò, thẩm quyền và giám sát của con người khi dùng kết quả AI - gồm quyền can thiệp, dừng hệ thống và phương án xử lý thay thế",
+            "Yêu cầu kiểm soát tăng cường đối với bài toán ảnh hưởng đến an toàn, vận hành, môi trường hoặc hệ thống OT",
+            "Tiêu chí đánh giá chất lượng, độ chính xác và ngưỡng chấp nhận đối với kết quả AI",
+            "Yêu cầu bảo mật, an toàn thông tin, định danh, phân quyền, ghi log và truy vết đối với hệ thống AI",
+            "Quy trình giám sát trong vận hành; tiếp nhận, báo cáo, xử lý sự cố AI; quản lý thay đổi, tạm dừng và chấm dứt sử dụng giải pháp AI"
+          ]
+        },
+        {
+          "id": "c4_riskgov",
+          "type": "checkbox",
+          "label": "Vướng mắc về quản trị AI tại doanh nghiệp đơn vị đã gặp phải",
+          "opts": [
+            "Người lao động dùng công cụ AI tự phát, ngoài kiểm soát của đơn vị",
+            "Nguy cơ đưa dữ liệu cần bảo mật lên công cụ AI công cộng",
+            "Kết quả AI sai dẫn đến phải làm lại công việc hoặc sửa quyết định",
+            "Không giải thích được vì sao mô hình cho kết quả đó nên không dám dùng",
+            "Chưa rõ ai chịu trách nhiệm khi hành động theo khuyến nghị của AI",
+            "Lo ngại an toàn, bảo mật khi kết nối hệ thống AI với hệ thống vận hành, OT",
+            "Kết quả AI ảnh hưởng đến an toàn con người, tài sản, môi trường hoặc quyết định quan trọng",
+            {
+              "t": "Không gặp vướng mắc"
+            }
+          ]
+        },
+        {
+          "id": "c4_legal",
+          "type": "checkbox",
+          "label": "Vướng mắc pháp lý - hợp đồng - nhà cung cấp AI đơn vị đã gặp phải",
+          "opts": [
+            "Quyền sử dụng dữ liệu của đơn vị để huấn luyện mô hình của nhà cung cấp",
+            "Quyền sở hữu mô hình, dữ liệu, nhật ký sau khi kết thúc hợp đồng; nhà cung cấp giữ log hoặc trọng số mô hình; khó chuyển nhà cung cấp, khó lấy dữ liệu ra",
+            "Nơi xử lý và lưu trữ dữ liệu, đặc biệt khi đặt ngoài lãnh thổ Việt Nam",
+            "Khó định giá, nghiệm thu và thanh toán dịch vụ AI",
+            "Trách nhiệm và bồi thường khi kết quả AI gây thiệt hại",
+            "Quyền với sản phẩm do AI tạo ra và rủi ro vi phạm bản quyền của bên thứ ba",
+            {
+              "t": "Không gặp vướng mắc"
+            }
+          ]
+        },
+        {
+          "id": "c4_share",
+          "type": "textarea",
+          "label": "Kinh nghiệm đơn vị muốn chia sẻ & kiến nghị (về quản trị AI)"
+        }
+      ]
+    },
+    {
+      "id": "C5",
+      "title": "C5. Năng lực và nhân sự AI",
+      "partTitle": "PHẦN C · THÔNG TIN CHI TIẾT",
+      "questions": [
+        {
+          "id": "c5_capacity",
+          "type": "matrix",
+          "label": "Hiện trạng & nhu cầu về nhân sự liên quan đến AI",
+          "cols": [
+            {
+              "label": "Hiện trạng đáp ứng nhu cầu năng lực",
+              "type": "radio",
+              "opts": [
+                "Không có nhu cầu",
+                "Có nhu cầu, chưa có khả năng đáp ứng",
+                "Đáp ứng được một phần",
+                "Đáp ứng đầy đủ, chủ động thực hiện phần lớn công việc"
+              ]
+            },
+            {
+              "label": "Hình thức đáp ứng hiện nay",
+              "type": "checkbox",
+              "opts": [
+                {
+                  "t": "Chưa có"
+                },
+                "Nhân sự chuyên trách tại đơn vị",
+                "Nhân sự kiêm nhiệm",
+                "Thuê chuyên gia, nhà cung cấp hoặc đối tác"
+              ]
+            },
+            {
+              "label": "Nhu cầu bổ sung trong ngắn hạn",
+              "type": "radio",
+              "opts": [
+                "Không có nhu cầu bổ sung trong ngắn hạn",
+                "Có nhu cầu trong ngắn hạn",
+                "Cần bổ sung ngay để triển khai các bài toán hiện tại",
+                "Chưa xác định"
+              ]
+            },
+            {
+              "label": "Hình thức bổ sung phù hợp",
+              "type": "checkbox",
+              "opts": [
+                "Đào tạo, bồi dưỡng nhân sự hiện có",
+                "Bố trí hoặc xây dựng đội ngũ chuyên trách tại đơn vị",
+                "Tuyển dụng hoặc bổ sung nhân sự có chuyên môn phù hợp",
+                "Huy động chuyên gia, nhân sự hoặc nhóm năng lực dùng chung trong Tập đoàn",
+                "Sử dụng dịch vụ tư vấn, triển khai hoặc vận hành của đối tác bên ngoài",
+                "Hợp tác với viện nghiên cứu, trường đại học hoặc tổ chức chuyên môn",
+                {
+                  "t": "Chưa xác định hình thức bổ sung phù hợp"
+                }
+              ]
+            }
+          ],
+          "rows": [
+            "Chuyển bài toán nghiệp vụ thành bài toán AI - xác định đầu bài, tiêu chí đánh giá",
+            "Chuẩn bị, quản trị và kỹ thuật dữ liệu",
+            "Xây dựng, kiểm thử và đánh giá mô hình AI",
+            "Triển khai, tích hợp, vận hành và giám sát giải pháp AI",
+            "Quản trị AI, pháp lý, an toàn thông tin và quản lý rủi ro",
+            "Quản lý chương trình, dự án AI và quản lý nhà cung cấp",
+            "Đào tạo người dùng và quản lý thay đổi"
+          ]
+        },
+        {
+          "id": "c5_scale",
+          "type": "matrix",
+          "label": "Quy mô nhân sự AI/dữ liệu hiện tại",
+          "cols": [
+            {
+              "label": "Số người",
+              "type": "radio",
+              "opts": [
+                "0",
+                "1 - 5",
+                "6 - 20",
+                "Trên 20"
+              ]
+            }
+          ],
+          "rows": [
+            "Chuyên trách (trên 50% thời gian cho AI/dữ liệu)",
+            "Kiêm nhiệm (có tham gia, không phải việc chính)",
+            "Nhân sự đối ứng thường xuyên từ đối tác"
+          ]
+        },
+        {
+          "id": "c5_training",
+          "type": "grid",
+          "label": "Khóa đào tạo liên quan AI đơn vị tổ chức/cử tham gia",
+          "cols": [
+            {
+              "k": "ten",
+              "label": "Tên khóa học",
+              "type": "text"
+            },
+            {
+              "k": "dv",
+              "label": "Đơn vị giảng dạy",
+              "type": "text"
+            },
+            {
+              "k": "sl",
+              "label": "Số lượng học viên",
+              "type": "number"
+            },
+            {
+              "k": "doituong",
+              "label": "Đối tượng học viên",
+              "type": "text"
+            },
+            {
+              "k": "thoigian",
+              "label": "Thời gian tổ chức",
+              "type": "radios",
+              "opts": [
+                "Đã tổ chức",
+                "Dự kiến tổ chức (2026-2027)"
+              ]
+            }
+          ],
+          "noDataLabel": "Chưa tổ chức hoặc chưa có kế hoạch triển khai khóa học AI"
+        },
+        {
+          "id": "c5_obstacles",
+          "type": "textarea",
+          "label": "Vướng mắc, kiến nghị về năng lực và nhân sự AI"
+        }
+      ]
+    },
+    {
+      "id": "C6",
+      "title": "C6. Hệ sinh thái và chia sẻ trong Tập đoàn",
+      "partTitle": "PHẦN C · THÔNG TIN CHI TIẾT",
+      "questions": [
+        {
+          "id": "c6_partners",
+          "type": "grid",
+          "label": "Danh mục đối tác hiện tại/tiềm năng của đơn vị",
+          "cols": [
+            {
+              "k": "ten",
+              "label": "Tên đối tác",
+              "type": "text"
+            },
+            {
+              "k": "linhvuc",
+              "label": "Lĩnh vực/hạng mục hợp tác",
+              "type": "text"
+            },
+            {
+              "k": "tinhtrang",
+              "label": "Tình trạng hợp tác hiện tại",
+              "type": "radios",
+              "opts": [
+                "Nghiên cứu đối tác",
+                "Demo",
+                "Trao đổi/NDA",
+                "PoC",
+                "MoU/Thỏa thuận hợp tác",
+                "Triển khai dự án chính thức",
+                "Dừng hợp tác"
+              ]
+            }
+          ],
+          "noDataLabel": "Không có đối tác hiện tại hoặc tiềm năng"
+        },
+        {
+          "id": "c6_assets",
+          "type": "textarea",
+          "label": "Tài sản đơn vị có thể chia sẻ cho Tập đoàn/đơn vị khác"
+        },
+        {
+          "id": "c6_reuse",
+          "type": "textarea",
+          "label": "Tài sản đơn vị muốn tái sử dụng từ Tập đoàn/đơn vị khác"
+        },
+        {
+          "id": "c6_ready",
+          "type": "matrix",
+          "label": "Mức sẵn sàng tham gia nguồn lực dùng chung",
+          "cols": [
+            {
+              "label": "Mức sẵn sàng",
+              "type": "radio",
+              "opts": [
+                "Rất sẵn sàng",
+                "Sẽ cân nhắc",
+                "Chưa sẵn sàng trong 12 tháng tới"
+              ]
+            }
+          ],
+          "rows": [
+            "Cử chuyên gia tham gia nhóm chuyên môn chung của Tập đoàn",
+            "Chia sẻ dữ liệu, mô hình hoặc công cụ đã có cho đơn vị khác",
+            "Cần chuyên gia từ Tập đoàn hoặc đơn vị khác hỗ trợ",
+            "Nhận vai chủ trì hoặc thí điểm đầu tiên cho một bài toán dùng chung"
+          ]
+        }
+      ]
+    }
+  ],
+  "schemaVersion": 16
+}

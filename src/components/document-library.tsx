@@ -1,7 +1,7 @@
 "use client";
 import { useState, type FormEvent } from "react";
 import { type CatalogDocument, type Membership } from "@/lib/catalog";
-import { DOCUMENT_ACCEPT, validateUploadFiles } from "@/lib/document-upload";
+import { DOCUMENT_ACCEPT, DOCUMENT_FORMAT_HINT, MAX_DOCUMENT_MIB, validateUploadFiles } from "@/lib/document-upload";
 import { canPreviewFile, currentFile } from "@/lib/document-presentation";
 import { api, date, Empty, ErrorBox, Heading, Icon, Loading, message, useDebounce, useResource } from "./ui";
 function bytes(value: number) { return value >= 1048576 ? `${(value / 1048576).toFixed(1)} MB` : `${Math.max(1, Math.round(value / 1024))} KB`; }
@@ -22,7 +22,7 @@ export function UploadForm({ recordId, document, onUploaded, onDone, onCancel }:
       onDone();
     } catch (e) { setFiles(files.slice(completed)); setError(`${completed ? `Đã tải ${completed} tệp. ` : ""}${message(e)}`); } finally { setBusy(false); }
   }
-  return <form className="inline-form" onSubmit={upload} aria-label="Đính kèm tệp tài liệu"><div className="section-heading"><h3>{document ? `Thêm phiên bản: ${document.title}` : "Đính kèm tệp tài liệu"}</h3><button className="icon-button" type="button" onClick={onCancel} aria-label="Đóng biểu mẫu tải lên" disabled={busy}><Icon name="close"/></button></div><div className="form-grid"><label className="field full">{document ? "Tệp phiên bản mới" : "Chọn tệp từ máy tính"}<input type="file" accept={DOCUMENT_ACCEPT} required disabled={busy} multiple={!document} onChange={e => { setFiles(Array.from(e.target.files || [])); setError(null); }}/><small>PDF, Word, Excel, PowerPoint, TXT, CSV hoặc ảnh PNG/JPG. Tối đa 20 MB mỗi tệp.</small></label>
+  return <form className="inline-form" onSubmit={upload} aria-label="Đính kèm tệp tài liệu"><div className="section-heading"><h3>{document ? `Thêm phiên bản: ${document.title}` : "Đính kèm tệp tài liệu"}</h3><button className="icon-button" type="button" onClick={onCancel} aria-label="Đóng biểu mẫu tải lên" disabled={busy}><Icon name="close"/></button></div><div className="form-grid"><label className="field full">{document ? "Tệp phiên bản mới" : "Chọn tệp từ máy tính"}<input type="file" accept={DOCUMENT_ACCEPT} required disabled={busy} multiple={!document} onChange={e => { setFiles(Array.from(e.target.files || [])); setError(null); }}/><small>{DOCUMENT_FORMAT_HINT} Tối đa {MAX_DOCUMENT_MIB} MB mỗi tệp.</small></label>
     {files.length > 0 && <div className="field full" aria-live="polite"><strong>{files.length} tệp đã chọn</strong><ul>{files.map((file, index) => <li key={`${file.name}-${index}`}>{file.name} · {bytes(file.size)}</li>)}</ul></div>}
     <label className="field full">Tên tài liệu<input maxLength={250} disabled={busy} value={title} onChange={e => setTitle(e.target.value)} placeholder="Để trống để dùng tên tệp"/></label></div><ErrorBox error={error}/><div className="actions"><button className="button primary" disabled={busy || !files.length}>{busy ? "Đang lưu tệp…" : `Lưu${files.length > 1 ? ` ${files.length}` : ""} tệp đính kèm`}</button><button className="button" type="button" onClick={onCancel} disabled={busy}>Hủy</button></div></form>;
 }

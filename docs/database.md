@@ -1,6 +1,6 @@
 # Cơ sở dữ liệu ứng dụng danh mục AI
 
-Cập nhật: 13/10/2026. Migration nền `supabase/migrations/202610080001_ai_catalog.sql` đã áp dụng qua Supabase MCP lên project hiện hữu ngày 08/10/2026. Các migration đến `202610130007_reconcile_partner_identities.sql` đã áp dụng qua Supabase MCP lên project hiện hữu ngày 13/10/2026. Đối chiếu trước/sau và kết quả kiểm thử tại [verification.md](verification.md).
+Cập nhật: 19/10/2026. Migration nền `supabase/migrations/202610080001_ai_catalog.sql` đã áp dụng qua Supabase MCP lên project hiện hữu ngày 08/10/2026. Migration dung lượng tài liệu `202610190001_document_upload_capacity.sql` đã áp dụng ngày 19/10/2026. Đối chiếu trước/sau và kết quả kiểm thử tại [verification.md](verification.md).
 
 ## Phạm vi migration
 
@@ -105,7 +105,7 @@ Giao diện hồ sơ bỏ tab quản lý liên kết, lịch sử và cơ cấu 
 
 `reference` là hồ sơ metadata/URL HTTP(S), tách khỏi `documents` và các phiên bản Storage. Không tạo tệp hoặc signed URL từ đường dẫn cục bộ trong workbook; giữ thông tin chưa đính kèm mà không công bố đường dẫn máy. Ngày nguồn chỉ biết một phần nằm trong `date_note`, không tự gán ngày phát hành.
 
-Bucket riêng tư giới hạn 20 MiB. API tải tệp lên `<user-id>/<version-id>/file.<extension>`, trong đó extension thuộc `pdf/doc/docx/xls/xlsx/ppt/pptx/txt/csv/png/jpg/jpeg`. Tên hiển thị giữ Unicode, không chứa dấu phân cách đường dẫn hoặc ký tự điều khiển. Gateway kiểm tra đường dẫn thuộc người gọi, UUID phiên bản, tệp đã tồn tại, kích thước khớp metadata nếu có, checksum SHA-256 dạng hex và quyền của tài liệu/hồ sơ.
+Bucket riêng tư hiện giới hạn 50 MiB theo trần global của gói Supabase hiện tại; bucket khảo sát vẫn 20 MiB. Constraint `document_versions.size_bytes` đã chuẩn bị cho 100 MiB nhưng app/bucket chỉ được nâng tiếp khi dự án dùng gói trả phí và trần global được tăng. API tải tệp lên `<user-id>/<version-id>/file.<extension>`, trong đó extension thuộc `pdf/doc/docx/xls/xlsx/ppt/pptx/txt/csv/md/rtf/png/jpg/jpeg/gif/webp/zip/7z/rar`. Tên hiển thị giữ Unicode, không chứa dấu phân cách đường dẫn hoặc ký tự điều khiển. Gateway kiểm tra đường dẫn thuộc người gọi, UUID phiên bản, tệp đã tồn tại, kích thước khớp metadata nếu có, checksum SHA-256 dạng hex và quyền của tài liệu/hồ sơ.
 
 Một tài liệu có nhiều phiên bản bất biến, đánh số dưới khóa hàng tài liệu. Khi bổ sung phiên bản, tên và visibility của tài liệu không thay đổi. `document_links.version_id` có thể ghim một phiên bản; `NULL` dùng danh sách phiên bản hiện tại. Gắn lại một tài liệu vào cùng hồ sơ cập nhật phiên bản ghim, không tạo bản sao tệp.
 

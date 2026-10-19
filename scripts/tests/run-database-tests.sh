@@ -94,4 +94,7 @@ psql -X -h "$test_dir" -p 55439 -d postgres -v ON_ERROR_STOP=1 -v "dossier_secti
   -f "$script_dir/activity-meeting-setup.sql" \
   -f "$project_dir/supabase/migrations/202610150012_activity_meetings_to_milestones.sql" \
   -f "$script_dir/activity-meeting-checks.sql" \
+  -f "$project_dir/supabase/migrations/202610190001_document_upload_capacity.sql" \
+  -f "$project_dir/supabase/migrations/202610190002_restore_document_filename_validation.sql" \
+  -f "$script_dir/document-upload-capacity-checks.sql" \
   -f "$script_dir/ui-contract-checks.sql"

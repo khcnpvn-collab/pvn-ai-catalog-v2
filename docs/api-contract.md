@@ -86,6 +86,8 @@ All authenticated functions execute with caller privileges and RLS (or tightly c
 - `ai_catalog_unlink(p_id uuid)` → boolean.
 - `ai_catalog_documents(p_query text default '')` → CatalogDocument[].
 - `ai_catalog_document_save(p_document jsonb)` → CatalogDocument. Input title,visibility,document_id? plus version_id UUID chosen by server, filename,mime_type,size_bytes,storage_path,checksum; record_id? optional. The file is first uploaded to path <user_id>/<version_id>/file.<extension>; member can write only own prefix; document registration validates prefix/metadata; new versions on authorized document only. On RPC failure, server removes uploaded unregistered object. Versions immutable. UI never receives storage_path.
+
+File upload accepts PDF, Word (DOC/DOCX), Excel (XLS/XLSX), PowerPoint (PPT/PPTX), TXT/CSV/MD/RTF, PNG/JPG/JPEG/GIF/WEBP and ZIP/7Z/RAR. The browser and API use the same extension/MIME rules; an empty or generic binary browser MIME is accepted for an allowed extension, while a conflicting specific MIME is rejected. The current Supabase Free project allows 50 MiB per file; the metadata constraint is prepared for 100 MiB, but the application and bucket must remain at 50 MiB until the project is upgraded and its global limit is raised. Archives and other formats without browser preview are download-only; no archive contents are unpacked or indexed.
 - `ai_catalog_document_link(p_record_id uuid,p_document_id uuid,p_version_id uuid default null)` → boolean; both readable, write permission record.
 - `ai_catalog_download(p_version_id uuid)` → `{storage_path,filename}` only when allowed; normal storage signed request ALSO enforces RLS via document-version entitlement.
 

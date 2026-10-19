@@ -1,6 +1,6 @@
 # Kiến trúc ứng dụng Danh mục AI
 
-Cập nhật: 13/10/2026. Tài liệu mô tả hợp đồng ứng dụng và migration trong mã nguồn; kết quả triển khai và kiểm thử thực tế được ghi riêng tại [verification.md](verification.md).
+Cập nhật: 19/10/2026. Tài liệu mô tả hợp đồng ứng dụng và migration trong mã nguồn; kết quả triển khai và kiểm thử thực tế được ghi riêng tại [verification.md](verification.md).
 
 ## Luồng ứng dụng
 
@@ -67,7 +67,7 @@ Tệp thực tế vẫn dùng `documents`, các phiên bản bất biến `docum
 
 Migration `202610130004_document_actions.sql` bổ sung `documents.archived_at` và hai gateway gỡ liên kết/ẩn tài liệu. File ẩn bị loại khỏi danh sách, hồ sơ và quyền tải/xem trước; các object Storage và lịch sử phiên bản vẫn được giữ để đối soát. Migration `202610130005_document_trash_guard.sql` chặn gỡ liên kết hoặc ẩn file còn gắn vào hồ sơ đã xóa. Xóa thư mục chỉ lưu trữ record `reference`, không ẩn những file bên trong kho chung.
 
-Biểu mẫu tải lên hiển thị tên và dung lượng tệp đã chọn; kiểm tra định dạng, tệp rỗng và giới hạn 20 MiB từng tệp trước khi gửi. API tiếp tục kiểm tra MIME, dung lượng và quyền bằng phiên người gọi. Nhiều tệp được gửi tuần tự, lỗi giữa chừng giữ lại phần chưa hoàn tất để thử lại; không coi một đợt nhiều tệp là giao dịch atomic. Thao tác trong vùng file chỉ hiện khi người dùng có quyền ghi cả hồ sơ đang xem lẫn đích đang mở; hồ sơ lưu trữ không cho ghi. API tiếp tục kiểm tra quyền độc lập. Tệp đính kèm của hồ sơ nghiệp vụ vẫn giữ riêng từng phiên bản ghim; có liên kết hồ sơ không cấp thêm quyền đọc tệp. Projection không gom tệp của một chuyên gia liền kề chỉ vì người đó có mặt trong quan hệ.
+Biểu mẫu tải lên hiển thị tên và dung lượng tệp đã chọn; kiểm tra định dạng, tệp rỗng và giới hạn 50 MiB từng tệp trước khi gửi. API tiếp tục kiểm tra MIME, dung lượng và quyền bằng phiên người gọi. Nhiều tệp được gửi tuần tự, lỗi giữa chừng giữ lại phần chưa hoàn tất để thử lại; không coi một đợt nhiều tệp là giao dịch atomic. Thao tác trong vùng file chỉ hiện khi người dùng có quyền ghi cả hồ sơ đang xem lẫn đích đang mở; hồ sơ lưu trữ không cho ghi. API tiếp tục kiểm tra quyền độc lập. Tệp đính kèm của hồ sơ nghiệp vụ vẫn giữ riêng từng phiên bản ghim; có liên kết hồ sơ không cấp thêm quyền đọc tệp. Projection không gom tệp của một chuyên gia liền kề chỉ vì người đó có mặt trong quan hệ.
 
 ## Nguồn workbook và nhập dữ liệu
 

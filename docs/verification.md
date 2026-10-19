@@ -1,6 +1,12 @@
 # Xác minh triển khai
 
-Cập nhật: 13/10/2026. Ứng dụng: `pvn-ai-catalog`. Supabase project: `icycubrzvfptfehxqvfp`.
+Cập nhật: 19/10/2026. Ứng dụng: `pvn-ai-catalog`. Supabase project: `icycubrzvfptfehxqvfp`.
+
+## Giới hạn tệp app quản trị (19/10/2026)
+
+Theo yêu cầu nâng lên 100 MB/tệp, Supabase MCP trả `PaymentRequiredException` khi tăng global Storage limit từ 50 MiB lên 100 MiB; dự án hiện cần nâng gói trả phí để đạt mức này. Migration `202610190001_document_upload_capacity.sql` đã áp dụng: bucket `ai-catalog-documents` từ 20 lên 50 MiB, bucket khảo sát giữ 20 MiB, constraint metadata chuẩn bị tới 100 MiB và gateway nhận các định dạng app cho phép gồm ZIP/7Z/RAR. Migration `202610190002_restore_document_filename_validation.sql` khôi phục biểu thức kiểm tra tên tệp của gateway trước đó; xác minh live nhận ZIP và vẫn chặn dấu gạch ngược. App hiện kiểm tra 50 MiB/tệp, đúng giới hạn lưu trữ thực tế.
+
+Đối chiếu live qua MCP: global 52.428.800 byte, bucket app 52.428.800 byte, bucket khảo sát 20.971.520 byte, constraint metadata `size_bytes <= 104857600`, gateway có đuôi mới. Bộ PostgreSQL biệt lập đạt **576 PASS**; Playwright validation **94 passed**, API khi chưa đăng nhập **7 passed**; typecheck, lint và production build đạt. Người dùng chọn giữ 50 MiB/tệp; không đổi gói dịch vụ hoặc nâng trần global lên 100 MiB.
 
 ## Database thật
 

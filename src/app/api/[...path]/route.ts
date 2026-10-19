@@ -3,17 +3,12 @@ import { createHash, randomUUID } from "node:crypto";
 import { authorized, ApiError, boundedBody, configured, databaseError, jsonBody, sameOrigin, supabase } from "@/lib/server";
 import { moduleMap, relations, UUID, validateRecord, type CatalogRecord, type RecordInput } from "@/lib/catalog";
 import { assignNewRecordCode } from "@/lib/record-code";
+import { DOCUMENT_FORMAT_HINT, MAX_DOCUMENT_BYTES, MAX_DOCUMENT_MIB, documentMimeType } from "@/lib/document-upload";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 const BUCKET = "ai-catalog-documents";
-const MAX_FILE = 20 * 1024 * 1024;
-const mimes: Record<string, string[]> = {
-  pdf: ["application/pdf"], doc: ["application/msword"], docx: ["application/vnd.openxmlformats-officedocument.wordprocessingml.document"],
-  xls: ["application/vnd.ms-excel"], xlsx: ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"],
-  ppt: ["application/vnd.ms-powerpoint"], pptx: ["application/vnd.openxmlformats-officedocument.presentationml.presentation"],
-  txt: ["text/plain"], csv: ["text/csv", "application/vnd.ms-excel"], png: ["image/png"], jpg: ["image/jpeg"], jpeg: ["image/jpeg"],
-};
+const MAX_FILE = MAX_DOCUMENT_BYTES;
 const response = (value: unknown, status = 200) => NextResponse.json(value, { status, headers: { "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff" } });
 const id = (value: unknown) => { if (typeof value !== "string" || !UUID.test(value)) throw new ApiError(400, "Mã hồ sơ không hợp lệ."); return value; };
 function rpcError(error: { message: string; code?: string } | null) { if (error) throw databaseError(error); }
@@ -205,16 +200,17 @@ async function handle(request: Request, context: { params: Promise<{ path: strin
     if (route === "documents" && method === "GET") return response({ data: await rpc("ai_catalog_documents", { p_query: (url.searchParams.get("q") || "").slice(0, 250) }) });
     if (route === "documents" && method === "POST") {
       const length = Number(request.headers.get("content-length") || "0");
-      if (length > MAX_FILE + 1024 * 1024) throw new ApiError(413, "Tệp tối đa 20 MB.");
+      if (length > MAX_FILE + 1024 * 1024) throw new ApiError(413, `Tệp tối đa ${MAX_DOCUMENT_MIB} MB.`);
       if (!request.headers.get("content-type")?.startsWith("multipart/form-data")) throw new ApiError(415, "Cần gửi biểu mẫu tải tệp.");
       const bytesReceived = await boundedBody(request, MAX_FILE + 1024 * 1024);
       let form: FormData;
       try { form = await new Response(new Uint8Array(bytesReceived), { headers: { "Content-Type": request.headers.get("content-type")! } }).formData(); }
       catch { throw new ApiError(400, "Biểu mẫu tải tệp không hợp lệ."); }
       const file = form.get("file");
-      if (!(file instanceof File) || file.size <= 0 || file.size > MAX_FILE) throw new ApiError(400, "Chọn một tệp có nội dung, tối đa 20 MB.");
+      if (!(file instanceof File) || file.size <= 0 || file.size > MAX_FILE) throw new ApiError(400, `Chọn một tệp có nội dung, tối đa ${MAX_DOCUMENT_MIB} MB.`);
       const ext = file.name.split(".").pop()?.toLowerCase() || "";
-      if (!mimes[ext] || (file.type && !mimes[ext].includes(file.type))) throw new ApiError(400, "Hỗ trợ PDF, Word, Excel, PowerPoint, TXT, CSV và ảnh PNG/JPG.");
+      const mime = documentMimeType(file.name, file.type);
+      if (!mime) throw new ApiError(400, `Hỗ trợ ${DOCUMENT_FORMAT_HINT}`);
       const title = String(form.get("title") || file.name).trim();
       if (!title || title.length > 250) throw new ApiError(400, "Tên tài liệu tối đa 250 ký tự.");
       const documentId = form.get("document_id") ? id(form.get("document_id")) : null;
@@ -226,7 +222,6 @@ async function handle(request: Request, context: { params: Promise<{ path: strin
       const filename = file.name.replace(/[\r\n/\\\x00-\x1f]/g, "_").slice(0, 180);
       const storagePath = `${user.id}/${versionId}/file.${ext}`;
       const bytes = Buffer.from(await file.arrayBuffer());
-      const mime = mimes[ext][0];
       const { error: uploadError } = await client.storage.from(BUCKET).upload(storagePath, bytes, { contentType: mime, upsert: false });
       if (uploadError) throw new ApiError(500, "Chưa thể tải tệp lên kho tài liệu. Kiểm tra quyền hoặc thử lại.");
       try {

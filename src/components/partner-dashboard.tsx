@@ -35,14 +35,9 @@ export default function PartnerDashboard({ overview, onOpen }: { overview: Overv
   const counts = countBy(partners, partner => partner.status, PARTNER_STATUSES);
   const count = (label: string) => counts.find(item => item.label === label)?.value || 0;
   const columns: CatalogColumn<Row>[] = [
-    { key: 'title', label: 'Đối tác', wide: true, text: row => row.partner.title, search: row => [row.partner.short_name, row.partner.partner_type, row.partner.country, ...row.groups],
+    { key: 'title', label: 'Đối tác', wide: true, text: row => row.partner.title, search: row => [row.partner.short_name, row.partner.partner_type, row.partner.country, row.partner.contact_name, ...tags(row), ...row.groups],
       render: row => <><button className="record-name" onClick={() => onOpen(row.id)}>{row.partner.title}</button><div className="record-meta">{[row.partner.partner_type, row.partner.country, row.groups.length ? `Liên danh: ${row.groups.join(', ')}` : null].filter(Boolean).join(' · ')}</div></> },
     { key: 'status', label: 'Trạng thái', text: row => row.partner.status, sort: row => rankIn(PARTNER_STATUSES, row.partner.status), render: row => <Badge>{row.partner.status}</Badge> },
-    { key: 'strategic', label: 'Hợp tác chiến lược', text: row => row.partner.strategic_level || '', sort: row => rankIn(STRATEGIC_LEVELS, row.partner.strategic_level) },
-    { key: 'specialties', label: 'Năng lực', text: row => tags(row).join(', '), sort: row => tags(row).length || null,
-      render: row => tags(row).length ? <div className={styles.clamp} title={tags(row).join(', ')}>{tags(row).join(', ')}</div> : '—' },
-    { key: 'contact', label: 'Đầu mối liên hệ', text: row => row.partner.contact_name || '',
-      render: row => row.partner.contact_name ? <>{row.partner.contact_name}{(row.partner.contact_count || 0) > 1 && <div className="record-meta">{row.partner.contact_count} đầu mối</div>}</> : '—' },
     { key: 'activities', label: 'Tổng hoạt động', numeric: true, text: row => String(row.activities.length), sort: row => row.activities.length,
       render: row => <>{row.activities.length}{row.active > 0 && <div className="record-meta">{row.active} đang chạy</div>}</> },
     { key: 'units', label: 'Đơn vị hợp tác', text: row => row.unitIds.map(id => unitName(maps, id)).join(', '), sort: row => row.unitIds.length || null, search: row => unitTerms(maps, row.unitIds),
@@ -50,14 +45,12 @@ export default function PartnerDashboard({ overview, onOpen }: { overview: Overv
     { key: 'items', label: 'Hạng mục hợp tác', wide: true, text: row => row.itemIds.map(itemLabel).join('; '), sort: row => row.itemIds.length || null,
       render: row => <RecordLines items={row.itemIds.map(id => ({ id, label: itemLabel(id) }))} onOpen={onOpen}/> },
     { key: 'last_work', label: 'Làm việc gần nhất', text: row => dayText(row.lastWork) || 'Không có', sort: row => row.lastWork, render: row => row.lastWork ? dayText(row.lastWork) : <span className="muted">Không có</span> },
-    { key: 'updated', label: 'Cập nhật', text: row => dayText(row.partner.updated_at), sort: row => row.partner.updated_at },
   ];
   const filters: TableFilter<Row>[] = [
     { key: 'status', label: 'Trạng thái hợp tác', all: 'Tất cả trạng thái', values: row => row.partner.status, order: PARTNER_STATUSES },
     { key: 'type', label: 'Loại đối tác', all: 'Mọi loại đối tác', values: row => row.partner.partner_type, order: PARTNER_TYPES },
     { key: 'country', label: 'Quốc gia', all: 'Mọi quốc gia', values: row => row.partner.country, order: COUNTRIES },
     { key: 'strategic', label: 'Hợp tác chiến lược', all: 'Mọi mức hợp tác chiến lược', values: row => row.partner.strategic_level, order: STRATEGIC_LEVELS },
-    { key: 'specialty', label: 'Năng lực', all: 'Mọi năng lực', values: tags },
   ];
   const quick: QuickFilter<Row>[] = [
     { key: 'no_activity', label: 'Chưa có hoạt động', test: row => !row.activities.length },

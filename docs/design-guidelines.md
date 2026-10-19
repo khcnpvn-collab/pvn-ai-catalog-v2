@@ -49,6 +49,7 @@ Tạo thư mục, tải file, dùng file có sẵn và đổi tên là thao tác
 - Không nhắc lại cùng một thông tin ở hai chỗ: đơn vị và đối tác đã có trong bảng hoạt động thì không liệt kê lại dạng "qua hoạt động"; dải số liệu không lặp trường đã có trong Thông tin chính; thư mục của hoạt động chỉ hiện ở File & tài liệu khi có file; mô tả đơn vị tự sinh từ khảo sát không hiện.
 - Mục trống trên trang tổng hợp chỉ còn dòng tiêu đề (số 0 + nút thêm). Bảng hoạt động trên trang tổng hợp hiện tối đa 6 dòng kèm **Xem tất cả**; cột bài toán chuẩn ghi mã + tên, tối đa 2 dòng. Mốc làm việc là dòng có cột ngày, tên, trạng thái và một ghi chú gộp kết quả/bước tiếp theo.
 - Bảng hoạt động dùng cột cố định (trạng thái, bên thực hiện/đầu mối, bài toán chuẩn), tên hoạt động lấy phần còn lại, không cuộn ngang. Trên trang đối tác/đơn vị, tên hoạt động bỏ phần lặp tên đối tác/đơn vị đó (tên đầy đủ ở tooltip). Dưới 760px, bảng hoạt động và bảng đầu mối thành các dòng xếp dọc có nhãn cột.
+- Bảng trong trang tổng quan đối tác chỉ hiện tên, trạng thái, tổng hoạt động, đơn vị hợp tác, hạng mục hợp tác và lần làm việc gần nhất. Vẫn tìm được theo năng lực và đầu mối liên hệ, nhưng không hiện hai cột này hoặc bộ lọc năng lực.
 - Form sửa tại chỗ chỉ có **Hủy / Lưu** ở cuối, không thêm nút đóng ở tiêu đề. Mục đầu mối luôn có nút **Thêm đầu mối** trên dòng tiêu đề, kể cả khi trống.
 - Tên chương trình AI hiển thị đầy đủ, viết hoa đầu câu như danh mục gốc ("AI cho …"), không cắt tiền tố.
 
